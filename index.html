@@ -912,6 +912,7 @@ body {
       var pc = f.patches || ['#3f6a2e', '#6b9a48'], q, gx, gy;
       for (q = 0; q < 320; q++) { g.fillStyle = pc[q % pc.length]; g.globalAlpha = 0.18 + r() * 0.16; g.beginPath(); g.arc(r() * s, r() * s, 14 + r() * 46, 0, 6.2832); g.fill(); }
       g.globalAlpha = 1;
+      if (f.litter) { var lc = ['#8a5a2a', '#a8742e', '#6a4a22', '#b58a3a']; for (q = 0; q < 1400; q++) { g.fillStyle = lc[q % 4]; g.globalAlpha = 0.28 + r() * 0.3; g.save(); g.translate(r() * s, r() * s); g.rotate(r() * 6.28); g.fillRect(0, 0, 3 + r() * 5, 1.5 + r() * 2.5); g.restore(); } g.globalAlpha = 1; }
       if (f.dirt) {
         g.strokeStyle = f.dirt; g.lineCap = 'round'; g.globalAlpha = 0.55;
         [[0.1, 0.9, 0.35, 0.6, 0.6, 0.45, 0.92, 0.1], [0.05, 0.3, 0.4, 0.45, 0.7, 0.6, 0.95, 0.75]].forEach(function (pp) {
@@ -975,7 +976,7 @@ body {
     mapGroup.add(mesh); obstacles.push(mesh);
     colliders.push({ minX: x - w / 2, maxX: x + w / 2, minZ: z - d / 2, maxZ: z + d / 2, h: h });
   }
-  function addPine(x, z, h) {
+  function addPineSimple(x, z, h) {
     var tr = new T.Mesh(new T.CylinderGeometry(0.34, 0.5, h, 8), mapMats.trunk); tr.position.set(x, h / 2, z);
     addSolid(tr, x, z, 0.95, 0.95, h);
     var i, n = 4;
@@ -984,7 +985,7 @@ body {
       cn.position.set(x, h * 0.42 + i * 1.55 + ch / 2, z); mapGroup.add(cn);
     }
   }
-  function addOak(x, z, h) {
+  function addOakSimple(x, z, h) {
     var tr = new T.Mesh(new T.CylinderGeometry(0.5, 0.72, h, 8), mapMats.trunk); tr.position.set(x, h / 2, z);
     addSolid(tr, x, z, 1.3, 1.3, h);
     var cs = [[0, 0, 0, 2.7, 0], [1.6, -0.5, 0.6, 2.0, 1], [-1.5, -0.4, -0.7, 2.1, 1], [0.4, 1.0, -1.5, 1.9, 0], [-0.3, 0.9, 1.5, 1.8, 1]];
@@ -993,18 +994,174 @@ body {
       m.position.set(x + c[0], h + c[1], z + c[2]); mapGroup.add(m);
     });
   }
-  function addRock(x, z, sz) {
+  function addRockSimple(x, z, sz) {
     var rk = new T.Mesh(new T.IcosahedronGeometry(sz, 0), mapMats.rock); rk.scale.set(1.15, 0.75, 1); rk.position.set(x, sz * 0.55, z); rk.rotation.y = x * 0.7;
     addSolid(rk, x, z, sz * 1.7, sz * 1.5, sz * 1.1);
   }
   function addLog(x, z, len, alongX) {
-    var lg = new T.Mesh(new T.CylinderGeometry(0.5, 0.5, len, 9), mapMats.trunk);
+    var lg = new T.Mesh(new T.CylinderGeometry(0.5, 0.5, len, 10), mapMats.bark || mapMats.trunk);
     if (alongX) { lg.rotation.z = Math.PI / 2; } else { lg.rotation.x = Math.PI / 2; }
     lg.position.set(x, 0.5, z);
     addSolid(lg, x, z, alongX ? len : 1.0, alongX ? 1.0 : len, 1.0);
   }
-  function addBush(x, z, sz) {
+  function addBushSimple(x, z, sz) {
     var b = new T.Mesh(new T.SphereGeometry(sz, 8, 6), mapMats.bush); b.scale.set(1.2, 0.7, 1.2); b.position.set(x, sz * 0.45, z); mapGroup.add(b);
+  }
+  /* ---- Pohon realistis: geometri digabung per pohon, warna per-simpul, kulit kayu bertekstur ---- */
+  function barkTexture(birch) {
+    var c = document.createElement('canvas'); c.width = 128; c.height = 256;
+    var g = c.getContext('2d'), r = rng(birch ? 5 : 3), i, x;
+    g.fillStyle = birch ? '#e9e6dc' : '#5a3f26'; g.fillRect(0, 0, 128, 256);
+    if (birch) {
+      for (i = 0; i < 46; i++) { g.fillStyle = 'rgba(30,28,24,' + (0.45 + r() * 0.4) + ')'; var bw = 6 + r() * 22, by = r() * 256; g.fillRect(r() * 128, by, bw, 2 + r() * 4); }
+      for (i = 0; i < 90; i++) { g.fillStyle = 'rgba(150,140,120,0.25)'; g.fillRect(r() * 128, r() * 256, 2 + r() * 8, 1); }
+    } else {
+      for (x = 0; x < 128; x += 2) { g.fillStyle = r() < 0.5 ? 'rgba(20,12,6,' + (0.15 + r() * 0.35) + ')' : 'rgba(150,110,70,' + (0.1 + r() * 0.22) + ')'; g.fillRect(x, 0, 1 + r() * 3, 256); }
+      for (i = 0; i < 120; i++) { g.fillStyle = 'rgba(15,8,3,' + (0.2 + r() * 0.3) + ')'; g.fillRect(r() * 128, r() * 256, 2 + r() * 6, 3 + r() * 14); }
+      for (i = 0; i < 40; i++) { g.fillStyle = 'rgba(80,110,50,0.22)'; g.beginPath(); g.arc(r() * 128, 150 + r() * 106, 3 + r() * 9, 0, 6.2832); g.fill(); }
+    }
+    var tx = new T.CanvasTexture(c); tx.wrapS = tx.wrapT = T.RepeatWrapping; tx.repeat.set(1, 2); tx.anisotropy = 4;
+    return tx;
+  }
+  function vh(x, y, z, k) { var v = Math.sin(x * 127.1 + y * 311.7 + z * 74.7 + k * 19.3) * 43758.5453; return v - Math.floor(v); }
+  function tint(hex, f) {
+    var r = Math.min(1, ((hex >> 16) & 255) / 255 * f), g = Math.min(1, ((hex >> 8) & 255) / 255 * f), b = Math.min(1, (hex & 255) / 255 * f);
+    return [r, g, b];
+  }
+  /* satu bagian: geometri bawaan -> goyang simpul -> segi rata -> warna gradien -> transformasi */
+  function part(geo, hex, o, px, py, pz, rx, ry, rz, sx, sy, sz, rr) {
+    var pa = geo.attributes.position, n = pa.count, i, a = pa.array, ymin = 1e9, ymax = -1e9, j = o.jit || 0;
+    for (i = 0; i < n; i++) {
+      var x = a[i * 3], y = a[i * 3 + 1], z = a[i * 3 + 2];
+      if (y < ymin) ymin = y; if (y > ymax) ymax = y;
+    }
+    for (i = 0; i < n; i++) {
+      var x0 = a[i * 3], y0 = a[i * 3 + 1], z0 = a[i * 3 + 2];
+      if (j) { a[i * 3] += (vh(x0, y0, z0, 1) - 0.5) * 2 * j; a[i * 3 + 1] += (vh(x0, y0, z0, 2) - 0.5) * 2 * j; a[i * 3 + 2] += (vh(x0, y0, z0, 3) - 0.5) * 2 * j; }
+      if (o.sag && y0 < ymin + 0.001) a[i * 3 + 1] -= o.sag;
+    }
+    var g = geo.index ? geo.toNonIndexed() : geo, pos = g.attributes.position, m = pos.count, col = new Float32Array(m * 3), k, tri = 0, tv = 0, span = (ymax - ymin) || 1;
+    for (k = 0; k < m; k++) {
+      if (k % 3 === 0) tv = (rr() - 0.5) * 2 * (o.vary || 0);
+      var t = (pos.array[k * 3 + 1] - ymin) / span, f = (o.lo === undefined ? 0.7 : o.lo) + ((o.hi === undefined ? 1.05 : o.hi) - (o.lo === undefined ? 0.7 : o.lo)) * t + tv;
+      var c = tint(hex, f); col[k * 3] = c[0]; col[k * 3 + 1] = c[1]; col[k * 3 + 2] = c[2];
+    }
+    g.setAttribute('color', new T.BufferAttribute(col, 3));
+    var mt = new T.Matrix4(), q = new T.Quaternion().setFromEuler(new T.Euler(rx || 0, ry || 0, rz || 0, 'YXZ'));
+    mt.compose(new T.Vector3(px || 0, py || 0, pz || 0), q, new T.Vector3(sx || 1, sy || 1, sz || 1));
+    g.applyMatrix4(mt);
+    g.computeVertexNormals();
+    return g;
+  }
+  function mergeParts(list) {
+    var n = 0, i, o = 0;
+    for (i = 0; i < list.length; i++) n += list[i].attributes.position.count;
+    var pos = new Float32Array(n * 3), nor = new Float32Array(n * 3), col = new Float32Array(n * 3);
+    for (i = 0; i < list.length; i++) {
+      var g = list[i], c = g.attributes.position.count;
+      pos.set(g.attributes.position.array, o * 3); nor.set(g.attributes.normal.array, o * 3); col.set(g.attributes.color.array, o * 3);
+      o += c; g.dispose();
+    }
+    var out = new T.BufferGeometry();
+    out.setAttribute('position', new T.BufferAttribute(pos, 3)); out.setAttribute('normal', new T.BufferAttribute(nor, 3)); out.setAttribute('color', new T.BufferAttribute(col, 3));
+    return out;
+  }
+  function trunkGeo(rb, rt, h, flare, bend, ph) {
+    var g = new T.CylinderGeometry(rt, rb, h, 10, 7), p = g.attributes.position, a = p.array, i;
+    for (i = 0; i < p.count; i++) {
+      var x = a[i * 3], y = a[i * 3 + 1], z = a[i * 3 + 2], yy = y + h / 2, th = Math.atan2(z, x);
+      var k = 1 + flare * Math.exp(-yy * 1.5) * (1 + 0.55 * Math.cos(3 * th + ph) + 0.3 * Math.cos(5 * th + ph * 2));
+      a[i * 3] = x * k + Math.sin(yy * 0.55 + ph) * bend * (yy / h); a[i * 3 + 2] = z * k + Math.cos(yy * 0.45 + ph) * bend * 0.6 * (yy / h);
+    }
+    g.computeVertexNormals();
+    return g;
+  }
+  function addTreeMeshes(x, z, h, tg, barkMat, foli, w, decor) {
+    var tr = new T.Mesh(tg, barkMat); tr.position.set(x, h / 2, z);
+    if (decor) mapGroup.add(tr); else addSolid(tr, x, z, w, w, h);
+    var fm = new T.Mesh(foli, mapMats.foli); fm.position.set(x, 0, z); mapGroup.add(fm);
+  }
+  function addPine(x, z, h, decor) {
+    try {
+      var r = rng(Math.floor(Math.abs(x * 131 + z * 517)) + 7), parts = [], i, nT = 11, pc = curMap.pine || 0x1f5a34, lc = curMap.leaf || 0x2f7a3a;
+      var tg = trunkGeo(0.46, 0.09, h, 0.7, 0.25, r() * 6);
+      var base = h * 0.24, top = h - 0.9;
+      for (i = 0; i < nT; i++) {
+        var u = i / (nT - 1), rad = (2.9 * (1 - u) + 0.5) * (0.88 + r() * 0.24), ch = 2.1 + (1 - u) * 0.9, y = base + u * (top - base);
+        parts.push(part(new T.ConeGeometry(rad, ch, 10, 2), (i % 3 === 1) ? lc : pc, { jit: rad * 0.1, sag: 0.3 * (1 - u), lo: 0.5, hi: 1.08, vary: 0.06 }, (r() - 0.5) * 0.25, y + ch / 2, (r() - 0.5) * 0.25, (r() - 0.5) * 0.12, r() * 6.28, (r() - 0.5) * 0.12, 1, 1, 0.92 + r() * 0.16, r));
+      }
+      parts.push(part(new T.ConeGeometry(0.28, 1.5, 6, 1), 0x2a6a3a, { lo: 0.9, hi: 1.2 }, 0, h + 0.2, 0, 0, 0, 0, 1, 1, 1, r));
+      addTreeMeshes(x, z, h, tg, mapMats.bark, mergeParts(parts), 0.9, decor);
+    } catch (e) { addPineSimple(x, z, h); }
+  }
+  function addOak(x, z, h) {
+    try {
+      var r = rng(Math.floor(Math.abs(x * 97 + z * 331)) + 11), parts = [], i, ph = r() * 6.28;
+      var tg = trunkGeo(0.78, 0.42, h, 1.0, 0.5, ph), pal = [curMap.leaf || 0x2f7a3a, curMap.leaf2 || 0x4f9a46, 0x2a6a30, 0x6aa84a];
+      for (i = 0; i < 4; i++) {
+        var L = 2.2 + r() * 1.4, yaw = i * 1.571 + r() * 0.7;
+        parts.push(part(new T.CylinderGeometry(0.09, 0.2, L, 6).translate(0, L / 2, 0), 0x5a3f26, { lo: 0.9, hi: 1.0 }, 0, h * (0.78 + r() * 0.2), 0, 0.85 + r() * 0.4, yaw, 0, 1, 1, 1, r));
+      }
+      var nC = 14, cy = h + 0.9;
+      for (i = 0; i < nC; i++) {
+        var a = r() * 6.2832, rad = Math.sqrt(r()) * 3.0, sz = 1.25 + r() * 1.0, dome = 1.7 * (1 - Math.pow(rad / 3.2, 2));
+        parts.push(part(new T.IcosahedronGeometry(sz, 1), pal[Math.floor(r() * 4)], { jit: sz * 0.2, lo: 0.58, hi: 1.12, vary: 0.07 }, Math.cos(a) * rad, cy + dome * (0.3 + r() * 0.7) + r() * 0.5 - 0.3, Math.sin(a) * rad, 0, r() * 6, 0, 1, 0.82, 1, r));
+      }
+      addTreeMeshes(x, z, h, tg, mapMats.bark, mergeParts(parts), 1.4, false);
+    } catch (e) { addOakSimple(x, z, h); }
+  }
+  function addBirch(x, z, h) {
+    try {
+      var r = rng(Math.floor(Math.abs(x * 61 + z * 211)) + 5), parts = [], i, pal = [0x86b84a, 0x9cc85a, 0x6fa23e, 0xb6d46a];
+      var tg = trunkGeo(0.3, 0.14, h, 0.35, 0.7, r() * 6);
+      for (i = 0; i < 3; i++) parts.push(part(new T.CylinderGeometry(0.04, 0.09, 1.8, 5).translate(0, 0.9, 0), 0xd8d4c6, { lo: 0.9, hi: 1 }, 0, h * (0.62 + i * 0.12), 0, 0.9, i * 2.1 + r(), 0, 1, 1, 1, r));
+      for (i = 0; i < 9; i++) {
+        var a = r() * 6.2832, rad = 0.4 + Math.sqrt(r()) * 1.7, sz = 0.7 + r() * 0.7;
+        parts.push(part(new T.IcosahedronGeometry(sz, 1), pal[Math.floor(r() * 4)], { jit: sz * 0.2, lo: 0.65, hi: 1.12, vary: 0.07 }, Math.cos(a) * rad, h * 0.72 + r() * (h * 0.32), Math.sin(a) * rad, 0, r() * 6, 0, 1, 0.85, 1, r));
+      }
+      addTreeMeshes(x, z, h, tg, mapMats.birch, mergeParts(parts), 0.7, false);
+    } catch (e) { addOakSimple(x, z, h * 0.9); }
+  }
+  function addRock(x, z, sz) {
+    try {
+      var r = rng(Math.floor(Math.abs(x * 71 + z * 193)) + 3), parts = [], rc = curMap.rock || 0x7d868c;
+      parts.push(part(new T.IcosahedronGeometry(sz, 1), rc, { jit: sz * 0.2, lo: 0.55, hi: 1.15, vary: 0.1 }, 0, sz * 0.5, 0, 0, r() * 6, 0, 1.2, 0.75, 1, r));
+      parts.push(part(new T.IcosahedronGeometry(sz * 0.45, 1), rc, { jit: sz * 0.1, lo: 0.6, hi: 1.1, vary: 0.08 }, sz * 0.9, sz * 0.2, sz * 0.3, 0, r() * 6, 0, 1, 0.8, 1, r));
+      parts.push(part(new T.IcosahedronGeometry(sz * 0.7, 0), 0x56803a, { jit: sz * 0.1, lo: 0.8, hi: 1.1 }, 0, sz * 0.82, 0, 0, r() * 6, 0, 1.0, 0.28, 0.9, r));
+      var rk = new T.Mesh(mergeParts(parts), mapMats.foli); rk.position.set(x, 0, z);
+      addSolid(rk, x, z, sz * 1.7, sz * 1.5, sz * 1.1);
+    } catch (e) { addRockSimple(x, z, sz); }
+  }
+  function addBush(x, z, sz) {
+    try {
+      var r = rng(Math.floor(Math.abs(x * 41 + z * 157)) + 9), parts = [], i, pal = [curMap.bush || 0x3d8a3a, 0x2f7a32, 0x57a048];
+      for (i = 0; i < 4; i++) { var s2 = sz * (0.6 + r() * 0.5), a = r() * 6.28; parts.push(part(new T.IcosahedronGeometry(s2, 1), pal[i % 3], { jit: s2 * 0.2, lo: 0.6, hi: 1.12, vary: 0.07 }, Math.cos(a) * sz * 0.7, s2 * 0.55, Math.sin(a) * sz * 0.7, 0, r() * 6, 0, 1, 0.75, 1, r)); }
+      var bm = new T.Mesh(mergeParts(parts), mapMats.foli); bm.position.set(x, 0, z); mapGroup.add(bm);
+    } catch (e) { addBushSimple(x, z, sz); }
+  }
+  /* rumput, pakis, dan jamur: satu mesh besar */
+  function addUndergrowth(r, nTuft, lim, avoid) {
+    try {
+      var parts = [], i, b, pal = [0x4f8a36, 0x6aa648, 0x3d7a2e, 0x86b858];
+      for (i = 0; i < nTuft; i++) {
+        var x = (r() - 0.5) * 2 * lim, z = (r() - 0.5) * 2 * lim;
+        if (Math.hypot(x, z) < (avoid || 4)) continue;
+        var nb = 4 + Math.floor(r() * 3), cp = pal[Math.floor(r() * 4)];
+        for (b = 0; b < nb; b++) {
+          var len = 0.45 + r() * 0.55, a = r() * 6.28, tl = 0.25 + r() * 0.35;
+          parts.push(part(new T.ConeGeometry(0.05, len, 3, 1, true), cp, { lo: 0.55, hi: 1.15 }, x + Math.cos(a) * 0.08, len * 0.5, z + Math.sin(a) * 0.08, tl, a, 0, 1, 1, 1, r));
+        }
+      }
+      for (i = 0; i < 16; i++) {
+        var mx = (r() - 0.5) * 2 * lim, mz = (r() - 0.5) * 2 * lim;
+        if (Math.hypot(mx, mz) < 5) continue;
+        var ms = 0.7 + r() * 0.7;
+        parts.push(part(new T.CylinderGeometry(0.035 * ms, 0.05 * ms, 0.16 * ms, 6), 0xe8e0c8, { lo: 0.9, hi: 1.0 }, mx, 0.08 * ms, mz, 0, 0, 0, 1, 1, 1, r));
+        parts.push(part(new T.SphereGeometry(0.13 * ms, 8, 4, 0, 6.2832, 0, 1.5708), r() < 0.6 ? 0xc03a2a : 0xb07a3a, { lo: 0.8, hi: 1.1 }, mx, 0.15 * ms, mz, 0, 0, 0, 1, 1, 1, r));
+      }
+      var gm = new T.Mesh(mergeParts(parts), mapMats.foli);
+      gm.material = mapMats.fol2 || mapMats.foli; mapGroup.add(gm);
+    } catch (e) {}
   }
   function scatterFree(r, list, n, rad, lim, fn) {
     var tries = 0, got = 0;
@@ -1277,7 +1434,7 @@ body {
       } }
     ,{ id: 'hutan', cat: 'alam', name: 'Hutan Rimba', tag: 'Pohon lebat', desc: 'Hutan pinus dan ek yang rapat dengan batang kayu, batu, dan api unggun di tengah. Berlindung di balik pohon.',
       half: 42, wallH: 11, sky: 0x86ad94, fogN: 12, fogF: 62, hemi: [0xeaffe2, 0x2c4a2a, 0.92], sun: [0xfff0c4, 0.7],
-      floor: { style: 'nature', base: '#3f6a30', patches: ['#2f5a26', '#6b9a48', '#4a7a38'], dirt: '#7a5a34', border: 'rgba(58,40,22,0.9)' },
+      floor: { style: 'nature', litter: true, base: '#3f6a30', patches: ['#2f5a26', '#6b9a48', '#4a7a38'], dirt: '#7a5a34', border: 'rgba(58,40,22,0.9)' },
       wall: 0x2c4a2c, band: 0x4a3520, crate: 0x5a3d22, edge: 0x1d3320, leaf: 0x2f7a3a, leaf2: 0x4f9a46, pine: 0x1d5a34, rock: 0x77807a, bush: 0x3d8a3a, climb: false,
       build: function () {
         var r = rng(77), pl = [{ x: 0, z: 0, r: 9 }];
@@ -1285,10 +1442,14 @@ body {
         var ring = new T.Mesh(new T.CylinderGeometry(1.1, 1.3, 0.3, 10), mapMats.rock); ring.position.set(0, 0.15, 0); mapGroup.add(ring);
         var fl = new T.Mesh(new T.ConeGeometry(0.6, 1.5, 7), mapMats.fire); fl.position.set(0, 1.0, 0); mapGroup.add(fl);
         addLog(0, 3.6, 3.4, true); addLog(0, -3.6, 3.4, true); addLog(3.6, 0, 3.4, false); addLog(-3.6, 0, 3.4, false);
-        scatterFree(r, pl, 30, 6.4, 38, function (x, z, rr) { if (rr() < 0.6) addPine(x, z, 8 + rr() * 4); else addOak(x, z, 5.5 + rr() * 2.5); });
+        scatterFree(r, pl, 32, 6.0, 38, function (x, z, rr) { var q = rr(); if (q < 0.5) addPine(x, z, 9 + rr() * 5); else if (q < 0.78) addOak(x, z, 5.5 + rr() * 2.5); else addBirch(x, z, 8 + rr() * 3); });
         scatterFree(r, pl, 12, 3.2, 38, function (x, z, rr) { addRock(x, z, 1.0 + rr() * 1.1); });
         scatterFree(r, pl, 8, 3.6, 38, function (x, z, rr) { addLog(x, z, 4 + rr() * 3, rr() < 0.5); });
         scatterFree(r, pl, 34, 1.4, 40, function (x, z, rr) { addBush(x, z, 0.7 + rr() * 0.6); });
+        addUndergrowth(r, 300, 40, 4);
+        // barisan pohon di luar dinding supaya hutan terasa tak berujung (hiasan, tanpa tabrakan)
+        var bi, side, along, off;
+        for (bi = 0; bi < 56; bi++) { side = bi % 4; along = ((Math.floor(bi / 4) + r() * 0.8) / 14 * 2 - 1) * 50; off = 46 + r() * 8; addPine(side === 0 ? along : (side === 1 ? off : (side === 2 ? -along : -off)), side === 0 ? -off : (side === 1 ? along : (side === 2 ? off : -along)), 12 + r() * 6, true); }
       } },
     { id: 'lembah', cat: 'alam', name: 'Lembah Danau', tag: 'Bukit & danau', desc: 'Lembah terbuka dengan danau dangkal, bukit berundak yang bisa dipanjat, dan pohon di tepinya. Cocok untuk tembakan jarak jauh.',
       half: 40, wallH: 9, sky: 0x9fd8f5, fogN: 34, fogF: 118, hemi: [0xffffff, 0x6a8f4a, 1.0], sun: [0xfff4d6, 0.85],
@@ -1345,6 +1506,11 @@ body {
       water: new T.MeshBasicMaterial({ color: 0x3aa0d8, transparent: true, opacity: 0.72, depthWrite: false }),
       fire: new T.MeshBasicMaterial({ color: 0xffa23a })
     };
+    if (m.floor && m.floor.style === 'nature') {
+      mapMats.foli = new T.MeshLambertMaterial({ vertexColors: true });
+      mapMats.bark = new T.MeshLambertMaterial({ map: barkTexture(false) });
+      mapMats.birch = new T.MeshLambertMaterial({ map: barkTexture(true) });
+    }
     scene.background.setHex(m.sky);
     scene.fog.color.setHex(m.sky); scene.fog.near = m.fogN; scene.fog.far = m.fogF;
     hemi.color.setHex(m.hemi[0]); hemi.groundColor.setHex(m.hemi[1]); hemi.intensity = m.hemi[2];
