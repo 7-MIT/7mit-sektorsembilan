@@ -240,10 +240,10 @@ body {
 #spinResult .tt { font: 900 24px/1 var(--display); text-transform: uppercase; letter-spacing: 0.05em; }
 #spinResult .note { font-size: 13px; line-height: 1.4; }
 #spinResult .go { font-size: 18px; padding: 9px 12px; }
-#healfx.phx { background: radial-gradient(ellipse at center, rgba(255, 150, 40, 0) 38%, rgba(255, 110, 20, 0.5) 100%); }
+#healfx.wiz { background: radial-gradient(ellipse at center, rgba(140, 90, 255, 0) 38%, rgba(140, 90, 255, 0.34) 78%, rgba(125, 255, 216, 0.38) 100%); }
 .skgrid.med { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.sk.phxc { background: linear-gradient(160deg, #2a0f12, #4a1a0c 60%, #7a3a08); color: #ffe3a3; border-color: #ffb23a; }
-.sk.phxc span { color: #ffc96b; }
+.sk.wizc { background: linear-gradient(160deg, #150a33, #2d1466 60%, #3b2a8a); color: #e6dcff; border-color: #b98cff; }
+.sk.wizc span { color: #7dffd8; }
 .medmsg { font: 500 11px/1.3 var(--mono); margin-top: 6px; min-height: 14px; color: var(--mute); }
 .skgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 8px; }
 .sk { appearance: none; cursor: pointer; text-align: center; border: 2px solid var(--ink); border-bottom-width: 4px; background: #fff; color: var(--ink); padding: 6px; display: flex; flex-direction: column; gap: 3px; min-width: 0; font-family: var(--body); }
@@ -748,7 +748,7 @@ body {
   var I18N_EX = {"peta": "maps", "senjata": "weapons", "mode": "modes", "Terbaik": "Best", "Skor": "Score", "Bergerak": "Move", "Membidik": "Aim", "Lari": "Sprint", "Spasi": "Space", "Lompat": "Jump", "Jeda": "Pause", "Tembak": "Fire", "Pisau": "Knife", "Isi": "Load", "Koleksi": "Collection", "Kembali": "Back", "Selesai": "Done", "Kontrol": "Controls", "koin": "coins", "Mulai": "Start", "Nyawa": "Health", "Magasin": "Magazine", "Medkit": "Medkit", "Bertahan": "Survival", "Umum": "Common", "Langka": "Rare", "Epik": "Epic", "Mitos": "Mythic", "Karbon": "Carbon", "Gurun": "Desert", "Hutan": "Forest", "Es": "Ice", "Emas": "Gold", "Galaksi": "Galaxy", "Pelangi": "Rainbow", "Petir": "Lightning", "Karambit": "Karambit", "Acak": "Random", "Terbuka": "Open", "Gelap": "Dark", "Berkabut": "Foggy", "Tahap": "Step", "Mudah": "Easy", "Normal": "Normal", "Sulit": "Hard", "Brutal": "Brutal", "Mustahil": "Impossible", "Rekrut": "Recruit", "Prajurit": "Private", "Kopral": "Corporal", "Sersan": "Sergeant", "Letnan": "Lieutenant", "Kapten": "Captain", "Mayor": "Major", "Kolonel": "Colonel", "Jenderal": "General", "Legenda": "Legend", "Pemain": "Player", "Bahasa": "Language", "Lainnya": "Other", "Rendah": "Low", "Sedang": "Medium", "Tinggi": "High", "Standar": "Default", "Merah": "Red", "Hijau": "Green", "Putih": "White"};
   var I18N_SUB = [[". Makin tinggi tahap, musuh makin akurat, kuat, dan cepat. Di pangkat tinggi mereka juga membawa senjata dan skin beragam, berlindung, mengepung, mengincar dari jauh, dan menyerang bersama. Rekan satu timmu ikut makin cerdas dan makin akurat seiring pangkatmu naik.", ". The higher the step, the more accurate, strong and fast the enemies. At high ranks they also carry varied weapons and skins, take cover, flank, snipe from afar and attack together. Your teammates also get smarter and more accurate as your rank rises."], ["Menara oranye di sisi tim Oranye, menara biru di sisi tim Biru, tangga luar menuju atap. Musuh ikut menaiki tangga untuk mengejar Anda, jadi atap bukan tempat aman.", "Orange tower on the Orange team side, blue tower on the Blue team side, outer stairs to the roof. Enemies climb the stairs to chase you, so the roof is not safe."], ["Satu spin menghabiskan 150 koin dan memberi satu skin acak untuk salah satu senjata. Koin didapat dari kill, gelombang selesai, dan hasil pertandingan.", "One spin costs 150 coins and gives one random skin for one of the weapons. Coins come from kills, completed waves, and match results."], ["Tiap pangkat punya 3 tahap (I, II, III). Menang +30 EXP, kalah -10 (tidak turun tahap). Makin tinggi pangkat, EXP yang dibutuhkan makin banyak. Musuh: ", "Each rank has 3 steps (I, II, III). Win +30 EXP, lose -10 (you never drop a step). The higher the rank, the more EXP you need. Enemies: "], ["Geser sisi kiri layar untuk bergerak, geser sisi kanan untuk membidik, tahan tombol Tembak untuk menembak, dan ketuk Scope untuk memperbesar bidikan.", "Drag the left side of the screen to move, drag the right side to aim, hold the Fire button to shoot, and tap Scope to zoom in."], ["Tips: bidik kepala untuk skor ekstra. Di mode tim, naikkan rank untuk lawan yang lebih kuat. Di layar sentuh, geser sisi kanan layar untuk membidik.", "Tip: aim for the head for bonus score. In team mode, rank up to face stronger opponents. On touch screens, drag the right side of the screen to aim."], ["Pisau tradisional berbilah melengkung seperti cakar atau bulan sabit, gagang pendek dengan cincin. Tebasan memutar dan mengalir, tanpa peluru.", "Traditional curved-blade knife like a claw or crescent, short handle with a ring. Spinning, flowing slashes, no ammo."], ["Drone latih menyerbu dari segala arah dan menembak balik. Pilih senjata, berlindung di balik rintangan, lalu bidik kepala untuk skor ekstra.", "Training drones swarm in from every direction and shoot back. Pick a weapon, take cover behind obstacles, and aim for the head for bonus score."], ["Peramban ini tidak bisa menampilkan grafik 3D (WebGL). Coba buka halaman ini di Chrome, Edge, Firefox atau Safari versi terbaru.", "This browser cannot display 3D graphics (WebGL). Try opening this page in a recent version of Chrome, Edge, Firefox or Safari."], ["Jika kursor tidak terkunci, bidik dengan tombol panah atau tahan klik kanan sambil menggeser mouse, dan pakai Q untuk scope.", "If the cursor is not locked, aim with the arrow keys or hold right click while moving the mouse, and use Q for the scope."], ["Dua tim saling berhadapan di peta pilihanmu. Kamu bergabung ke satu tim bersama bot, dan tim pertama yang mencapai ", "Two teams face off on the map you picked. You join one team with bots, and the first team to reach "], ["Kota hancur: tank bangkai, dinding runtuh, kawah, dan karung pasir. Berasap dan berdebu, banyak celah berlindung.", "Ruined city: wrecked tanks, collapsed walls, craters and sandbags. Smoky and dusty, plenty of cover."], ["Drone latih menyerbu dari segala arah. Bertahan selama mungkin dan bidik kepala untuk skor ekstra.", "Training drones swarm in from every direction. Survive as long as you can and aim for the head for bonus score."], ["Piramida, tangga, dan menara. Tahan Spasi sambil maju untuk memanjat balok bertanda kuning.", "Pyramids, stairs and towers. Hold Space while moving forward to climb yellow-marked blocks."], ["Online tidak tersedia. Buka gim lewat claude.ai dengan akun yang punya akses ke gim ini.", "Online is not available. Open the game through claude.ai with an account that has access to this game."], ["Teras batu bertingkat, pilar patah, dan tangga. Naik ke puncak untuk tembakan dari atas.", "Tiered stone terraces, broken pillars and stairs. Climb to the top for shots from above."], ["Rak dan tumpukan peti membentuk lorong. Banyak tempat berlindung, jarak pandang pendek.", "Shelves and crate stacks form corridors. Lots of cover, short sight lines."], ["Dinding beton berlapis dengan celah sempit. Musuh bisa muncul dari tikungan mana saja.", "Layered concrete walls with narrow gaps. Enemies can appear from any corner."], ["Multiplayer online. Masukkan kode ruangan yang sama dengan temanmu, lalu tekan Mulai.", "Online multiplayer. Enter the same room code as your friend, then press Start."], ["Hadapi gelombang drone yang terus bertambah. Skor dan gelombang tertinggi tersimpan.", "Face ever-growing waves of drones. Your best score and wave are saved."], ["Dentuman memekakkan, 20 peluru menyebar. Hancurkan jarak dekat. Kokang pump-action.", "Deafening blast, 20 spreading pellets. Devastating up close. Pump-action."], ["Duel 1v1 online. Masukkan kode ruangan yang sama dengan temanmu, lalu tekan Mulai.", "Online 1v1 duel. Enter the same room code as your friend, then press Start."], ["Dua tim saling tembak. Kamu bergabung ke satu tim, dan tim pertama yang mencapai ", "Two teams fight each other. You join one team, and the first team to reach "], ["Pertandingan online tetap berjalan untuk pemain lain. Klik tombol untuk kembali.", "The online match keeps running for other players. Click the button to return."], ["Gagal menyimpan ke akun. Progres tetap ada di peramban ini dan akan dicoba lagi.", "Failed to save to account. Progress stays in this browser and will be retried."], ["Tumpukan kontainer di dermaga. Naiki kontainer rendah, lalu panjat yang tinggi.", "Stacked containers on the dock. Climb the low containers, then the tall ones."], ["Semua melawan semua bersama temanmu lewat kode ruangan. Pertama yang mencapai ", "Free-for-all with your friends via a room code. The first to reach "], ["Dentuman menggema, recoil keras, peluru tembus penghalang. Kokang bolt manual.", "Echoing boom, heavy recoil, rounds penetrate cover. Manual bolt action."], ["Arena melingkar di malam hari. Pilar tinggi dan sekat rendah untuk berlindung.", "Circular arena at night. Tall pillars and low walls for cover."], ["Dataran bersalju dengan bunker rendah. Kabut tebal membatasi jarak pandang.", "Snowy plain with low bunkers. Thick fog limits visibility."], ["Empat gedung di senja hari. Panjat peti di sisi gedung untuk naik ke atap.", "Four buildings at dusk. Climb the crates beside the buildings to reach the roofs."], ["Garis laser merah berarti tembakan segera datang. Bergeraklah!", "A red laser line means a shot is coming. Move!"], ["Pertandingan sedang berjalan. Klik tombol untuk melanjutkan.", "The match is in progress. Click the button to continue."], ["Akun tidak tersedia · progres tersimpan di peramban ini saja", "Account unavailable · progress is saved in this browser only"], ["Lapangan latihan luas dengan peti acak. Pas untuk pemanasan.", "Wide training field with random crates. Perfect for warming up."], ["Mereka menyerang dari dua sisi. Cari penutup atau mundur.", "They attack from two sides. Find cover or fall back."], ["Online tidak tersedia di sini. Buka gim lewat claude.ai.", "Online is not available here. Open the game through claude.ai."], ["Peta dipilih acak setiap kali Anda mulai atau main lagi.", "The map is chosen at random every time you start or play again."], ["Drone menembak balik. Berlindunglah di balik rintangan.", "Drones shoot back. Take cover behind obstacles."], ["Nama pemain minimal 2 karakter (huruf, angka, spasi).", "Player name must be at least 2 characters (letters, digits, spaces)."], ["Koin belum cukup. Main dulu untuk mengumpulkan koin.", "Not enough coins. Play first to earn some."], [" pemain, semua melawan semua. Pertama yang mencapai ", " players, free for all. The first to reach "], ["Belum masuk · progres tersimpan di peramban ini saja", "Not signed in · progress is saved in this browser only"], ["Mode tamu · progres tersimpan di peramban ini saja", "Guest mode · progress is saved in this browser only"], ["Ganti tim, ukuran tim, atau peta untuk membalas.", "Change team, team size, or map to get revenge."], ["Bidik dan tembak (klik kanan: bidik jarak jauh)", "Aim and shoot (right click: long-range scope)"], ["sedang berjalan. Klik tombol untuk melanjutkan.", "in progress. Click the button to continue."], ["Sangat cepat, tapi dayanya kecil dan agak liar.", "Very fast, but low damage and a bit wild."], ["Tidak bisa terhubung ke ruangan. Coba lagi.", "Cannot connect to the room. Try again."], ["Pakai medkit (dijatuhkan musuh yang kalah)", "Use medkit (dropped by defeated enemies)"], ["Drone latih masih menunggu di sektor ini.", "Training drones are still waiting in this sector."], ["Kode ruangan minimal 3 huruf atau angka.", "Room code must be at least 3 letters or digits."], ["Nama pemain · tampil di dalam permainan", "Player name · shown in game"], ["Seimbang dan stabil. Tembakan otomatis.", "Balanced and stable. Automatic fire."], ["Tahan Spasi sambil maju untuk memanjat.", "Hold Space while moving forward to climb."], ["Skor terbaik baru. Coba lampaui lagi.", "New high score. Try to beat it again."], ["Bergerak (Shift lari, Spasi lompat)", "Move (Shift to sprint, Space to jump)"], ["Periksa senjata (animasi inspeksi)", "Inspect weapon (inspection animation)"], ["Senjata utama / karambit / tukar", "Main weapon / karambit / swap"], ["Nyawa +30, magasin penuh, koin +", "Health +30, magazine full, coins +"], ["Kesempatan hidup lagi tersisa ", "Revives left: "], [" · progres tersimpan di akunmu", " · progress is saved to your account"], ["Balik sumbu Y (bidik vertikal)", "Invert Y axis (vertical aim)"], ["Pangkat dan tahap tertinggi. ", "Highest rank and step. "], ["drone masuk dari tepi sektor", "drones entering from the edge of the sector"], ["Bagikan kode ini ke temanmu.", "Share this code with your friends."], ["Lawanmu keluar dari ruangan.", "Your opponent left the room."], [" pemain). Pakai kode lain.", " players). Use another code."], ["Penembak jitu mengincarmu", "A sniper is targeting you"], ["2 tim, bot sebagai rekan", "2 teams, bots as teammates"], ["Online · sampai 8 pemain", "Online · up to 8 players"], ["Selamat datang kembali, ", "Welcome back, "], ["Lapangan latihan tembak", "Shooting range"], ["Pengaturan & cara main", "Settings & how to play"], ["Menyambung ke ruangan ", "Connecting to room "], ["Setel ulang pengaturan", "Reset settings"], ["Jumlah pemain per tim", "Players per team"], ["Pertandingan selesai", "Match over"], ["! Musuh makin sulit.", "! Enemies get tougher."], ["Bidang pandang (FOV)", "Field of view (FOV)"], ["Menyambungkan akun…", "Connecting account…"], ["Menyiapkan senjata…", "Preparing weapons…"], [" + Karambit · Peta ", " + Karambit · Map "], [" · sisa kesempatan ", " · chances left "], ["Pengaturan & bahasa", "Settings & language"], ["Senjata / Karambit", "Weapon / Karambit"], ["Scope (hidup/mati)", "Scope (on/off)"], ["Menyimpan ke akun…", "Saving to account…"], ["Kamu menumbangkan ", "You downed "], ["Gagal menyambung: ", "Connection failed: "], ["kesalahan jaringan", "network error"], ["Berganti tiap main", "Changes every match"], ["Sensitivitas bidik", "Aim sensitivity"], ["Drone dilumpuhkan", "Drones downed"], ["Toko skin senjata", "Weapon skin shop"], ["Buat akun & masuk", "Create account & enter"], [" kill lebih dulu.", " kills first."], ["Hidup lagi dalam ", "Reviving in "], ["Arena Bulan Kelam", "Dark Moon Arena"], ["Benteng Dua Panji", "Two-Banner Fortress"], ["Warna garis bidik", "Crosshair color"], ["Ubah nama pemain", "Change player name"], ["Isi ulang peluru", "Reload"], ["Suara hidup/mati", "Sound on/off"], ["Permainan dijeda", "Game paused"], ["Sendiri vs drone", "Solo vs drones"], ["Selamat datang, ", "Welcome, "], ["Karambit · Peta ", "Karambit · Map "], ["Musuh mengepung!", "Enemies are flanking!"], [". Lawan berpita ", ". Opponents wear "], ["Periksa senjata", "Inspect weapon"], ["Memeriksa akun…", "Checking account…"], ["Tim kamu menang", "Your team wins"], ["Ruangan penuh (", "Room full ("], ["Penguasa Kosmos", "Cosmos Ruler"], ["Gudang Besi Tua", "Old Iron Warehouse"], [" · Hidup lagi ×", " · Revive ×"], ["Kualitas grafik", "Graphics quality"], ["Guncangan layar", "Screen shake"], ["Nyawa · Medkit ", "Health · Medkit "], ["Mode permainan", "Game mode"], ["Bidik teropong", "Aim through scope"], ["Tembak (tahan)", "Fire (hold)"], ["Lanjut bermain", "Resume"], ["Tim kamu kalah", "Your team loses"], ["Kamu tertembak", "You were shot"], ["Kamu mencapai ", "You reached "], ["Respawn dalam ", "Respawn in "], ["Masuk sebagai ", "Signed in as "], ["Pakai skin ini", "Use this skin"], ["Obsidian Merah", "Red Obsidian"], ["Lapangan Fajar", "Dawn Field"], ["Labirin Bayang", "Shadow Labyrinth"], ["Musuh memanjat", "Enemies climb"], ["NAIK PANGKAT: ", "RANK UP: "], ["Lawan berpita ", "Opponents wear "], ["Rekan berpita ", "Teammates wear "], ["Drone tersisa", "Drones left"], ["Pilih senjata", "Choose weapon"], ["Scope (tahan)", "Scope (hold)"], ["Misi berakhir", "Mission over"], [" kill menang.", " kills wins."], ["Senapan Serbu", "Assault Rifle"], ["Penembak Jitu", "Sniper"], ["Piramida Debu", "Dust Pyramid"], ["Dermaga Karat", "Rusty Dock"], ["Lorong sempit", "Narrow corridors"], ["Bisa dipanjat", "Climbable"], ["Naik pangkat!", "Rank up!"], ["Tampilkan FPS", "Show FPS"], ["skin berefek", "effect skins"], ["Skor terbaik", "Best score"], ["Ruang online", "Online room"], ["kode ruangan", "room code"], ["Kode ruangan", "Room code"], ["Pakai medkit", "Use medkit"], ["Jeda / suara", "Pause / sound"], ["Koin didapat", "Coins earned"], ["Contoh: Bayu", "Example: Bayu"], ["Masuk ke gim", "Enter the game"], ["Memuat peta…", "Loading maps…"], ["Kamu tumbang", "You went down"], ["Cakar Kosmik", "Cosmic Claw"], ["NAIK TAHAP: ", "STEP UP: "], ["Pangkat kamu", "Your rank"], [" EXP menuju ", " EXP to reach "], ["Mouse / Klik", "Mouse / Click"], ["Buat akunmu", "Create your account"], ["Memuat gim…", "Loading game…"], ["Multiplayer", "Multiplayer"], ["Kamu menang", "You win"], ["Nyawa habis", "Out of health"], ["Nyawa penuh", "Health full"], ["Teras Purba", "Ancient Terraces"], ["Kota Runtuh", "Fallen City"], ["Naik tahap!", "Step up!"], ["Suara hidup", "Sound on"], ["+ karambit", "+ karambit"], ["Pilih peta", "Choose map"], ["Pilih mode", "Choose mode"], ["Klik kanan", "Right click"], ["Saldo koin", "Coin balance"], ["Mulai lagi", "Start again"], ["Pengaturan", "Settings"], ["Tim vs Tim", "Team vs Team"], ["Tim Oranye", "Orange Team"], ["Kamu kalah", "You lose"], ["Kill lawan", "Enemy kills"], ["Hidup lagi", "Revive"], [" bergabung", " joined"], ["Legendaris", "Legendary"], ["Atap Senja", "Dusk Rooftops"], ["Kawah Beku", "Frozen Crater"], ["Reruntuhan", "Ruins"], [" mencapai ", " reached "], ["Suara mati", "Sound off"], ["Kode baru", "New code"], ["Pilih tim", "Choose team"], ["Isi ulang", "Reload"], ["Klik kiri", "Left click"], ["Toko Skin", "Skin Shop"], ["Spin Skin", "Skin Spin"], ["Main lagi", "Play again"], ["Gelombang", "Wave"], ["Kill kamu", "Your kills"], ["Skin baru", "New skin"], ["Raja Naga", "Dragon King"], [" · Tahap ", " · Step "], ["Guncangan", "Shake"], ["Prajurit ", "Private "], ["Jenderal ", "General "], ["Tim Biru", "Blue Team"], [" selesai", " complete"], [" (admin)", " (admin)"], ["Terbaik ", "Best "], ["Skor tim", "Team score"], ["Kolonel ", "Colonel "], ["Legenda ", "Legend "], ["+ Medkit", "+ Medkit"], [" · Efek", " · Effect"], ["Sampai ", "Up to "], ["Rekrut ", "Recruit "], ["Kopral ", "Corporal "], ["Sersan ", "Sergeant "], ["Letnan ", "Lieutenant "], ["Kapten ", "Captain "], ["+ Nyawa", "+ Health"], ["Koin +", "Coins +"], ["Halo, ", "Hello, "], ["Capai ", "Reach "], ["Mayor ", "Major "]];
 
-  I18N_SUB.unshift(['Skin medkit','Medkit skin'],['Api Kehidupan','Flame of Life'],['Beli · ',' Buy · '.slice(1)],['Dipakai','Equipped'],['Terkunci','Locked']);
+  I18N_SUB.unshift(['Skin medkit','Medkit skin'],['Penyihir Agung','Grand Wizard'],['Sihir Penyembuh','Healing Magic'],['Beli · ',' Buy · '.slice(1)],['Dipakai','Equipped'],['Terkunci','Locked']);
   I18N_SUB.unshift(['Sensitivitas vertikal','Vertical sensitivity'],['Sensitivitas saat scope','Scope sensitivity'],['Sensitivitas scope sniper','Sniper scope sensitivity'],['Sensitivitas layar sentuh','Touch screen sensitivity'],['Sensitivitas bidik (umum)','Aim sensitivity (general)'],['Pengaturan & cara main','Settings & how to play']);
   I18N_SUB.unshift(['Sensitivitas Senapan Serbu','Assault Rifle sensitivity'],['Sensitivitas Penembak Jitu (tanpa scope)','Sniper sensitivity (no scope)'],['Sensitivitas SMG','SMG sensitivity'],['Sensitivitas Shotgun','Shotgun sensitivity'],['Kecepatan bidik tombol panah','Arrow-key aim speed'],['Balik sumbu X (bidik horizontal)','Invert X axis (horizontal aim)'],['Pengaturan cepat','Quick settings'],['Semua pengaturan','All settings'],['Bahasa: Indonesia','Language: Indonesia']);
   var i18nOrig = new WeakMap(), i18nSet = new WeakMap(), i18nAny = false, i18nAttrs = ['title', 'aria-label', 'placeholder'];
@@ -3944,28 +3944,27 @@ body {
       var sec = document.createElement('div'); sec.className = 'collsec';
       var lab = document.createElement('div'); lab.className = 'wlabel'; lab.textContent = 'Skin medkit · ' + (phxOwned() ? 2 : 1) + '/2'; sec.appendChild(lab);
       var grid = document.createElement('div'); grid.className = 'skgrid med';
-      var wing = '<path d="M40 30 C14 6 6 24 4 40 C16 30 20 34 24 40 C26 34 30 34 40 36Z M80 30 C106 6 114 24 116 40 C104 30 100 34 96 40 C94 34 90 34 80 36Z" fill="#ffb23a" opacity=".85"/><path d="M42 32 C26 16 18 26 16 38 M78 32 C94 16 102 26 104 38" stroke="#fff2b8" stroke-width="2" fill="none"/>';
       var stdSvg = '<svg viewBox="0 0 120 70"><rect x="30" y="22" width="60" height="40" rx="4" fill="#f4f6f7" stroke="#222" stroke-width="2"/><rect x="48" y="14" width="24" height="10" rx="2" fill="#f4f6f7" stroke="#222" stroke-width="2"/><rect x="54" y="30" width="12" height="24" fill="#d7262e"/><rect x="48" y="36" width="24" height="12" fill="#d7262e"/></svg>';
-      var phxSvg = '<svg viewBox="0 0 120 70"><circle cx="60" cy="40" r="30" fill="#ff9a2a" opacity=".25"/>' + wing + '<rect x="32" y="26" width="56" height="36" rx="4" fill="#2a1014" stroke="#ffb23a" stroke-width="2"/><rect x="48" y="18" width="24" height="10" rx="2" fill="#3a1418" stroke="#ffb23a" stroke-width="2"/><rect x="55" y="32" width="10" height="24" fill="#ffc34a"/><rect x="48" y="39" width="24" height="10" fill="#ffc34a"/></svg>';
+      var phxSvg = '<svg viewBox="0 0 120 70"><circle cx="60" cy="36" r="31" fill="none" stroke="#b98cff" stroke-width="1.5"/><circle cx="60" cy="36" r="25" fill="none" stroke="#ffd27a" stroke-width="1" stroke-dasharray="3 3"/><polygon points="60,14 79,47 41,47" fill="none" stroke="#7dffd8" stroke-width="1"/><polygon points="60,58 41,25 79,25" fill="none" stroke="#7dffd8" stroke-width="1" opacity=".6"/><rect x="42" y="30" width="36" height="24" rx="3" fill="#241448" stroke="#ffd27a" stroke-width="1.6"/><path d="M42 30 L48 20 L72 20 L78 30Z" fill="#3b1d6e" stroke="#ffd27a" stroke-width="1.4"/><rect x="57" y="35" width="6" height="14" fill="#ffd27a"/><rect x="53" y="39" width="14" height="6" fill="#ffd27a"/><circle cx="26" cy="20" r="2" fill="#7dffd8"/><circle cx="96" cy="50" r="2.4" fill="#c9a8ff"/><circle cx="90" cy="16" r="1.6" fill="#ffe29a"/><circle cx="20" cy="54" r="1.8" fill="#ffe29a"/></svg>';
       var msg = document.createElement('div'); msg.className = 'medmsg'; msg.setAttribute('role', 'status');
       function card(id, name, svg, own, cur, sub, cls) {
         var b = document.createElement('button'); b.type = 'button'; b.className = 'sk' + (cls ? ' ' + cls : '');
         b.setAttribute('aria-pressed', own && cur ? 'true' : 'false');
-        b.style.borderBottomColor = id === 'phoenix' ? RAR.mitos.col : '#7b8794';
+        b.style.borderBottomColor = id === 'wizard' ? RAR.mitos.col : '#7b8794';
         b.innerHTML = svg + '<b>' + name + '</b><span>' + sub + '</span>';
         b.addEventListener('click', function () {
           if (own) { equip.med = id; saveJSON('sektor9-equip', equip); renderCollection(); return; }
           if (wallet < MED_COST) { msg.textContent = 'Koin belum cukup. Main dulu untuk mengumpulkan koin.'; return; }
-          wallet -= MED_COST; saveWallet(); owned['med:phoenix'] = true; saveJSON('sektor9-skins', Object.keys(owned));
-          equip.med = 'phoenix'; saveJSON('sektor9-equip', equip);
+          wallet -= MED_COST; saveWallet(); owned['med:wizard'] = true; saveJSON('sektor9-skins', Object.keys(owned));
+          equip.med = 'wizard'; saveJSON('sektor9-equip', equip);
           tone(440, 880, 0.25, 'triangle', 0.12); tone(110, 40, 1.0, 'sawtooth', 0.12); setTimeout(function () { tone(1320, 2640, 0.8, 'sine', 0.08); }, 250);
           refreshEcon(); renderCollection();
         });
         grid.appendChild(b);
       }
-      var cs = equip.med !== 'phoenix' || !phxOwned();
+      var cs = equip.med !== 'wizard' || !phxOwned();
       card('std', 'Standar', stdSvg, true, cs, cs ? 'Dipakai' : 'Awal');
-      card('phoenix', 'PHOENIX: Api Kehidupan', phxSvg, phxOwned(), !cs, phxOwned() ? (cs ? 'Mitos' : 'Dipakai') : 'Beli · ' + MED_COST + ' koin', 'phxc');
+      card('wizard', 'ARCHMAGE: Penyihir Agung', phxSvg, phxOwned(), !cs, phxOwned() ? (cs ? 'Mitos' : 'Dipakai') : 'Beli · ' + MED_COST + ' koin', 'wizc');
       sec.appendChild(grid); sec.appendChild(msg); body.appendChild(sec);
     })();
     WEAPONS.forEach(function (w) {
@@ -4681,85 +4680,76 @@ body {
     var k1 = new T.Mesh(medGeo.cH, red); k1.position.y = 0.168; kit.add(k1);
     var k2 = new T.Mesh(medGeo.cV, red); k2.position.y = 0.168; kit.add(k2);
     medG.add(kit);
-    medParts.m = { skin: skin, glove: glove, sleeve: sleeve, band: band, kit: [kb, k1, k2] };
-    /* ---- Skin medkit: PHOENIX (Api Kehidupan) ---- */
+    /* ---- Skin medkit: ARCHMAGE (Penyihir Agung): sihir penyembuh, bukan perban ---- */
     var add = function (c, o) { return new T.MeshBasicMaterial({ color: c, transparent: true, opacity: o, depthWrite: false, blending: T.AdditiveBlending }); };
-    var phx = new T.Group(); phx.visible = false; medG.add(phx); medParts.phx = phx;
-    medParts.pm = { box: new T.MeshLambertMaterial({ color: 0x2a1014, emissive: 0x240400 }), cross: new T.MeshBasicMaterial({ color: 0xffc34a }), flame: new T.MeshBasicMaterial({ color: 0xffe9a0 }) };
-    medParts.wings = [];
-    [-1, 1].forEach(function (sd) {
-      var wg = new T.Group(); wg.position.set(sd * 0.06, 0.02, -0.78); phx.add(wg);
-      var fs = [];
-      for (var i = 0; i < 7; i++) {
-        var len = 0.34 + i * 0.045 - (i > 4 ? (i - 4) * 0.07 : 0);
-        var f = new T.Group();
-        var m = new T.Mesh(new T.BoxGeometry(0.03 - i * 0.002, len, 0.004), add(i % 2 ? 0xffb23a : 0xff7a1a, 0.62));
-        m.position.y = len / 2; f.add(m);
-        var tip = new T.Mesh(new T.BoxGeometry(0.014, 0.07, 0.004), add(0xfff2b8, 0.85)); tip.position.y = len + 0.02; f.add(tip);
-        f.userData = { a: 0.15 + i * 0.2 };
-        wg.add(f); fs.push(f);
-      }
-      medParts.wings.push({ g: wg, f: fs, sd: sd });
-    });
-    var halo = new T.Mesh(new T.CircleGeometry(0.5, 28), add(0xff9a2a, 0.16)); halo.position.set(0, 0.0, -0.95); phx.add(halo); medParts.halo = halo;
-    var halo2 = new T.Mesh(new T.RingGeometry(0.42, 0.5, 32), add(0xffd27a, 0.35)); halo2.position.set(0, 0.0, -0.94); phx.add(halo2); medParts.halo2 = halo2;
+    var wz = new T.Group(); wz.visible = false; medG.add(wz); medParts.phx = wz;
+    // lengan jubah ungu dengan tangan bercahaya terangkat ke depan
+    var robe = new T.MeshLambertMaterial({ color: 0x3b1d6e, emissive: 0x160a38 }), trim = new T.MeshBasicMaterial({ color: 0xffd27a });
+    var outer = new T.Group(); outer.position.set(0.26, -0.34, -0.3); outer.rotation.z = 0.5; wz.add(outer);
+    var inner = new T.Group(); inner.rotation.x = -1.2; outer.add(inner);
+    var sl = new T.Mesh(new T.CylinderGeometry(0.1, 0.05, 0.5, 14, 1, true), new T.MeshLambertMaterial({ color: 0x3b1d6e, emissive: 0x160a38, side: T.DoubleSide })); sl.position.y = 0.25; inner.add(sl);
+    var cuff = new T.Mesh(new T.CylinderGeometry(0.056, 0.056, 0.03, 14), trim); cuff.position.y = 0.5; inner.add(cuff);
+    var palm = new T.Mesh(new T.BoxGeometry(0.085, 0.07, 0.03), new T.MeshLambertMaterial({ color: 0xd9a77f, emissive: 0x6a3a10 })); palm.position.y = 0.55; inner.add(palm);
+    for (var fi = 0; fi < 4; fi++) { var fg = new T.Mesh(new T.BoxGeometry(0.014, 0.06, 0.014), palm.material); fg.position.set(-0.03 + fi * 0.02, 0.62, 0); fg.rotation.z = (fi - 1.5) * 0.12; inner.add(fg); }
+    var core = new T.Mesh(new T.SphereGeometry(0.03, 10, 8), add(0xb9a0ff, 0.9)); core.position.set(0, 0.6, 0.03); inner.add(core); medParts.core = core;
+    // lingkaran sihir: dua cincin berlawanan arah dengan rune
+    var mc = new T.Group(); mc.position.set(-0.02, 0.04, -0.95); wz.add(mc); medParts.mc = mc;
+    var r1 = new T.Group(), r2 = new T.Group(); mc.add(r1); mc.add(r2); medParts.r1 = r1; medParts.r2 = r2;
+    r1.add(new T.Mesh(new T.RingGeometry(0.44, 0.455, 48), add(0xb98cff, 0.75)));
+    r1.add(new T.Mesh(new T.RingGeometry(0.36, 0.368, 48), add(0xffd27a, 0.55)));
+    r2.add(new T.Mesh(new T.RingGeometry(0.28, 0.292, 6), add(0x7dffd8, 0.7)));
+    r2.add(new T.Mesh(new T.RingGeometry(0.2, 0.208, 3), add(0xffd27a, 0.6)));
+    var ang, tk;
+    for (ang = 0; ang < 12; ang++) { tk = new T.Mesh(new T.BoxGeometry(0.02, 0.05 + (ang % 3) * 0.015, 0.004), add(ang % 2 ? 0xffd27a : 0xb98cff, 0.85)); tk.position.set(Math.cos(ang / 12 * 6.2832) * 0.4, Math.sin(ang / 12 * 6.2832) * 0.4, 0); tk.rotation.z = ang / 12 * 6.2832 + 1.5708; r1.add(tk); }
+    for (ang = 0; ang < 6; ang++) { tk = new T.Mesh(new T.BoxGeometry(0.03, 0.03, 0.004), add(0x7dffd8, 0.9)); tk.position.set(Math.cos(ang / 6 * 6.2832) * 0.28, Math.sin(ang / 6 * 6.2832) * 0.28, 0); tk.rotation.z = 0.785; r2.add(tk); }
+    var gl = new T.Mesh(new T.CircleGeometry(0.46, 32), add(0x7a4dff, 0.12)); gl.position.z = -0.01; mc.add(gl); medParts.gl = gl;
+    // medkit melayang yang terbuka sendiri
+    var fk = new T.Group(); fk.position.set(-0.02, 0.04, -0.82); wz.add(fk); medParts.fk = fk;
+    var fb = new T.Mesh(medGeo.box, new T.MeshLambertMaterial({ color: 0x241448, emissive: 0x120830 })); fk.add(fb);
+    var fcA = new T.Mesh(medGeo.fH, medParts.pmCross = new T.MeshBasicMaterial({ color: 0xffd27a })); fcA.position.z = 0.186; fk.add(fcA);
+    var fcB = new T.Mesh(medGeo.fV, medParts.pmCross); fcB.position.z = 0.186; fk.add(fcB);
+    var lid = new T.Mesh(medGeo.box, new T.MeshLambertMaterial({ color: 0x3b1d6e, emissive: 0x1a0a40 })); lid.scale.set(1, 0.18, 1); lid.position.y = 0.17; fk.add(lid); medParts.lid = lid;
+    var beam2 = new T.Mesh(new T.CylinderGeometry(0.1, 0.1, 0.5, 12, 1, true), add(0x9ffff0, 0.2)); beam2.position.y = 0.3; fk.add(beam2); medParts.beam2 = beam2;
+    // butiran cahaya penyembuh yang mengalir ke pemain
     medParts.embers = [];
-    for (var j = 0; j < 26; j++) {
-      var em = new T.Mesh(new T.BoxGeometry(0.014, 0.014, 0.014), add(j % 3 ? 0xffa42a : 0xffe29a, 0.9));
-      em.visible = false; phx.add(em); medParts.embers.push({ m: em, life: 0, vx: 0, vy: 0, vz: 0 });
+    for (var j = 0; j < 34; j++) {
+      var em = new T.Mesh(new T.BoxGeometry(0.016, 0.016, 0.016), add(j % 3 === 0 ? 0xffe29a : (j % 3 === 1 ? 0x7dffd8 : 0xc9a8ff), 0.95));
+      em.visible = false; wz.add(em); medParts.embers.push({ m: em, life: 0, a: 0, r: 0 });
     }
+    medParts.m = { kit: [] };
     medG.visible = false;
     camera.add(medG);
   })();
-  var MED_COST = 600, phxSeed = 0, phxFlare = 0;
-  function phxOwned() { return isAdmin || !!owned['med:phoenix']; }
-  function phxOn() { return equip.med === 'phoenix' && phxOwned(); }
+  var MED_COST = 4000, phxFlare = 0;
+  function phxOwned() { return isAdmin || !!owned['med:wizard'] || !!owned['med:phoenix']; }
+  function phxOn() { return equip.med === 'wizard' && phxOwned(); }
   function applyMedSkin(on) {
-    var m = medParts.m, pm = medParts.pm;
-    if (on) {
-      m.sleeve.color.setHex(0x3a0d10); m.sleeve.emissive.setHex(0x2a0600);
-      m.glove.color.setHex(0x16100c); m.glove.emissive.setHex(0x1a0c00);
-      m.band.color.setHex(0xffd27a); m.band.emissive.setHex(0xff8a1a);
-      medParts.patch.material = pm.flame; medParts.tail.material = m.band;
-      m.kit[0].material = pm.box; m.kit[1].material = pm.cross; m.kit[2].material = pm.cross;
-    } else {
-      m.sleeve.color.setHex(0x3a4a3b); m.sleeve.emissive.setHex(0);
-      m.glove.color.setHex(0x1d2227); m.glove.emissive.setHex(0);
-      m.band.color.setHex(0xf2f0e8); m.band.emissive.setHex(0);
-      medParts.patch.material = medMats.red;
-      m.kit[0].material = medMats.white; m.kit[1].material = medMats.red; m.kit[2].material = medMats.red;
-    }
+    for (var i = 0; i < medG.children.length; i++) { var c = medG.children[i]; if (c !== medParts.phx) c.visible = !on; }
     medParts.phx.visible = on;
   }
   function updatePhx(dt, p, e, cur) {
-    var k = e * (0.3 + 0.7 * Math.min(1, p * 2.6)) + phxFlare * 0.35, flap = Math.sin(healT * 6) * 0.05 * k, i, w;
-    phxFlare = Math.max(0, phxFlare - dt * 1.6);
-    for (w = 0; w < medParts.wings.length; w++) {
-      var W = medParts.wings[w];
-      W.g.scale.set(Math.max(0.01, k), Math.max(0.01, k), 1);
-      for (i = 0; i < W.f.length; i++) { var f = W.f[i]; f.rotation.z = -W.sd * (f.userData.a * k * 0.95 + flap * (1 + i * 0.25)) + (W.sd < 0 ? 0 : 0); }
-    }
-    var pulse = 0.8 + Math.sin(healT * 7) * 0.2;
-    medParts.halo.material.opacity = (0.1 + 0.1 * pulse) * e + phxFlare * 0.5;
-    medParts.halo.scale.setScalar(0.8 + e * 0.35 + phxFlare * 0.8);
-    medParts.halo2.material.opacity = 0.3 * e * pulse + phxFlare * 0.6;
-    medParts.halo2.scale.setScalar(0.8 + e * 0.35 + phxFlare * 0.8);
-    medParts.halo2.rotation.z += dt * 0.8;
-    medParts.m.band.emissive.setRGB(1, 0.45 + 0.15 * pulse, 0.08);
-    var spawn = Math.max(0, Math.floor(dt * 70 * e + Math.random()));
+    var i, t = healT, open = Math.max(0, Math.min(1, (p - 0.08) / 0.18)), pulse = 0.85 + Math.sin(t * 6) * 0.15;
+    phxFlare = Math.max(0, phxFlare - dt * 1.4);
+    var k = e * (0.4 + 0.6 * Math.min(1, p * 4)) + phxFlare * 0.25;
+    medParts.mc.scale.setScalar(Math.max(0.01, k));
+    medParts.r1.rotation.z += dt * (0.9 + phxFlare * 4); medParts.r2.rotation.z -= dt * (1.5 + phxFlare * 5);
+    medParts.gl.material.opacity = (0.08 + 0.08 * pulse) * e + phxFlare * 0.5;
+    medParts.core.scale.setScalar(0.8 + 0.4 * pulse + phxFlare * 1.5);
+    medParts.fk.scale.setScalar(Math.max(0.01, e * 0.55 * (1 + phxFlare * 0.25)));
+    medParts.fk.position.y = 0.04 + Math.sin(t * 3) * 0.02; medParts.fk.rotation.y = Math.sin(t * 1.6) * 0.5; medParts.fk.rotation.x = -0.25;
+    medParts.lid.position.y = 0.17 + open * 0.2; medParts.lid.rotation.x = -open * 0.9;
+    medParts.beam2.material.opacity = (0.08 + 0.14 * pulse) * open; medParts.beam2.scale.set(1 + phxFlare, 0.6 + open * 0.8, 1 + phxFlare);
+    var spawn = Math.max(0, Math.floor(dt * 80 * e * open + Math.random() * open));
     for (i = 0; i < medParts.embers.length; i++) {
       var E = medParts.embers[i];
       if (E.life <= 0) {
-        if (spawn > 0) {
-          spawn--; E.life = 0.7 + Math.random() * 0.8;
-          E.m.position.set(cur * 0.9 + (Math.random() - 0.5) * 0.25, -0.1 + (Math.random() - 0.5) * 0.08, -0.5 + (Math.random() - 0.5) * 0.1);
-          E.vx = (Math.random() - 0.5) * 0.18; E.vy = 0.18 + Math.random() * 0.4; E.vz = (Math.random() - 0.5) * 0.1;
-          E.m.visible = true;
-        }
+        if (spawn > 0) { spawn--; E.life = 0.9 + Math.random() * 0.5; E.a = Math.random() * 6.28; E.r = 0.04 + Math.random() * 0.08; E.t = 0; E.m.visible = true; }
       } else {
-        E.life -= dt;
-        E.m.position.x += (E.vx + Math.sin(healT * 6 + i) * 0.05) * dt; E.m.position.y += E.vy * dt; E.m.position.z += E.vz * dt;
-        E.m.scale.setScalar(Math.max(0.05, E.life));
+        E.life -= dt; E.t += dt;
+        var u = Math.min(1, E.t / 1.1);                      // dari medkit (jauh) ke pemain (dekat dan bawah)
+        E.a += dt * 5;
+        E.m.position.set(-0.02 + Math.cos(E.a) * E.r * (1 - u * 0.6), 0.04 - u * 0.36 + Math.sin(E.a) * E.r * (1 - u), -0.82 + u * 0.55);
+        E.m.scale.setScalar(Math.max(0.05, Math.min(1.2, E.life * 1.3)) * (1 - u * 0.4));
         if (E.life <= 0) E.m.visible = false;
       }
     }
@@ -4778,10 +4768,12 @@ body {
       layerN(t + 2.25, 'highpass', 3600, 0.8, 0.22, 0.12, out, 7000);    // plester disobek
       layerO(t + 2.5, 523, 523, 0.16, 'sine', 0.1, out); layerO(t + 2.62, 784, 784, 0.3, 'sine', 0.1, out);
       if (phxOn()) {
-        layerN(t + 0.05, 'bandpass', 500, 0.7, 0.9, 0.12, out, 2600);                       // kobaran api
-        layerO(t + 0.2, 330, 660, 1.2, 'sine', 0.06, out); layerO(t + 0.9, 495, 990, 1.4, 'sine', 0.05, out);
-        layerN(t + 2.2, 'bandpass', 1800, 0.9, 0.5, 0.1, out, 6000);                        // sayap mengembang
-        layerO(t + 2.5, 659, 659, 0.7, 'triangle', 0.07, out); layerO(t + 2.55, 988, 988, 0.8, 'triangle', 0.06, out); layerO(t + 2.6, 1319, 1319, 0.9, 'sine', 0.06, out);
+        var nt = [392, 523, 659, 784, 1047, 784, 1319], q;
+        layerN(t, 'bandpass', 700, 0.8, 1.2, 0.1, out, 3200);                                // kekuatan terkumpul
+        layerO(t + 0.05, 98, 196, 1.6, 'sine', 0.1, out);                                    // dengung sihir
+        for (q = 0; q < nt.length; q++) { layerO(t + 0.25 + q * 0.28, nt[q], nt[q], 0.6, 'sine', 0.07, out); layerO(t + 0.25 + q * 0.28, nt[q] * 2, nt[q] * 2, 0.35, 'triangle', 0.025, out); }
+        layerN(t + 2.2, 'highpass', 4200, 0.8, 0.7, 0.12, out, 9000);                        // taburan kilau
+        layerO(t + 2.5, 523, 523, 0.9, 'sine', 0.08, out); layerO(t + 2.5, 784, 784, 0.9, 'sine', 0.07, out); layerO(t + 2.5, 1047, 1047, 1.1, 'sine', 0.07, out); layerO(t + 2.5, 1568, 1568, 1.2, 'sine', 0.05, out);
       }
     } catch (e) {}
   }
@@ -4792,7 +4784,7 @@ body {
     }
     medkits--; healing = true; healT = 0; healFlash = 0;
     scoped = false; reloading = false; reloadT = 0; slashT = -1; meleeDelay = -1; firing = false; touch.firing = false;
-    var po = phxOn(); applyMedSkin(po); phxFlare = 0;
+    var po = phxOn(); applyMedSkin(po); phxFlare = 0; medParts.flared = false;
     medG.visible = true;
     healSound();
   }
@@ -4801,7 +4793,7 @@ body {
     var hf = $('healfx');
     if (healFlash > 0) healFlash = Math.max(0, healFlash - dt * 2);
     var po = phxOn();
-    if (hf) hf.classList.toggle('phx', po);
+    if (hf) hf.classList.toggle('wiz', po);
     if (!healing) { if (hf) hf.style.opacity = String(healFlash * 0.9); return; }
     if (pDead) { stopHeal(); return; }
     healT += dt;
@@ -4836,7 +4828,7 @@ body {
     if (hf) hf.style.opacity = String(0.2 + Math.sin(healT * 5) * 0.08 + healFlash * 0.7);
     if (healT >= HEAL_DUR) {
       stopHeal(); healFlash = 1;
-      popup(po ? '+ Nyawa · Api Kehidupan' : '+ Nyawa', false);
+      popup(po ? '+ Nyawa · Sihir Penyembuh' : '+ Nyawa', false);
     }
   }
 
