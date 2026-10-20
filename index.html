@@ -583,6 +583,14 @@ body {
               <div class="wlabel"><i>04</i>Pilih peta</div>
               <div class="weapons maps" id="mGrid" role="radiogroup" aria-label="Pilih peta"></div>
             </div>
+            <div class="wsel" id="quickSet">
+              <div class="wlabel"><i>05</i>Pengaturan cepat</div>
+              <div class="wlabel">Sensitivitas bidik · <span id="qSenV">1.0×</span></div>
+              <input id="qSenR" type="range" min="30" max="250" step="5" value="100">
+              <div class="wlabel">Sensitivitas saat scope · <span id="qAdsV">1.0×</span></div>
+              <input id="qAdsR" type="range" min="30" max="250" step="5" value="100">
+              <div class="btns"><button class="mini" id="qLang" type="button">Bahasa: Indonesia</button><button class="mini" id="qAll" type="button">Semua pengaturan</button></div>
+            </div>
           </div>
         </div>
         <div class="actions">
@@ -655,17 +663,28 @@ body {
       <input id="ssnR" type="range" min="30" max="250" step="5" value="100">
       <div class="wlabel"><i>07</i> Sensitivitas layar sentuh · <span id="stcV">1.0×</span></div>
       <input id="stcR" type="range" min="30" max="250" step="5" value="100">
-      <div class="wlabel"><i>08</i> Bidang pandang (FOV) · <span id="fovV">75°</span></div>
+      <div class="wlabel"><i>08</i> Sensitivitas Senapan Serbu · <span id="waV">1.0×</span></div>
+      <input id="waR" type="range" min="30" max="250" step="5" value="100">
+      <div class="wlabel"><i>09</i> Sensitivitas SMG · <span id="wsV">1.0×</span></div>
+      <input id="wsR" type="range" min="30" max="250" step="5" value="100">
+      <div class="wlabel"><i>10</i> Sensitivitas Shotgun · <span id="wgV">1.0×</span></div>
+      <input id="wgR" type="range" min="30" max="250" step="5" value="100">
+      <div class="wlabel"><i>11</i> Sensitivitas Penembak Jitu (tanpa scope) · <span id="wnV">1.0×</span></div>
+      <input id="wnR" type="range" min="30" max="250" step="5" value="100">
+      <div class="wlabel"><i>12</i> Kecepatan bidik tombol panah · <span id="kbV">1.0×</span></div>
+      <input id="kbR" type="range" min="30" max="250" step="5" value="100">
+      <div class="wlabel"><i>13</i> Bidang pandang (FOV) · <span id="fovV">75°</span></div>
       <input id="fovR" type="range" min="60" max="100" step="1" value="75">
-      <div class="wlabel"><i>09</i> Kualitas grafik</div>
+      <div class="wlabel"><i>14</i> Kualitas grafik</div>
       <div class="seg sm" id="setGfx" role="radiogroup" aria-label="Kualitas grafik"><button type="button" role="radio" data-v="low" aria-checked="false">Rendah</button><button type="button" role="radio" data-v="med" aria-checked="false">Sedang</button><button type="button" role="radio" data-v="high" aria-checked="true">Tinggi</button></div>
-      <div class="wlabel"><i>10</i> Warna garis bidik</div>
+      <div class="wlabel"><i>15</i> Warna garis bidik</div>
       <div class="seg sm" id="setXh" role="radiogroup" aria-label="Warna garis bidik"><button type="button" role="radio" data-v="default" aria-checked="true">Standar</button><button type="button" role="radio" data-v="red" aria-checked="false">Merah</button><button type="button" role="radio" data-v="green" aria-checked="false">Hijau</button><button type="button" role="radio" data-v="cyan" aria-checked="false">Cyan</button><button type="button" role="radio" data-v="white" aria-checked="false">Putih</button></div>
-      <div class="wlabel"><i>11</i> Lainnya</div>
+      <div class="wlabel"><i>16</i> Lainnya</div>
+      <label class="chk"><input type="checkbox" id="setInvX"><span>Balik sumbu X (bidik horizontal)</span></label>
       <label class="chk"><input type="checkbox" id="setInv"><span>Balik sumbu Y (bidik vertikal)</span></label>
       <label class="chk"><input type="checkbox" id="setShk" checked><span>Guncangan layar</span></label>
       <label class="chk"><input type="checkbox" id="setFps"><span>Tampilkan FPS</span></label>
-      <div class="wlabel"><i>12</i> Kontrol</div>
+      <div class="wlabel"><i>17</i> Kontrol</div>
       <table>
         <tr><td>W A S D</td><td>Bergerak (Shift lari, Spasi lompat)</td></tr>
         <tr><td>Mouse / Klik</td><td>Bidik dan tembak (klik kanan: bidik jarak jauh)</td></tr>
@@ -710,7 +729,7 @@ body {
 
 
   /* ---------- Pengaturan & bahasa ---------- */
-  var cfg = { lang: 'id', fov: 75, gfx: 'high', xh: 'default', inv: false, shk: true, fps: false, sy: 1, sads: 1, ssn: 1, stc: 1 };
+  var cfg = { lang: 'id', fov: 75, gfx: 'high', xh: 'default', inv: false, shk: true, fps: false, sy: 1, sads: 1, ssn: 1, stc: 1, wa: 1, ws: 1, wg: 1, wn: 1, invx: false, kb: 1 };
   (function () {
     var saved = false;
     try {
@@ -724,7 +743,8 @@ body {
   var I18N_EX = {"peta": "maps", "senjata": "weapons", "mode": "modes", "Terbaik": "Best", "Skor": "Score", "Bergerak": "Move", "Membidik": "Aim", "Lari": "Sprint", "Spasi": "Space", "Lompat": "Jump", "Jeda": "Pause", "Tembak": "Fire", "Pisau": "Knife", "Isi": "Load", "Koleksi": "Collection", "Kembali": "Back", "Selesai": "Done", "Kontrol": "Controls", "koin": "coins", "Mulai": "Start", "Nyawa": "Health", "Magasin": "Magazine", "Medkit": "Medkit", "Bertahan": "Survival", "Umum": "Common", "Langka": "Rare", "Epik": "Epic", "Mitos": "Mythic", "Karbon": "Carbon", "Gurun": "Desert", "Hutan": "Forest", "Es": "Ice", "Emas": "Gold", "Galaksi": "Galaxy", "Pelangi": "Rainbow", "Petir": "Lightning", "Karambit": "Karambit", "Acak": "Random", "Terbuka": "Open", "Gelap": "Dark", "Berkabut": "Foggy", "Tahap": "Step", "Mudah": "Easy", "Normal": "Normal", "Sulit": "Hard", "Brutal": "Brutal", "Mustahil": "Impossible", "Rekrut": "Recruit", "Prajurit": "Private", "Kopral": "Corporal", "Sersan": "Sergeant", "Letnan": "Lieutenant", "Kapten": "Captain", "Mayor": "Major", "Kolonel": "Colonel", "Jenderal": "General", "Legenda": "Legend", "Pemain": "Player", "Bahasa": "Language", "Lainnya": "Other", "Rendah": "Low", "Sedang": "Medium", "Tinggi": "High", "Standar": "Default", "Merah": "Red", "Hijau": "Green", "Putih": "White"};
   var I18N_SUB = [[". Makin tinggi tahap, musuh makin akurat, kuat, dan cepat. Di pangkat tinggi mereka juga membawa senjata dan skin beragam, berlindung, mengepung, mengincar dari jauh, dan menyerang bersama. Rekan satu timmu ikut makin cerdas dan makin akurat seiring pangkatmu naik.", ". The higher the step, the more accurate, strong and fast the enemies. At high ranks they also carry varied weapons and skins, take cover, flank, snipe from afar and attack together. Your teammates also get smarter and more accurate as your rank rises."], ["Menara oranye di sisi tim Oranye, menara biru di sisi tim Biru, tangga luar menuju atap. Musuh ikut menaiki tangga untuk mengejar Anda, jadi atap bukan tempat aman.", "Orange tower on the Orange team side, blue tower on the Blue team side, outer stairs to the roof. Enemies climb the stairs to chase you, so the roof is not safe."], ["Satu spin menghabiskan 150 koin dan memberi satu skin acak untuk salah satu senjata. Koin didapat dari kill, gelombang selesai, dan hasil pertandingan.", "One spin costs 150 coins and gives one random skin for one of the weapons. Coins come from kills, completed waves, and match results."], ["Tiap pangkat punya 3 tahap (I, II, III). Menang +30 EXP, kalah -10 (tidak turun tahap). Makin tinggi pangkat, EXP yang dibutuhkan makin banyak. Musuh: ", "Each rank has 3 steps (I, II, III). Win +30 EXP, lose -10 (you never drop a step). The higher the rank, the more EXP you need. Enemies: "], ["Geser sisi kiri layar untuk bergerak, geser sisi kanan untuk membidik, tahan tombol Tembak untuk menembak, dan ketuk Scope untuk memperbesar bidikan.", "Drag the left side of the screen to move, drag the right side to aim, hold the Fire button to shoot, and tap Scope to zoom in."], ["Tips: bidik kepala untuk skor ekstra. Di mode tim, naikkan rank untuk lawan yang lebih kuat. Di layar sentuh, geser sisi kanan layar untuk membidik.", "Tip: aim for the head for bonus score. In team mode, rank up to face stronger opponents. On touch screens, drag the right side of the screen to aim."], ["Pisau tradisional berbilah melengkung seperti cakar atau bulan sabit, gagang pendek dengan cincin. Tebasan memutar dan mengalir, tanpa peluru.", "Traditional curved-blade knife like a claw or crescent, short handle with a ring. Spinning, flowing slashes, no ammo."], ["Drone latih menyerbu dari segala arah dan menembak balik. Pilih senjata, berlindung di balik rintangan, lalu bidik kepala untuk skor ekstra.", "Training drones swarm in from every direction and shoot back. Pick a weapon, take cover behind obstacles, and aim for the head for bonus score."], ["Peramban ini tidak bisa menampilkan grafik 3D (WebGL). Coba buka halaman ini di Chrome, Edge, Firefox atau Safari versi terbaru.", "This browser cannot display 3D graphics (WebGL). Try opening this page in a recent version of Chrome, Edge, Firefox or Safari."], ["Jika kursor tidak terkunci, bidik dengan tombol panah atau tahan klik kanan sambil menggeser mouse, dan pakai Q untuk scope.", "If the cursor is not locked, aim with the arrow keys or hold right click while moving the mouse, and use Q for the scope."], ["Dua tim saling berhadapan di peta pilihanmu. Kamu bergabung ke satu tim bersama bot, dan tim pertama yang mencapai ", "Two teams face off on the map you picked. You join one team with bots, and the first team to reach "], ["Kota hancur: tank bangkai, dinding runtuh, kawah, dan karung pasir. Berasap dan berdebu, banyak celah berlindung.", "Ruined city: wrecked tanks, collapsed walls, craters and sandbags. Smoky and dusty, plenty of cover."], ["Drone latih menyerbu dari segala arah. Bertahan selama mungkin dan bidik kepala untuk skor ekstra.", "Training drones swarm in from every direction. Survive as long as you can and aim for the head for bonus score."], ["Piramida, tangga, dan menara. Tahan Spasi sambil maju untuk memanjat balok bertanda kuning.", "Pyramids, stairs and towers. Hold Space while moving forward to climb yellow-marked blocks."], ["Online tidak tersedia. Buka gim lewat claude.ai dengan akun yang punya akses ke gim ini.", "Online is not available. Open the game through claude.ai with an account that has access to this game."], ["Teras batu bertingkat, pilar patah, dan tangga. Naik ke puncak untuk tembakan dari atas.", "Tiered stone terraces, broken pillars and stairs. Climb to the top for shots from above."], ["Rak dan tumpukan peti membentuk lorong. Banyak tempat berlindung, jarak pandang pendek.", "Shelves and crate stacks form corridors. Lots of cover, short sight lines."], ["Dinding beton berlapis dengan celah sempit. Musuh bisa muncul dari tikungan mana saja.", "Layered concrete walls with narrow gaps. Enemies can appear from any corner."], ["Multiplayer online. Masukkan kode ruangan yang sama dengan temanmu, lalu tekan Mulai.", "Online multiplayer. Enter the same room code as your friend, then press Start."], ["Hadapi gelombang drone yang terus bertambah. Skor dan gelombang tertinggi tersimpan.", "Face ever-growing waves of drones. Your best score and wave are saved."], ["Dentuman memekakkan, 20 peluru menyebar. Hancurkan jarak dekat. Kokang pump-action.", "Deafening blast, 20 spreading pellets. Devastating up close. Pump-action."], ["Duel 1v1 online. Masukkan kode ruangan yang sama dengan temanmu, lalu tekan Mulai.", "Online 1v1 duel. Enter the same room code as your friend, then press Start."], ["Dua tim saling tembak. Kamu bergabung ke satu tim, dan tim pertama yang mencapai ", "Two teams fight each other. You join one team, and the first team to reach "], ["Pertandingan online tetap berjalan untuk pemain lain. Klik tombol untuk kembali.", "The online match keeps running for other players. Click the button to return."], ["Gagal menyimpan ke akun. Progres tetap ada di peramban ini dan akan dicoba lagi.", "Failed to save to account. Progress stays in this browser and will be retried."], ["Tumpukan kontainer di dermaga. Naiki kontainer rendah, lalu panjat yang tinggi.", "Stacked containers on the dock. Climb the low containers, then the tall ones."], ["Semua melawan semua bersama temanmu lewat kode ruangan. Pertama yang mencapai ", "Free-for-all with your friends via a room code. The first to reach "], ["Dentuman menggema, recoil keras, peluru tembus penghalang. Kokang bolt manual.", "Echoing boom, heavy recoil, rounds penetrate cover. Manual bolt action."], ["Arena melingkar di malam hari. Pilar tinggi dan sekat rendah untuk berlindung.", "Circular arena at night. Tall pillars and low walls for cover."], ["Dataran bersalju dengan bunker rendah. Kabut tebal membatasi jarak pandang.", "Snowy plain with low bunkers. Thick fog limits visibility."], ["Empat gedung di senja hari. Panjat peti di sisi gedung untuk naik ke atap.", "Four buildings at dusk. Climb the crates beside the buildings to reach the roofs."], ["Garis laser merah berarti tembakan segera datang. Bergeraklah!", "A red laser line means a shot is coming. Move!"], ["Pertandingan sedang berjalan. Klik tombol untuk melanjutkan.", "The match is in progress. Click the button to continue."], ["Akun tidak tersedia · progres tersimpan di peramban ini saja", "Account unavailable · progress is saved in this browser only"], ["Lapangan latihan luas dengan peti acak. Pas untuk pemanasan.", "Wide training field with random crates. Perfect for warming up."], ["Mereka menyerang dari dua sisi. Cari penutup atau mundur.", "They attack from two sides. Find cover or fall back."], ["Online tidak tersedia di sini. Buka gim lewat claude.ai.", "Online is not available here. Open the game through claude.ai."], ["Peta dipilih acak setiap kali Anda mulai atau main lagi.", "The map is chosen at random every time you start or play again."], ["Drone menembak balik. Berlindunglah di balik rintangan.", "Drones shoot back. Take cover behind obstacles."], ["Nama pemain minimal 2 karakter (huruf, angka, spasi).", "Player name must be at least 2 characters (letters, digits, spaces)."], ["Koin belum cukup. Main dulu untuk mengumpulkan koin.", "Not enough coins. Play first to earn some."], [" pemain, semua melawan semua. Pertama yang mencapai ", " players, free for all. The first to reach "], ["Belum masuk · progres tersimpan di peramban ini saja", "Not signed in · progress is saved in this browser only"], ["Mode tamu · progres tersimpan di peramban ini saja", "Guest mode · progress is saved in this browser only"], ["Ganti tim, ukuran tim, atau peta untuk membalas.", "Change team, team size, or map to get revenge."], ["Bidik dan tembak (klik kanan: bidik jarak jauh)", "Aim and shoot (right click: long-range scope)"], ["sedang berjalan. Klik tombol untuk melanjutkan.", "in progress. Click the button to continue."], ["Sangat cepat, tapi dayanya kecil dan agak liar.", "Very fast, but low damage and a bit wild."], ["Tidak bisa terhubung ke ruangan. Coba lagi.", "Cannot connect to the room. Try again."], ["Pakai medkit (dijatuhkan musuh yang kalah)", "Use medkit (dropped by defeated enemies)"], ["Drone latih masih menunggu di sektor ini.", "Training drones are still waiting in this sector."], ["Kode ruangan minimal 3 huruf atau angka.", "Room code must be at least 3 letters or digits."], ["Nama pemain · tampil di dalam permainan", "Player name · shown in game"], ["Seimbang dan stabil. Tembakan otomatis.", "Balanced and stable. Automatic fire."], ["Tahan Spasi sambil maju untuk memanjat.", "Hold Space while moving forward to climb."], ["Skor terbaik baru. Coba lampaui lagi.", "New high score. Try to beat it again."], ["Bergerak (Shift lari, Spasi lompat)", "Move (Shift to sprint, Space to jump)"], ["Periksa senjata (animasi inspeksi)", "Inspect weapon (inspection animation)"], ["Senjata utama / karambit / tukar", "Main weapon / karambit / swap"], ["Nyawa +30, magasin penuh, koin +", "Health +30, magazine full, coins +"], ["Kesempatan hidup lagi tersisa ", "Revives left: "], [" · progres tersimpan di akunmu", " · progress is saved to your account"], ["Balik sumbu Y (bidik vertikal)", "Invert Y axis (vertical aim)"], ["Pangkat dan tahap tertinggi. ", "Highest rank and step. "], ["drone masuk dari tepi sektor", "drones entering from the edge of the sector"], ["Bagikan kode ini ke temanmu.", "Share this code with your friends."], ["Lawanmu keluar dari ruangan.", "Your opponent left the room."], [" pemain). Pakai kode lain.", " players). Use another code."], ["Penembak jitu mengincarmu", "A sniper is targeting you"], ["2 tim, bot sebagai rekan", "2 teams, bots as teammates"], ["Online · sampai 8 pemain", "Online · up to 8 players"], ["Selamat datang kembali, ", "Welcome back, "], ["Lapangan latihan tembak", "Shooting range"], ["Pengaturan & cara main", "Settings & how to play"], ["Menyambung ke ruangan ", "Connecting to room "], ["Setel ulang pengaturan", "Reset settings"], ["Jumlah pemain per tim", "Players per team"], ["Pertandingan selesai", "Match over"], ["! Musuh makin sulit.", "! Enemies get tougher."], ["Bidang pandang (FOV)", "Field of view (FOV)"], ["Menyambungkan akun…", "Connecting account…"], ["Menyiapkan senjata…", "Preparing weapons…"], [" + Karambit · Peta ", " + Karambit · Map "], [" · sisa kesempatan ", " · chances left "], ["Pengaturan & bahasa", "Settings & language"], ["Senjata / Karambit", "Weapon / Karambit"], ["Scope (hidup/mati)", "Scope (on/off)"], ["Menyimpan ke akun…", "Saving to account…"], ["Kamu menumbangkan ", "You downed "], ["Gagal menyambung: ", "Connection failed: "], ["kesalahan jaringan", "network error"], ["Berganti tiap main", "Changes every match"], ["Sensitivitas bidik", "Aim sensitivity"], ["Drone dilumpuhkan", "Drones downed"], ["Toko skin senjata", "Weapon skin shop"], ["Buat akun & masuk", "Create account & enter"], [" kill lebih dulu.", " kills first."], ["Hidup lagi dalam ", "Reviving in "], ["Arena Bulan Kelam", "Dark Moon Arena"], ["Benteng Dua Panji", "Two-Banner Fortress"], ["Warna garis bidik", "Crosshair color"], ["Ubah nama pemain", "Change player name"], ["Isi ulang peluru", "Reload"], ["Suara hidup/mati", "Sound on/off"], ["Permainan dijeda", "Game paused"], ["Sendiri vs drone", "Solo vs drones"], ["Selamat datang, ", "Welcome, "], ["Karambit · Peta ", "Karambit · Map "], ["Musuh mengepung!", "Enemies are flanking!"], [". Lawan berpita ", ". Opponents wear "], ["Periksa senjata", "Inspect weapon"], ["Memeriksa akun…", "Checking account…"], ["Tim kamu menang", "Your team wins"], ["Ruangan penuh (", "Room full ("], ["Penguasa Kosmos", "Cosmos Ruler"], ["Gudang Besi Tua", "Old Iron Warehouse"], [" · Hidup lagi ×", " · Revive ×"], ["Kualitas grafik", "Graphics quality"], ["Guncangan layar", "Screen shake"], ["Nyawa · Medkit ", "Health · Medkit "], ["Mode permainan", "Game mode"], ["Bidik teropong", "Aim through scope"], ["Tembak (tahan)", "Fire (hold)"], ["Lanjut bermain", "Resume"], ["Tim kamu kalah", "Your team loses"], ["Kamu tertembak", "You were shot"], ["Kamu mencapai ", "You reached "], ["Respawn dalam ", "Respawn in "], ["Masuk sebagai ", "Signed in as "], ["Pakai skin ini", "Use this skin"], ["Obsidian Merah", "Red Obsidian"], ["Lapangan Fajar", "Dawn Field"], ["Labirin Bayang", "Shadow Labyrinth"], ["Musuh memanjat", "Enemies climb"], ["NAIK PANGKAT: ", "RANK UP: "], ["Lawan berpita ", "Opponents wear "], ["Rekan berpita ", "Teammates wear "], ["Drone tersisa", "Drones left"], ["Pilih senjata", "Choose weapon"], ["Scope (tahan)", "Scope (hold)"], ["Misi berakhir", "Mission over"], [" kill menang.", " kills wins."], ["Senapan Serbu", "Assault Rifle"], ["Penembak Jitu", "Sniper"], ["Piramida Debu", "Dust Pyramid"], ["Dermaga Karat", "Rusty Dock"], ["Lorong sempit", "Narrow corridors"], ["Bisa dipanjat", "Climbable"], ["Naik pangkat!", "Rank up!"], ["Tampilkan FPS", "Show FPS"], ["skin berefek", "effect skins"], ["Skor terbaik", "Best score"], ["Ruang online", "Online room"], ["kode ruangan", "room code"], ["Kode ruangan", "Room code"], ["Pakai medkit", "Use medkit"], ["Jeda / suara", "Pause / sound"], ["Koin didapat", "Coins earned"], ["Contoh: Bayu", "Example: Bayu"], ["Masuk ke gim", "Enter the game"], ["Memuat peta…", "Loading maps…"], ["Kamu tumbang", "You went down"], ["Cakar Kosmik", "Cosmic Claw"], ["NAIK TAHAP: ", "STEP UP: "], ["Pangkat kamu", "Your rank"], [" EXP menuju ", " EXP to reach "], ["Mouse / Klik", "Mouse / Click"], ["Buat akunmu", "Create your account"], ["Memuat gim…", "Loading game…"], ["Multiplayer", "Multiplayer"], ["Kamu menang", "You win"], ["Nyawa habis", "Out of health"], ["Nyawa penuh", "Health full"], ["Teras Purba", "Ancient Terraces"], ["Kota Runtuh", "Fallen City"], ["Naik tahap!", "Step up!"], ["Suara hidup", "Sound on"], ["+ karambit", "+ karambit"], ["Pilih peta", "Choose map"], ["Pilih mode", "Choose mode"], ["Klik kanan", "Right click"], ["Saldo koin", "Coin balance"], ["Mulai lagi", "Start again"], ["Pengaturan", "Settings"], ["Tim vs Tim", "Team vs Team"], ["Tim Oranye", "Orange Team"], ["Kamu kalah", "You lose"], ["Kill lawan", "Enemy kills"], ["Hidup lagi", "Revive"], [" bergabung", " joined"], ["Legendaris", "Legendary"], ["Atap Senja", "Dusk Rooftops"], ["Kawah Beku", "Frozen Crater"], ["Reruntuhan", "Ruins"], [" mencapai ", " reached "], ["Suara mati", "Sound off"], ["Kode baru", "New code"], ["Pilih tim", "Choose team"], ["Isi ulang", "Reload"], ["Klik kiri", "Left click"], ["Toko Skin", "Skin Shop"], ["Spin Skin", "Skin Spin"], ["Main lagi", "Play again"], ["Gelombang", "Wave"], ["Kill kamu", "Your kills"], ["Skin baru", "New skin"], ["Raja Naga", "Dragon King"], [" · Tahap ", " · Step "], ["Guncangan", "Shake"], ["Prajurit ", "Private "], ["Jenderal ", "General "], ["Tim Biru", "Blue Team"], [" selesai", " complete"], [" (admin)", " (admin)"], ["Terbaik ", "Best "], ["Skor tim", "Team score"], ["Kolonel ", "Colonel "], ["Legenda ", "Legend "], ["+ Medkit", "+ Medkit"], [" · Efek", " · Effect"], ["Sampai ", "Up to "], ["Rekrut ", "Recruit "], ["Kopral ", "Corporal "], ["Sersan ", "Sergeant "], ["Letnan ", "Lieutenant "], ["Kapten ", "Captain "], ["+ Nyawa", "+ Health"], ["Koin +", "Coins +"], ["Halo, ", "Hello, "], ["Capai ", "Reach "], ["Mayor ", "Major "]];
 
-  I18N_SUB.push(['Sensitivitas vertikal','Vertical sensitivity'],['Sensitivitas saat scope','Scope sensitivity'],['Sensitivitas scope sniper','Sniper scope sensitivity'],['Sensitivitas layar sentuh','Touch screen sensitivity'],['Sensitivitas bidik (umum)','Aim sensitivity (general)'],['Pengaturan & cara main','Settings & how to play']);
+  I18N_SUB.unshift(['Sensitivitas vertikal','Vertical sensitivity'],['Sensitivitas saat scope','Scope sensitivity'],['Sensitivitas scope sniper','Sniper scope sensitivity'],['Sensitivitas layar sentuh','Touch screen sensitivity'],['Sensitivitas bidik (umum)','Aim sensitivity (general)'],['Pengaturan & cara main','Settings & how to play']);
+  I18N_SUB.unshift(['Sensitivitas Senapan Serbu','Assault Rifle sensitivity'],['Sensitivitas Penembak Jitu (tanpa scope)','Sniper sensitivity (no scope)'],['Sensitivitas SMG','SMG sensitivity'],['Sensitivitas Shotgun','Shotgun sensitivity'],['Kecepatan bidik tombol panah','Arrow-key aim speed'],['Balik sumbu X (bidik horizontal)','Invert X axis (horizontal aim)'],['Pengaturan cepat','Quick settings'],['Semua pengaturan','All settings'],['Bahasa: Indonesia','Language: Indonesia']);
   var i18nOrig = new WeakMap(), i18nSet = new WeakMap(), i18nAny = false, i18nAttrs = ['title', 'aria-label', 'placeholder'];
   function trText(v) {
     if (!/[A-Za-z]{2}/.test(v)) return v;
@@ -2436,7 +2456,8 @@ body {
     camera.fov = baseFov / (1 + (weapon.zoom - 1) * scopeK);
     camera.updateProjectionMatrix();
   }
-  function lookScale() { return optSens * (1 + ((weapon.id === 'sn' ? cfg.ssn : cfg.sads) - 1) * scopeK) / (1 + (weapon.zoom - 1) * scopeK); }
+  var WSENS = { ar: 'wa', smg: 'ws', sg: 'wg', sn: 'wn' };
+  function lookScale() { return optSens * (cfg[WSENS[weapon.id]] || 1) * (1 + ((weapon.id === 'sn' ? cfg.ssn : cfg.sads) - 1) * scopeK) / (1 + (weapon.zoom - 1) * scopeK); }
   function scopeFx() {
     var snipe = weapon.id === 'sn' ? clamp((scopeK - 0.6) / 0.4, 0, 1) : 0;
     var dot = (weapon.id === 'ar' || (weapon.id === 'smg' && fxName === 'reaper')) ? clamp((scopeK - 0.5) / 0.5, 0, 1) : 0;
@@ -4120,23 +4141,30 @@ body {
     }
     function syncOpts() {
       $('senR').value = Math.round(optSens * 100); $('volR').value = Math.round(optVol * 100); $('fovR').value = cfg.fov;
-      ['sy', 'sads', 'ssn', 'stc'].forEach(function (k) { $(k + 'R').value = Math.round(cfg[k] * 100); $(k + 'V').textContent = cfg[k].toFixed(1) + '×'; });
+      ['sy', 'sads', 'ssn', 'stc', 'wa', 'ws', 'wg', 'wn', 'kb'].forEach(function (k) { $(k + 'R').value = Math.round(cfg[k] * 100); $(k + 'V').textContent = cfg[k].toFixed(1) + '×'; });
       $('senV').textContent = optSens.toFixed(1) + '×'; $('volV').textContent = Math.round(optVol * 100) + '%'; $('fovV').textContent = cfg.fov + '°';
-      $('setInv').checked = !!cfg.inv; $('setShk').checked = !!cfg.shk; $('setFps').checked = !!cfg.fps;
+      $('setInvX').checked = !!cfg.invx; $('setInv').checked = !!cfg.inv; $('setShk').checked = !!cfg.shk; $('setFps').checked = !!cfg.fps;
       segSet('setLang', cfg.lang); segSet('setGfx', cfg.gfx); segSet('setXh', cfg.xh);
+    }
+    function syncQuick() {
+      if (!$('qSenR')) return;
+      $('qSenR').value = Math.round(optSens * 100); $('qSenV').textContent = optSens.toFixed(1) + '×';
+      $('qAdsR').value = Math.round(cfg.sads * 100); $('qAdsV').textContent = cfg.sads.toFixed(1) + '×';
+      $('qLang').textContent = cfg.lang === 'en' ? 'Language: English' : 'Bahasa: Indonesia';
     }
     function openOpts() { syncOpts(); $('opts').hidden = false; }
     $('senR').addEventListener('input', function () {
       optSens = (parseInt(this.value, 10) || 100) / 100; $('senV').textContent = optSens.toFixed(1) + '×';
       try { localStorage.setItem('sektor9-sens', String(optSens)); } catch (e) {}
+      syncQuick();
     });
     $('volR').addEventListener('input', function () {
       optVol = (parseInt(this.value, 10) || 0) / 100; $('volV').textContent = Math.round(optVol * 100) + '%';
       if (mgain) mgain.gain.value = optVol;
       try { localStorage.setItem('sektor9-vol', String(optVol)); } catch (e) {}
     });
-    ['sy', 'sads', 'ssn', 'stc'].forEach(function (k) {
-      $(k + 'R').addEventListener('input', function () { cfg[k] = clamp((parseInt(this.value, 10) || 100) / 100, 0.3, 2.5); $(k + 'V').textContent = cfg[k].toFixed(1) + '×'; saveCfg(); });
+    ['sy', 'sads', 'ssn', 'stc', 'wa', 'ws', 'wg', 'wn', 'kb'].forEach(function (k) {
+      $(k + 'R').addEventListener('input', function () { cfg[k] = clamp((parseInt(this.value, 10) || 100) / 100, 0.3, 2.5); $(k + 'V').textContent = cfg[k].toFixed(1) + '×'; saveCfg(); syncQuick(); });
     });
     $('fovR').addEventListener('input', function () {
       cfg.fov = clamp(parseInt(this.value, 10) || 75, 60, 100); $('fovV').textContent = cfg.fov + '°'; saveCfg(); resize();
@@ -4146,22 +4174,27 @@ body {
         var t = ev.target; while (t && t !== this && !(t.getAttribute && t.getAttribute('data-v'))) t = t.parentNode;
         if (!t || t === this || !t.getAttribute) return;
         cfg[pr[1]] = t.getAttribute('data-v'); saveCfg(); segSet(pr[0], cfg[pr[1]]);
-        if (pr[1] === 'lang') applyLang();
+        if (pr[1] === 'lang') { applyLang(); syncQuick(); }
         else if (pr[1] === 'gfx') { renderer.setPixelRatio(pixelRatio()); resize(); }
         else applyCfgVisual();
       });
     });
-    [['setInv', 'inv'], ['setShk', 'shk'], ['setFps', 'fps']].forEach(function (pr) {
+    [['setInvX', 'invx'], ['setInv', 'inv'], ['setShk', 'shk'], ['setFps', 'fps']].forEach(function (pr) {
       $(pr[0]).addEventListener('change', function () { cfg[pr[1]] = !!this.checked; saveCfg(); applyCfgVisual(); });
     });
     $('setReset').addEventListener('click', function () {
-      var keepLang = cfg.lang; cfg.sy = 1; cfg.sads = 1; cfg.ssn = 1; cfg.stc = 1; cfg.fov = 75; cfg.gfx = 'high'; cfg.xh = 'default'; cfg.inv = false; cfg.shk = true; cfg.fps = false; cfg.lang = keepLang;
+      var keepLang = cfg.lang; cfg.sy = 1; cfg.sads = 1; cfg.ssn = 1; cfg.stc = 1; cfg.wa = 1; cfg.ws = 1; cfg.wg = 1; cfg.wn = 1; cfg.kb = 1; cfg.invx = false; cfg.fov = 75; cfg.gfx = 'high'; cfg.xh = 'default'; cfg.inv = false; cfg.shk = true; cfg.fps = false; cfg.lang = keepLang;
       optSens = 1; optVol = 1; if (mgain) mgain.gain.value = 1;
       try { localStorage.setItem('sektor9-sens', '1'); localStorage.setItem('sektor9-vol', '1'); } catch (e) {}
-      saveCfg(); renderer.setPixelRatio(pixelRatio()); resize(); applyCfgVisual(); syncOpts();
+      saveCfg(); renderer.setPixelRatio(pixelRatio()); resize(); applyCfgVisual(); syncOpts(); syncQuick();
     });
     $('optBtn').addEventListener('click', openOpts);
     $('lgOpt').addEventListener('click', openOpts);
+    $('qAll').addEventListener('click', openOpts);
+    $('qSenR').addEventListener('input', function () { optSens = (parseInt(this.value, 10) || 100) / 100; $('qSenV').textContent = optSens.toFixed(1) + '×'; try { localStorage.setItem('sektor9-sens', String(optSens)); } catch (e) {} });
+    $('qAdsR').addEventListener('input', function () { cfg.sads = clamp((parseInt(this.value, 10) || 100) / 100, 0.3, 2.5); $('qAdsV').textContent = cfg.sads.toFixed(1) + '×'; saveCfg(); });
+    $('qLang').addEventListener('click', function () { cfg.lang = cfg.lang === 'en' ? 'id' : 'en'; saveCfg(); applyLang(); syncQuick(); });
+    syncQuick();
     $('pSet').addEventListener('click', openOpts);
     $('optOk').addEventListener('click', function () { $('opts').hidden = true; });
     window.__openOpts = openOpts;
@@ -4940,8 +4973,8 @@ body {
     if (keys.ArrowUp) lookV += 1;
     if (keys.ArrowDown) lookV -= 1;
     var ls = lookScale();
-    yaw += look * 2.2 * dt * ls;
-    pitch += lookV * 1.6 * dt * ls * cfg.sy;
+    yaw += look * 2.2 * dt * ls * cfg.kb;
+    pitch += lookV * 1.6 * dt * ls * cfg.sy * cfg.kb;
     pitch = clamp(pitch, -1.45, 1.45);
 
     var f = (keys.KeyW ? 1 : 0) - (keys.KeyS ? 1 : 0) - touch.my;
@@ -5535,7 +5568,7 @@ body {
     if (state !== 'playing') return;
     if (locked || rmb) {
       var sk = 0.0022 * lookScale();
-      yaw -= (e.movementX || 0) * sk;
+      yaw -= (e.movementX || 0) * sk * (cfg.invx ? -1 : 1);
       pitch -= (e.movementY || 0) * sk * cfg.sy * (cfg.inv ? -1 : 1);
       pitch = clamp(pitch, -1.45, 1.45);
     }
@@ -5578,7 +5611,7 @@ body {
   zl.addEventListener('pointermove', function (e) {
     if (e.pointerId !== touch.lookId || state !== 'playing') return;
     var tk = 0.0055 * lookScale() * cfg.stc;
-    yaw -= (e.clientX - touch.lx) * tk;
+    yaw -= (e.clientX - touch.lx) * tk * (cfg.invx ? -1 : 1);
     pitch -= (e.clientY - touch.ly) * tk * cfg.sy * (cfg.inv ? -1 : 1);
     pitch = clamp(pitch, -1.45, 1.45);
     touch.lx = e.clientX; touch.ly = e.clientY;
