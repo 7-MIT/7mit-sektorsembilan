@@ -275,6 +275,23 @@ body {
 #gchatLog b { color: var(--signal); }
 #gchatIn { pointer-events: auto; width: 100%; box-sizing: border-box; margin-top: 4px; padding: 6px 8px; font: 600 13px/1.2 var(--body); border: 2px solid var(--ink); background: #fff; color: var(--ink); }
 #gchatIn[hidden] { display: none; }
+.resbox { display: flex; flex-direction: column; gap: 8px; }
+.resbox[hidden] { display: none; }
+.mvp { display: flex; align-items: center; gap: 10px; border: 2px solid var(--ink); background: linear-gradient(100deg, #ffd24a, #ffb300); padding: 8px 12px; font: 900 18px/1.1 var(--display); letter-spacing: 0.06em; text-transform: uppercase; box-shadow: 3px 3px 0 var(--ink); }
+.mvp i { font-style: normal; font-size: 24px; }
+.mvp small { display: block; font: 600 11px/1.3 var(--mono); letter-spacing: 0.08em; opacity: 0.8; }
+.rtbl { border: 2px solid var(--ink); background: #fff; max-height: 30vh; overflow-y: auto; }
+.rrow { display: grid; grid-template-columns: 28px 1fr 34px 34px 46px; align-items: center; gap: 6px; padding: 5px 10px; font: 600 12px/1.2 var(--mono); border-top: 1px solid rgba(15,27,38,0.15); }
+.rrow:first-child { border-top: 0; }
+.rrow.rh { background: var(--ink); color: var(--paper); font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; position: sticky; top: 0; }
+.rrow.me { background: #eaf3ff; font-weight: 800; box-shadow: inset 4px 0 0 var(--safety); }
+.rrow.top { background: #ffe58a; }
+.rrow span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rrow span:nth-child(n+3) { text-align: right; }
+.rrow .tg { display: inline-block; width: 9px; height: 9px; margin-right: 6px; border: 1px solid rgba(0,0,0,0.4); }
+.rrow .cr { font-weight: 900; color: #b36b00; margin-left: 4px; }
+.rstars { font: 900 15px/1 var(--display); letter-spacing: 0.1em; text-transform: uppercase; }
+.rstars b { color: #e8a200; font-size: 20px; letter-spacing: 0.15em; }
 .skgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 8px; }
 .sk { appearance: none; cursor: pointer; text-align: center; border: 2px solid var(--ink); border-bottom-width: 4px; background: #fff; color: var(--ink); padding: 6px; display: flex; flex-direction: column; gap: 3px; min-width: 0; font-family: var(--body); }
 .sk b { font: 900 13px/1 var(--display); letter-spacing: 0.05em; text-transform: uppercase; }
@@ -571,6 +588,11 @@ body {
               <div><dt id="sL4">Skor terbaik</dt><dd id="sBest">0</dd></div>
               <div><dt>Koin didapat</dt><dd id="sCoin">0</dd></div>
             </dl>
+            <div class="resbox" id="resBox" hidden>
+              <div class="mvp" id="resMvp"></div>
+              <div class="rtbl" id="resTbl" role="table" aria-label="Hasil pertandingan"></div>
+              <div class="rstars" id="resStars"></div>
+            </div>
             <div class="wsel" id="modeSel">
               <div class="wlabel"><i>01</i>Mode permainan</div>
               <div class="weapons" id="modeGrid" role="radiogroup" aria-label="Pilih mode"></div>
@@ -810,11 +832,12 @@ body {
   })();
   function saveCfg() { try { localStorage.setItem('sektor9-set', JSON.stringify(cfg)); } catch (e) {} }
   function pixelRatio() { var d = window.devicePixelRatio || 1; return cfg.gfx === 'low' ? Math.min(d, 0.75) : (cfg.gfx === 'med' ? Math.min(d, 1.25) : Math.min(d, 2)); }
-  var I18N_EX = {"peta": "maps", "senjata": "weapons", "mode": "modes", "Terbaik": "Best", "Skor": "Score", "Bergerak": "Move", "Membidik": "Aim", "Lari": "Sprint", "Spasi": "Space", "Lompat": "Jump", "Jeda": "Pause", "Tembak": "Fire", "Pisau": "Knife", "Isi": "Load", "Koleksi": "Collection", "Kembali": "Back", "Selesai": "Done", "Kontrol": "Controls", "koin": "coins", "Mulai": "Start", "Nyawa": "Health", "Magasin": "Magazine", "Medkit": "Medkit", "Bertahan": "Survival", "Umum": "Common", "Langka": "Rare", "Epik": "Epic", "Mitos": "Mythic", "Karbon": "Carbon", "Gurun": "Desert", "Hutan": "Forest", "Es": "Ice", "Emas": "Gold", "Galaksi": "Galaxy", "Pelangi": "Rainbow", "Petir": "Lightning", "Karambit": "Karambit", "Acak": "Random", "Terbuka": "Open", "Gelap": "Dark", "Berkabut": "Foggy", "Tahap": "Step", "Mudah": "Easy", "Normal": "Normal", "Sulit": "Hard", "Brutal": "Brutal", "Mustahil": "Impossible", "Rekrut": "Recruit", "Prajurit": "Private", "Kopral": "Corporal", "Sersan": "Sergeant", "Letnan": "Lieutenant", "Kapten": "Captain", "Mayor": "Major", "Kolonel": "Colonel", "Jenderal": "General", "Legenda": "Legend", "Pemain": "Player", "Bahasa": "Language", "Lainnya": "Other", "Rendah": "Low", "Sedang": "Medium", "Tinggi": "High", "Standar": "Default", "Merah": "Red", "Hijau": "Green", "Putih": "White", "Obrolan": "Chat", "Tersambung": "Connected", "Gabung": "Join", "Penuh": "Full", "Kirim": "Send", "Segarkan": "Refresh", "Tim kamu": "Your team", "Tim lawan": "Enemy team", "Semua": "All", "Kota": "City", "Alam": "Nature"};
+  var I18N_EX = {"peta": "maps", "senjata": "weapons", "mode": "modes", "Terbaik": "Best", "Skor": "Score", "Bergerak": "Move", "Membidik": "Aim", "Lari": "Sprint", "Spasi": "Space", "Lompat": "Jump", "Jeda": "Pause", "Tembak": "Fire", "Pisau": "Knife", "Isi": "Load", "Koleksi": "Collection", "Kembali": "Back", "Selesai": "Done", "Kontrol": "Controls", "koin": "coins", "Mulai": "Start", "Nyawa": "Health", "Magasin": "Magazine", "Medkit": "Medkit", "Bertahan": "Survival", "Umum": "Common", "Langka": "Rare", "Epik": "Epic", "Mitos": "Mythic", "Karbon": "Carbon", "Gurun": "Desert", "Hutan": "Forest", "Es": "Ice", "Emas": "Gold", "Galaksi": "Galaxy", "Pelangi": "Rainbow", "Petir": "Lightning", "Karambit": "Karambit", "Acak": "Random", "Terbuka": "Open", "Gelap": "Dark", "Berkabut": "Foggy", "Tahap": "Step", "Mudah": "Easy", "Normal": "Normal", "Sulit": "Hard", "Brutal": "Brutal", "Mustahil": "Impossible", "Rekrut": "Recruit", "Prajurit": "Private", "Kopral": "Corporal", "Sersan": "Sergeant", "Letnan": "Lieutenant", "Kapten": "Captain", "Mayor": "Major", "Kolonel": "Colonel", "Jenderal": "General", "Legenda": "Legend", "Pemain": "Player", "Bahasa": "Language", "Lainnya": "Other", "Rendah": "Low", "Sedang": "Medium", "Tinggi": "High", "Standar": "Default", "Merah": "Red", "Hijau": "Green", "Putih": "White", "Mati": "Deaths", "Obrolan": "Chat", "Tersambung": "Connected", "Gabung": "Join", "Penuh": "Full", "Kirim": "Send", "Segarkan": "Refresh", "Tim kamu": "Your team", "Tim lawan": "Enemy team", "Semua": "All", "Kota": "City", "Alam": "Nature"};
   var I18N_SUB = [[". Makin tinggi tahap, musuh makin akurat, kuat, dan cepat. Di pangkat tinggi mereka juga membawa senjata dan skin beragam, berlindung, mengepung, mengincar dari jauh, dan menyerang bersama. Rekan satu timmu ikut makin cerdas dan makin akurat seiring pangkatmu naik.", ". The higher the step, the more accurate, strong and fast the enemies. At high ranks they also carry varied weapons and skins, take cover, flank, snipe from afar and attack together. Your teammates also get smarter and more accurate as your rank rises."], ["Menara oranye di sisi tim Oranye, menara biru di sisi tim Biru, tangga luar menuju atap. Musuh ikut menaiki tangga untuk mengejar Anda, jadi atap bukan tempat aman.", "Orange tower on the Orange team side, blue tower on the Blue team side, outer stairs to the roof. Enemies climb the stairs to chase you, so the roof is not safe."], ["Satu spin menghabiskan 150 koin dan memberi satu skin acak untuk salah satu senjata. Koin didapat dari kill, gelombang selesai, dan hasil pertandingan.", "One spin costs 150 coins and gives one random skin for one of the weapons. Coins come from kills, completed waves, and match results."], ["Tiap pangkat punya 3 tahap (I, II, III). Menang +30 EXP, kalah -10 (tidak turun tahap). Makin tinggi pangkat, EXP yang dibutuhkan makin banyak. Musuh: ", "Each rank has 3 steps (I, II, III). Win +30 EXP, lose -10 (you never drop a step). The higher the rank, the more EXP you need. Enemies: "], ["Geser sisi kiri layar untuk bergerak, geser sisi kanan untuk membidik, tahan tombol Tembak untuk menembak, dan ketuk Scope untuk memperbesar bidikan.", "Drag the left side of the screen to move, drag the right side to aim, hold the Fire button to shoot, and tap Scope to zoom in."], ["Tips: bidik kepala untuk skor ekstra. Di mode tim, naikkan rank untuk lawan yang lebih kuat. Di layar sentuh, geser sisi kanan layar untuk membidik.", "Tip: aim for the head for bonus score. In team mode, rank up to face stronger opponents. On touch screens, drag the right side of the screen to aim."], ["Pisau tradisional berbilah melengkung seperti cakar atau bulan sabit, gagang pendek dengan cincin. Tebasan memutar dan mengalir, tanpa peluru.", "Traditional curved-blade knife like a claw or crescent, short handle with a ring. Spinning, flowing slashes, no ammo."], ["Drone latih menyerbu dari segala arah dan menembak balik. Pilih senjata, berlindung di balik rintangan, lalu bidik kepala untuk skor ekstra.", "Training drones swarm in from every direction and shoot back. Pick a weapon, take cover behind obstacles, and aim for the head for bonus score."], ["Peramban ini tidak bisa menampilkan grafik 3D (WebGL). Coba buka halaman ini di Chrome, Edge, Firefox atau Safari versi terbaru.", "This browser cannot display 3D graphics (WebGL). Try opening this page in a recent version of Chrome, Edge, Firefox or Safari."], ["Jika kursor tidak terkunci, bidik dengan tombol panah atau tahan klik kanan sambil menggeser mouse, dan pakai Q untuk scope.", "If the cursor is not locked, aim with the arrow keys or hold right click while moving the mouse, and use Q for the scope."], ["Dua tim saling berhadapan di peta pilihanmu. Kamu bergabung ke satu tim bersama bot, dan tim pertama yang mencapai ", "Two teams face off on the map you picked. You join one team with bots, and the first team to reach "], ["Kota hancur: tank bangkai, dinding runtuh, kawah, dan karung pasir. Berasap dan berdebu, banyak celah berlindung.", "Ruined city: wrecked tanks, collapsed walls, craters and sandbags. Smoky and dusty, plenty of cover."], ["Drone latih menyerbu dari segala arah. Bertahan selama mungkin dan bidik kepala untuk skor ekstra.", "Training drones swarm in from every direction. Survive as long as you can and aim for the head for bonus score."], ["Piramida, tangga, dan menara. Tahan Spasi sambil maju untuk memanjat balok bertanda kuning.", "Pyramids, stairs and towers. Hold Space while moving forward to climb yellow-marked blocks."], ["Online tidak tersedia. Buka gim lewat claude.ai dengan akun yang punya akses ke gim ini.", "Online is not available. Open the game through claude.ai with an account that has access to this game."], ["Teras batu bertingkat, pilar patah, dan tangga. Naik ke puncak untuk tembakan dari atas.", "Tiered stone terraces, broken pillars and stairs. Climb to the top for shots from above."], ["Rak dan tumpukan peti membentuk lorong. Banyak tempat berlindung, jarak pandang pendek.", "Shelves and crate stacks form corridors. Lots of cover, short sight lines."], ["Dinding beton berlapis dengan celah sempit. Musuh bisa muncul dari tikungan mana saja.", "Layered concrete walls with narrow gaps. Enemies can appear from any corner."], ["Multiplayer online. Masukkan kode ruangan yang sama dengan temanmu, lalu tekan Mulai.", "Online multiplayer. Enter the same room code as your friend, then press Start."], ["Hadapi gelombang drone yang terus bertambah. Skor dan gelombang tertinggi tersimpan.", "Face ever-growing waves of drones. Your best score and wave are saved."], ["Dentuman memekakkan, 20 peluru menyebar. Hancurkan jarak dekat. Kokang pump-action.", "Deafening blast, 20 spreading pellets. Devastating up close. Pump-action."], ["Duel 1v1 online. Masukkan kode ruangan yang sama dengan temanmu, lalu tekan Mulai.", "Online 1v1 duel. Enter the same room code as your friend, then press Start."], ["Dua tim saling tembak. Kamu bergabung ke satu tim, dan tim pertama yang mencapai ", "Two teams fight each other. You join one team, and the first team to reach "], ["Pertandingan online tetap berjalan untuk pemain lain. Klik tombol untuk kembali.", "The online match keeps running for other players. Click the button to return."], ["Gagal menyimpan ke akun. Progres tetap ada di peramban ini dan akan dicoba lagi.", "Failed to save to account. Progress stays in this browser and will be retried."], ["Tumpukan kontainer di dermaga. Naiki kontainer rendah, lalu panjat yang tinggi.", "Stacked containers on the dock. Climb the low containers, then the tall ones."], ["Semua melawan semua bersama temanmu lewat kode ruangan. Pertama yang mencapai ", "Free-for-all with your friends via a room code. The first to reach "], ["Dentuman menggema, recoil keras, peluru tembus penghalang. Kokang bolt manual.", "Echoing boom, heavy recoil, rounds penetrate cover. Manual bolt action."], ["Arena melingkar di malam hari. Pilar tinggi dan sekat rendah untuk berlindung.", "Circular arena at night. Tall pillars and low walls for cover."], ["Dataran bersalju dengan bunker rendah. Kabut tebal membatasi jarak pandang.", "Snowy plain with low bunkers. Thick fog limits visibility."], ["Empat gedung di senja hari. Panjat peti di sisi gedung untuk naik ke atap.", "Four buildings at dusk. Climb the crates beside the buildings to reach the roofs."], ["Garis laser merah berarti tembakan segera datang. Bergeraklah!", "A red laser line means a shot is coming. Move!"], ["Pertandingan sedang berjalan. Klik tombol untuk melanjutkan.", "The match is in progress. Click the button to continue."], ["Akun tidak tersedia · progres tersimpan di peramban ini saja", "Account unavailable · progress is saved in this browser only"], ["Lapangan latihan luas dengan peti acak. Pas untuk pemanasan.", "Wide training field with random crates. Perfect for warming up."], ["Mereka menyerang dari dua sisi. Cari penutup atau mundur.", "They attack from two sides. Find cover or fall back."], ["Online tidak tersedia di sini. Buka gim lewat claude.ai.", "Online is not available here. Open the game through claude.ai."], ["Peta dipilih acak setiap kali Anda mulai atau main lagi.", "The map is chosen at random every time you start or play again."], ["Drone menembak balik. Berlindunglah di balik rintangan.", "Drones shoot back. Take cover behind obstacles."], ["Nama pemain minimal 2 karakter (huruf, angka, spasi).", "Player name must be at least 2 characters (letters, digits, spaces)."], ["Koin belum cukup. Main dulu untuk mengumpulkan koin.", "Not enough coins. Play first to earn some."], [" pemain, semua melawan semua. Pertama yang mencapai ", " players, free for all. The first to reach "], ["Belum masuk · progres tersimpan di peramban ini saja", "Not signed in · progress is saved in this browser only"], ["Mode tamu · progres tersimpan di peramban ini saja", "Guest mode · progress is saved in this browser only"], ["Ganti tim, ukuran tim, atau peta untuk membalas.", "Change team, team size, or map to get revenge."], ["Bidik dan tembak (klik kanan: bidik jarak jauh)", "Aim and shoot (right click: long-range scope)"], ["sedang berjalan. Klik tombol untuk melanjutkan.", "in progress. Click the button to continue."], ["Sangat cepat, tapi dayanya kecil dan agak liar.", "Very fast, but low damage and a bit wild."], ["Tidak bisa terhubung ke ruangan. Coba lagi.", "Cannot connect to the room. Try again."], ["Pakai medkit (dijatuhkan musuh yang kalah)", "Use medkit (dropped by defeated enemies)"], ["Drone latih masih menunggu di sektor ini.", "Training drones are still waiting in this sector."], ["Kode ruangan minimal 3 huruf atau angka.", "Room code must be at least 3 letters or digits."], ["Nama pemain · tampil di dalam permainan", "Player name · shown in game"], ["Seimbang dan stabil. Tembakan otomatis.", "Balanced and stable. Automatic fire."], ["Tahan Spasi sambil maju untuk memanjat.", "Hold Space while moving forward to climb."], ["Skor terbaik baru. Coba lampaui lagi.", "New high score. Try to beat it again."], ["Bergerak (Shift lari, Spasi lompat)", "Move (Shift to sprint, Space to jump)"], ["Periksa senjata (animasi inspeksi)", "Inspect weapon (inspection animation)"], ["Senjata utama / karambit / tukar", "Main weapon / karambit / swap"], ["Nyawa +30, magasin penuh, koin +", "Health +30, magazine full, coins +"], ["Kesempatan hidup lagi tersisa ", "Revives left: "], [" · progres tersimpan di akunmu", " · progress is saved to your account"], ["Balik sumbu Y (bidik vertikal)", "Invert Y axis (vertical aim)"], ["Pangkat dan tahap tertinggi. ", "Highest rank and step. "], ["drone masuk dari tepi sektor", "drones entering from the edge of the sector"], ["Bagikan kode ini ke temanmu.", "Share this code with your friends."], ["Lawanmu keluar dari ruangan.", "Your opponent left the room."], [" pemain). Pakai kode lain.", " players). Use another code."], ["Penembak jitu mengincarmu", "A sniper is targeting you"], ["2 tim, bot sebagai rekan", "2 teams, bots as teammates"], ["Online · sampai 8 pemain", "Online · up to 8 players"], ["Selamat datang kembali, ", "Welcome back, "], ["Lapangan latihan tembak", "Shooting range"], ["Pengaturan & cara main", "Settings & how to play"], ["Menyambung ke ruangan ", "Connecting to room "], ["Setel ulang pengaturan", "Reset settings"], ["Jumlah pemain per tim", "Players per team"], ["Pertandingan selesai", "Match over"], ["! Musuh makin sulit.", "! Enemies get tougher."], ["Bidang pandang (FOV)", "Field of view (FOV)"], ["Menyambungkan akun…", "Connecting account…"], ["Menyiapkan senjata…", "Preparing weapons…"], [" + Karambit · Peta ", " + Karambit · Map "], [" · sisa kesempatan ", " · chances left "], ["Pengaturan & bahasa", "Settings & language"], ["Senjata / Karambit", "Weapon / Karambit"], ["Scope (hidup/mati)", "Scope (on/off)"], ["Menyimpan ke akun…", "Saving to account…"], ["Kamu menumbangkan ", "You downed "], ["Gagal menyambung: ", "Connection failed: "], ["kesalahan jaringan", "network error"], ["Berganti tiap main", "Changes every match"], ["Sensitivitas bidik", "Aim sensitivity"], ["Drone dilumpuhkan", "Drones downed"], ["Toko skin senjata", "Weapon skin shop"], ["Buat akun & masuk", "Create account & enter"], [" kill lebih dulu.", " kills first."], ["Hidup lagi dalam ", "Reviving in "], ["Arena Bulan Kelam", "Dark Moon Arena"], ["Benteng Dua Panji", "Two-Banner Fortress"], ["Warna garis bidik", "Crosshair color"], ["Ubah nama pemain", "Change player name"], ["Isi ulang peluru", "Reload"], ["Suara hidup/mati", "Sound on/off"], ["Permainan dijeda", "Game paused"], ["Sendiri vs drone", "Solo vs drones"], ["Selamat datang, ", "Welcome, "], ["Karambit · Peta ", "Karambit · Map "], ["Musuh mengepung!", "Enemies are flanking!"], [". Lawan berpita ", ". Opponents wear "], ["Periksa senjata", "Inspect weapon"], ["Memeriksa akun…", "Checking account…"], ["Tim kamu menang", "Your team wins"], ["Ruangan penuh (", "Room full ("], ["Penguasa Kosmos", "Cosmos Ruler"], ["Gudang Besi Tua", "Old Iron Warehouse"], [" · Hidup lagi ×", " · Revive ×"], ["Kualitas grafik", "Graphics quality"], ["Guncangan layar", "Screen shake"], ["Nyawa · Medkit ", "Health · Medkit "], ["Mode permainan", "Game mode"], ["Bidik teropong", "Aim through scope"], ["Tembak (tahan)", "Fire (hold)"], ["Lanjut bermain", "Resume"], ["Tim kamu kalah", "Your team loses"], ["Kamu tertembak", "You were shot"], ["Kamu mencapai ", "You reached "], ["Respawn dalam ", "Respawn in "], ["Masuk sebagai ", "Signed in as "], ["Pakai skin ini", "Use this skin"], ["Obsidian Merah", "Red Obsidian"], ["Lapangan Fajar", "Dawn Field"], ["Labirin Bayang", "Shadow Labyrinth"], ["Musuh memanjat", "Enemies climb"], ["NAIK PANGKAT: ", "RANK UP: "], ["Lawan berpita ", "Opponents wear "], ["Rekan berpita ", "Teammates wear "], ["Drone tersisa", "Drones left"], ["Pilih senjata", "Choose weapon"], ["Scope (tahan)", "Scope (hold)"], ["Misi berakhir", "Mission over"], [" kill menang.", " kills wins."], ["Senapan Serbu", "Assault Rifle"], ["Penembak Jitu", "Sniper"], ["Piramida Debu", "Dust Pyramid"], ["Dermaga Karat", "Rusty Dock"], ["Lorong sempit", "Narrow corridors"], ["Bisa dipanjat", "Climbable"], ["Naik pangkat!", "Rank up!"], ["Tampilkan FPS", "Show FPS"], ["skin berefek", "effect skins"], ["Skor terbaik", "Best score"], ["Ruang online", "Online room"], ["kode ruangan", "room code"], ["Kode ruangan", "Room code"], ["Pakai medkit", "Use medkit"], ["Jeda / suara", "Pause / sound"], ["Koin didapat", "Coins earned"], ["Contoh: Bayu", "Example: Bayu"], ["Masuk ke gim", "Enter the game"], ["Memuat peta…", "Loading maps…"], ["Kamu tumbang", "You went down"], ["Cakar Kosmik", "Cosmic Claw"], ["NAIK TAHAP: ", "STEP UP: "], ["Pangkat kamu", "Your rank"], [" EXP menuju ", " EXP to reach "], ["Mouse / Klik", "Mouse / Click"], ["Buat akunmu", "Create your account"], ["Memuat gim…", "Loading game…"], ["Multiplayer", "Multiplayer"], ["Kamu menang", "You win"], ["Nyawa habis", "Out of health"], ["Nyawa penuh", "Health full"], ["Teras Purba", "Ancient Terraces"], ["Kota Runtuh", "Fallen City"], ["Naik tahap!", "Step up!"], ["Suara hidup", "Sound on"], ["+ karambit", "+ karambit"], ["Pilih peta", "Choose map"], ["Pilih mode", "Choose mode"], ["Klik kanan", "Right click"], ["Saldo koin", "Coin balance"], ["Mulai lagi", "Start again"], ["Pengaturan", "Settings"], ["Tim vs Tim", "Team vs Team"], ["Tim Oranye", "Orange Team"], ["Kamu kalah", "You lose"], ["Kill lawan", "Enemy kills"], ["Hidup lagi", "Revive"], [" bergabung", " joined"], ["Legendaris", "Legendary"], ["Atap Senja", "Dusk Rooftops"], ["Kawah Beku", "Frozen Crater"], ["Reruntuhan", "Ruins"], [" mencapai ", " reached "], ["Suara mati", "Sound off"], ["Kode baru", "New code"], ["Pilih tim", "Choose team"], ["Isi ulang", "Reload"], ["Klik kiri", "Left click"], ["Toko Skin", "Skin Shop"], ["Spin Skin", "Skin Spin"], ["Main lagi", "Play again"], ["Gelombang", "Wave"], ["Kill kamu", "Your kills"], ["Skin baru", "New skin"], ["Raja Naga", "Dragon King"], [" · Tahap ", " · Step "], ["Guncangan", "Shake"], ["Prajurit ", "Private "], ["Jenderal ", "General "], ["Tim Biru", "Blue Team"], [" selesai", " complete"], [" (admin)", " (admin)"], ["Terbaik ", "Best "], ["Skor tim", "Team score"], ["Kolonel ", "Colonel "], ["Legenda ", "Legend "], ["+ Medkit", "+ Medkit"], [" · Efek", " · Effect"], ["Sampai ", "Up to "], ["Rekrut ", "Recruit "], ["Kopral ", "Corporal "], ["Sersan ", "Sergeant "], ["Letnan ", "Lieutenant "], ["Kapten ", "Captain "], ["+ Nyawa", "+ Health"], ["Koin +", "Coins +"], ["Halo, ", "Hello, "], ["Capai ", "Reach "], ["Mayor ", "Major "]];
 
   I18N_EX['Semua'] = 'All'; I18N_EX['Kota'] = 'City'; I18N_EX['Alam'] = 'Nature'; I18N_EX['Arena'] = 'Arena';
   I18N_SUB.unshift(['Hutan Rimba','Deep Forest'],['Lembah Danau','Lakeside Valley'],['Pohon lebat','Dense trees'],['Bukit & danau','Hills & lake'],['Hutan pinus dan ek yang rapat dengan batang kayu, batu, dan api unggun di tengah. Berlindung di balik pohon.','Dense pine and oak forest with logs, rocks and a campfire in the middle. Take cover behind the trees.'],['Lembah terbuka dengan danau dangkal, bukit berundak yang bisa dipanjat, dan pohon di tepinya. Cocok untuk tembakan jarak jauh.','Open valley with a shallow lake, climbable stepped hills and trees along the edge. Great for long-range shots.']);
+  I18N_SUB.unshift(['Kamu MVP!','You are MVP!'],['Penilaianmu','Your rating'],[' mati',' deaths'],[' · bonus koin +50',' · bonus coins +50'],['Hasil pertandingan','Match results']);
   I18N_SUB.unshift(['Tim vs Tim Online','Online Team vs Team'],['Co-op Drone','Co-op Drones'],['Lobi Online','Online Lobby'],['Buka lobi','Open lobby'],['Buat ruangan','Create room'],['Jenis ruangan baru','New room type'],['Papan skor','Leaderboard'],['Tidak terjangkau','Unreachable'],['Belum ada ruangan aktif. Buat ruangan pertama!','No active rooms yet. Create the first one!'],['Tulis pesan','Write a message'],['Ketik pesan, Enter kirim','Type a message, Enter to send']);
   I18N_SUB.unshift(['Kode redeem','Redeem code'],['Kode ini sudah kamu pakai.','You already used this code.'],['Kode tidak valid.','Invalid code.'],['Masukkan kode redeem dulu.','Enter a redeem code first.'],['Berhasil! Koin +','Success! Coins +'],['Berhasil! Skin medkit VOID WARDEN didapat dan langsung dipakai.','Success! VOID WARDEN medkit skin unlocked and equipped.'],['Skin mitos ini hanya bisa didapat lewat kode redeem. Masukkan kodenya di kolom atas.','This mythic skin can only be obtained with a redeem code. Enter the code in the box above.']);
   I18N_SUB.unshift(['Skin medkit','Medkit skin'],['The Last Guardian','The Last Guardian'],['Beli · ',' Buy · '.slice(1)],['Dipakai','Equipped'],['Terkunci','Locked']);
@@ -2576,6 +2599,7 @@ body {
       $('pBtn').textContent = 'Main lagi';
     }
     $('sCoin').textContent = coinsRun;
+    renderResults();
     $('pShop').hidden = mode === 'pause'; $('pLobby').hidden = mode === 'pause';
     refreshEcon();
     o.hidden = false;
@@ -2626,6 +2650,7 @@ body {
   }
   function gameOver() {
     srvScore('survival', score, kills);
+    resCache = computeResults('');
     state = 'over';
     firing = false; touch.firing = false;
     if (score > best) {
@@ -4814,7 +4839,7 @@ body {
 
   var NET_KIND = { ffa: { name: 'Multiplayer', max: 8, target: 10 }, duel: { name: 'Duel 1v1', max: 2, target: 5 },
     tdm: { name: 'Tim vs Tim Online', max: 8, target: 20, team: true }, coop: { name: 'Co-op Drone', max: 4, target: 0, coop: true } };
-  var net = { srv: false, tm: 'biru', teamK: 0, oppK: 0, beatT: 0, on: false, ready: false, joining: false, room: null, code: '', me: '', remotes: {}, acc: 0, k: 0, topK: 0, dc: 0, kb: '', shots: 0, hits: {}, seen: {}, lastAtk: '', ending: false, hadOpp: false, lostT: 0, boardT: 0, result: null };
+  var net = { roster: {}, srv: false, tm: 'biru', teamK: 0, oppK: 0, beatT: 0, on: false, ready: false, joining: false, room: null, code: '', me: '', remotes: {}, acc: 0, k: 0, topK: 0, dc: 0, kb: '', shots: 0, hits: {}, seen: {}, lastAtk: '', ending: false, hadOpp: false, lostT: 0, boardT: 0, result: null };
   function netClean(v) { return String(v || '').toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 12); }
   function netNewCode() { var c = 'abcdefghjkmnpqrstuvwxyz23456789', o = ''; for (var i = 0; i < 5; i++) o += c.charAt(Math.floor(Math.random() * c.length)); return o; }
   function netMsg(t) { var m = $('netMsg'); if (m) m.textContent = t || ''; }
@@ -4880,7 +4905,7 @@ body {
   }
   function startOnline() {
     net.k = 0; net.topK = 0; net.dc = 0; net.kb = ''; net.shots = 0; net.hits = {}; net.seen = {}; net.lastAtk = '';
-    net.ending = false; net.hadOpp = false; net.lostT = 0; net.acc = 1; net.boardT = 0; net.result = null; net.remotes = {};
+    net.ending = false; net.hadOpp = false; net.lostT = 0; net.acc = 1; net.boardT = 0; net.result = null; net.remotes = {}; net.roster = {};
     netScan();
     var b = safeSpot();
     player.pos.set(b.x, 0, b.z); yaw = Math.atan2(b.x, b.z); pitch = 0; graceT = 2;
@@ -4927,6 +4952,7 @@ body {
     }
     e.tx = +d.x || 0; e.tz = +d.z || 0; e.ty = +d.y || 0; e.tyaw = (+d.ya || 0) + Math.PI;
     e.nm = String(d.n || 'Pemain').slice(0, 16); e.kn = d.k | 0; e.tm = d.tm;
+    net.roster[id] = { n: e.nm, t: d.tm || '', k: d.k | 0, d: d.dc | 0 };
     e.friend = !!(NET_KIND[netKind].coop || (NET_KIND[netKind].team && d.tm === net.tm));
     var dead = d.dd === 1;
     if (dead !== e.dead) { e.dead = dead; e.t = 0; if (!dead) { e.g.rotation.x = 0; e.g.visible = true; } }
@@ -5070,6 +5096,7 @@ body {
     earn(win ? 120 : 40);
     srvScore(netKind, net.k * 100 + (win ? 200 : 0), net.k);
     net.result = { win: win, note: note, winner: win ? (profile.name || 'Kamu') : (winner || 'Lawan') };
+    finalizeResults(NET_KIND[netKind].team ? (win ? net.tm : (net.tm === 'biru' ? 'oranye' : 'biru')) : '');
     showPanel('over');
     el.hud.hidden = false;
     $('touch').hidden = true;
@@ -5427,7 +5454,7 @@ body {
       hitMarker(true);
       burst(tmpV.set(e.g.position.x, 1.2, e.g.position.z), 0xe8472b, 14, 5);
       tone(520, 120, 0.25, 'square', 0.12);
-      if (e.team) { teamScore[myTeam]++; queueRespawn(e.team); checkTeamWin(); }
+      if (e.team) { teamScore[myTeam]++; if (e.bid) e.bid.d++; queueRespawn(e.team, e.bid); checkTeamWin(); }
     } else {
       hitMarker(false);
       var nowMs = performance.now();
@@ -5435,16 +5462,18 @@ body {
     }
   }
 
-  function hurtPlayer(d, byTeam) {
+  function hurtPlayer(d, byTeam, by) {
     if (state !== 'playing' || pDead || graceT > 0) return;
     health = Math.max(0, health - d);
     dmgT = 0.45; shake = 0.25;
     tone(150, 55, 0.2, 'sawtooth', 0.18);
-    if (health <= 0) { if (gameMode === 'online') netDied(); else if (gameMode === 'team') playerDied(byTeam); else if (revives > 0) survivalDied(); else gameOver(); }
+    if (health <= 0) { if (gameMode === 'online') netDied(); else if (gameMode === 'team') playerDied(byTeam, by); else if (revives > 0) survivalDied(); else gameOver(); }
   }
 
   /* ---------- Mode tim ---------- */
   var teamQueue = [], teamWin = false, lastSec = -1;
+  var botIds = [], BOT_NAMES = ['Rajawali', 'Harimau', 'Elang', 'Naga', 'Garuda', 'Cakra', 'Bayu', 'Surya', 'Petir', 'Bima', 'Arjuna', 'Gatot', 'Sakti', 'Wira', 'Kobra', 'Macan', 'Badai', 'Karang', 'Banteng', 'Walet'];
+  function newBotId(team) { var b = { name: BOT_NAMES[botIds.length % BOT_NAMES.length] + (botIds.length >= BOT_NAMES.length ? ' ' + (1 + Math.floor(botIds.length / BOT_NAMES.length)) : ''), team: team, k: 0, d: 0 }; botIds.push(b); return b; }
   function enemyOf(t) { return t === 'biru' ? 'oranye' : 'biru'; }
 
   function baseFor(team) {
@@ -5507,15 +5536,16 @@ body {
     return best;
   }
 
-  function queueRespawn(team) { teamQueue.push({ team: team, t: 4 * botMod(team).resp }); }
+  function queueRespawn(team, bid) { teamQueue.push({ team: team, t: 4 * botMod(team).resp, bid: bid || null }); }
 
-  function hurtBot(b, dmg, killerTeam) {
+  function hurtBot(b, dmg, killerTeam, killerBid) {
     if (b.dead || b.grace > 0) return;
     b.hp -= dmg; b.flash = 0.1; b.hurtT = 2.2;
     if (b.hp <= 0) {
       b.dead = true; b.t = 0;
       teamScore[killerTeam]++;
-      queueRespawn(b.team);
+      if (b.bid) b.bid.d++; if (killerBid) killerBid.k++;
+      queueRespawn(b.team, b.bid);
       dropMed(b.g.position.x, b.g.position.z, b.ey || 0);
       burst(tmpV.set(b.g.position.x, 1.2, b.g.position.z), TEAMS[b.team].col, 10, 4);
       checkTeamWin();
@@ -5526,6 +5556,69 @@ body {
     if (state !== 'playing') return;
     if (teamScore[myTeam] >= TEAM_TARGET) endTeam(true);
     else if (teamScore[enemyOf(myTeam)] >= TEAM_TARGET) endTeam(false);
+  }
+
+  /* ---------- Hasil akhir: tabel pemain, MVP, penilaian bintang ---------- */
+  var resCache = null;
+  function resRate(r) { return r.k * 100 - r.d * 30; }
+  function computeResults(winTeam) {
+    var rows = [], me = { n: profile.name || 'Kamu', t: '', k: kills, d: deaths, me: true };
+    if (gameMode === 'team') {
+      me.t = myTeam; rows.push(me);
+      botIds.forEach(function (b) { rows.push({ n: b.name, t: b.team, k: b.k, d: b.d }); });
+    } else if (gameMode === 'online') {
+      var kd = NET_KIND[netKind];
+      me.t = kd.team ? net.tm : ''; me.k = kd.coop ? kills : net.k; rows.push(me);
+      for (var id in net.roster) { var r = net.roster[id]; rows.push({ n: r.n, t: r.t, k: r.k, d: r.d }); }
+    } else {
+      return { rows: null, stars: Math.max(1, Math.min(5, 1 + Math.floor(waveNum / 3))), mvp: null, meMvp: false };
+    }
+    rows.forEach(function (r) { r.rt = resRate(r); });
+    var pool = winTeam ? rows.filter(function (r) { return r.t === winTeam; }) : rows;
+    if (!pool.length) pool = rows;
+    var mvp = pool.slice().sort(function (a, b) { return b.rt - a.rt || b.k - a.k || a.d - b.d; })[0];
+    rows.sort(function (a, b) { return b.rt - a.rt || b.k - a.k || a.d - b.d; });
+    var ratio = (me.k + 1) / (me.d + 1), st = ratio >= 2.6 ? 5 : ratio >= 1.8 ? 4 : ratio >= 1.2 ? 3 : ratio >= 0.8 ? 2 : 1;
+    if (mvp === me) st = 5;
+    return { rows: rows, mvp: mvp, meMvp: mvp === me, stars: st };
+  }
+  function renderResults() {
+    var box = $('resBox'), over = panelMode === 'over';
+    if (!box) return;
+    if (!over || !resCache) { box.hidden = true; return; }
+    box.hidden = false;
+    var rc = resCache, mv = $('resMvp'), tb = $('resTbl'), sr = $('resStars');
+    tb.textContent = ''; mv.textContent = '';
+    var stars = '';
+    for (var i = 0; i < 5; i++) stars += i < rc.stars ? '\u2605' : '\u2606';
+    sr.textContent = ''; sr.appendChild(document.createTextNode('Penilaianmu '));
+    var sb = document.createElement('b'); sb.textContent = stars; sr.appendChild(sb);
+    if (!rc.rows) { mv.hidden = true; tb.hidden = true; return; }
+    mv.hidden = false; tb.hidden = false;
+    var ic = document.createElement('i'); ic.textContent = '\u2605'; mv.appendChild(ic);
+    var tx = document.createElement('div');
+    tx.appendChild(document.createTextNode(rc.meMvp ? 'Kamu MVP!' : 'MVP: ' + String(rc.mvp.n).slice(0, 16)));
+    var sm = document.createElement('small'); sm.textContent = rc.mvp.k + ' kill · ' + rc.mvp.d + ' mati' + (rc.meMvp ? ' · bonus koin +50' : ''); tx.appendChild(sm);
+    mv.appendChild(tx);
+    function row(cells, cls, team) {
+      var d = document.createElement('div'); d.className = 'rrow' + (cls ? ' ' + cls : '');
+      cells.forEach(function (c, idx) {
+        var sp = document.createElement('span');
+        if (idx === 1 && team) { var tg = document.createElement('i'); tg.className = 'tg'; tg.style.background = TEAMS[team] ? TEAMS[team].hex : '#999'; sp.appendChild(tg); }
+        sp.appendChild(document.createTextNode(c.t)); if (c.crown) { var cw = document.createElement('b'); cw.className = 'cr'; cw.textContent = 'MVP'; sp.appendChild(cw); }
+        d.appendChild(sp);
+      });
+      tb.appendChild(d);
+    }
+    row([{ t: '#' }, { t: 'Pemain' }, { t: 'K' }, { t: 'M' }, { t: 'K/D' }], 'rh');
+    rc.rows.forEach(function (r, idx) {
+      var kdv = r.d ? (r.k / r.d).toFixed(1) : String(r.k) + '.0';
+      row([{ t: String(idx + 1) }, { t: String(r.n).slice(0, 16), crown: r === rc.mvp }, { t: String(r.k) }, { t: String(r.d) }, { t: kdv }], (r.me ? 'me ' : '') + (r === rc.mvp ? 'top' : ''), r.t);
+    });
+  }
+  function finalizeResults(winTeam) {
+    resCache = computeResults(winTeam);
+    if (resCache.meMvp) { earn(50); tone(660, 1320, 0.35, 'triangle', 0.1); }
   }
 
   var rankResult = null;
@@ -5541,12 +5634,14 @@ body {
     rankResult = { gain: win ? 30 : -10, from: st0, to: stepOf(rankPts) };
     try { localStorage.setItem('sektor9-rp', String(rankPts)); } catch (e) {}
     earn(win ? 150 + r0 * 20 : 50);
+    finalizeResults(win ? myTeam : enemyOf(myTeam));
     showPanel('over');
     el.hud.hidden = false;
     $('touch').hidden = true;
   }
 
-  function playerDied(byTeam) {
+  function playerDied(byTeam, by) {
+    if (by) by.k++;
     pDead = true; respawnT = 3.2; lastSec = -1; deaths++;
     firing = false; touch.firing = false; reloading = false;
     resetScope();
@@ -5613,7 +5708,7 @@ body {
     player.pos.set(b.x, 0, b.z);
     yaw = Math.atan2(b.x, b.z); pitch = 0;
     graceT = 1.5;
-    teamQueue = [];
+    teamQueue = []; botIds = [];
     var i;
     for (i = 0; i < teamSize - 1; i++) teamQueue.push({ team: myTeam, t: 0.3 + i * 0.35 });
     for (i = 0; i < teamSize; i++) teamQueue.push({ team: other, t: 0.5 + i * 0.35 });
@@ -5628,6 +5723,7 @@ body {
       if (q.t <= 0) {
         var b = baseFor(q.team);
         var e = makeEnemy('trooper', b.x, b.z, true, q.team);
+        e.bid = q.bid || newBotId(q.team);
         e.g.rotation.y = Math.atan2(-b.x, -b.z);
         e.grace = 1.2;
         teamQueue.splice(i, 1);
@@ -6123,7 +6219,7 @@ body {
     var v = new T.Vector3(tx - mzV.x, ay - mzV.y, tz - mzV.z).normalize().multiplyScalar(aim && aim.spd ? aim.spd : 15);
     if (aim && aim.sc) m.scale.setScalar(aim.sc);
     scene.add(m);
-    projectiles.push({ m: m, v: v, life: 4, dmg: dmg, team: e.team || null });
+    projectiles.push({ m: m, v: v, life: 4, dmg: dmg, team: e.team || null, by: e.bid || null });
     var nowE = performance.now();
     if (nowE - enSndAt > 70) {
       enSndAt = nowE;
@@ -6149,14 +6245,14 @@ body {
       }
       if (!dead && state === 'playing' && !pDead && p.team !== myTeam) {
         var dx = pos.x - player.pos.x, dz = pos.z - player.pos.z;
-        if (dx * dx + dz * dz < 0.5 && Math.abs(pos.y - (1.4 + py)) < 1.1) { hurtPlayer(p.dmg || 8, p.team); dead = true; }
+        if (dx * dx + dz * dz < 0.5 && Math.abs(pos.y - (1.4 + py)) < 1.1) { hurtPlayer(p.dmg || 8, p.team, p.by); dead = true; }
       }
       if (!dead && p.team) {
         for (var bi = 0; bi < enemies.length; bi++) {
           var bt = enemies[bi];
           if (bt.dead || !bt.team || bt.team === p.team) continue;
           var bx = pos.x - bt.g.position.x, bz = pos.z - bt.g.position.z;
-          if (bx * bx + bz * bz < 0.4 && pos.y > (bt.ey || 0) + 0.1 && pos.y < (bt.ey || 0) + 2.15) { hurtBot(bt, p.dmg || 9, p.team); dead = true; burst(pos, 0xffc21a, 3, 2.5); break; }
+          if (bx * bx + bz * bz < 0.4 && pos.y > (bt.ey || 0) + 0.1 && pos.y < (bt.ey || 0) + 2.15) { hurtBot(bt, p.dmg || 9, p.team, p.by); dead = true; burst(pos, 0xffc21a, 3, 2.5); break; }
         }
       }
       if (dead) { scene.remove(p.m); projectiles.splice(i, 1); }
