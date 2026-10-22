@@ -381,7 +381,10 @@ body {
 .cvortex { animation: cspin 5s linear infinite; }
 .cvortex2 { animation: cspin 9s linear infinite reverse; }
 @keyframes cspin { to { transform: rotate(360deg); } }
-.cret { filter: drop-shadow(0 0 2px #b44cff); }
+.cret { filter: drop-shadow(0 0 2px #b44cff) drop-shadow(0 0 5px #8a3cff); }
+.cticks { animation: cspin 120s linear infinite reverse; }
+.sswirl { animation: cspin 3s linear infinite; }
+.lore { font-style: italic; font-size: 12px; line-height: 1.35; color: #6a3cb0; max-width: 28ch; }
 #cEye { opacity: 0; transform-box: fill-box; transform-origin: center; }
 #cosmos.eye #cEye { animation: ceye 1.3s ease-in-out 1; }
 @keyframes ceye { 0% { opacity: 0; transform: scaleY(0.1); } 25%, 70% { opacity: 0.92; transform: scaleY(1); } 100% { opacity: 0; transform: scaleY(0.1); } }
@@ -2765,6 +2768,7 @@ body {
     reloading = true; reloadT = 0;
     scoped = false;
     reloadSound(weapon.id, RELOAD);
+    if (fxName === 'cosmos' && weapon.id === 'sn') { cosRig.boost = 1; cosmosSound('reload'); }
   }
 
   var slashT = -1, slashDir = 1, meleeDelay = -1, curMove = null, hitMul = 1, hitRM = 1;
@@ -2838,7 +2842,7 @@ body {
     yaw += (Math.random() - 0.5) * 0.006;
     gunSound(weapon.id, 0.9, 0, false);
     if (fxName === 'naga') nagaSound('shot');
-    if (fxName === 'cosmos') { cosmosSound('shot'); cosRig.flash = 1; cosRig.boost = 1; cosFlashDom(); }
+    if (fxName === 'cosmos') { cosmosSound('shot'); cosRig.flash = 1; cosRig.boost = 1; cosFlashDom(); cosBolts(); }
     if (fxName === 'reaper') { reaperSound('shot'); rpRig.flash = 1; rpRig.boost = Math.min(1, rpRig.boost + 0.25); }
     if (fxName === 'dread') { dreadSound('shot'); dreadRig.flash = 1; dreadRig.boost = Math.min(1, dreadRig.boost + 0.3); }
     flash.visible = true; flash.rotation.z = Math.random() * 3;
@@ -3137,7 +3141,7 @@ body {
     { id: 'petir', name: 'Petir', rar: 'legendaris', body: 0x14304a, dark: 0x06121f, acc: 0x7df3ff, fx: 'thunder', cols: [0x7df3ff, 0xffffff, 0xbfefff] },
     { id: 'void', name: 'Cakar Kosmik', rar: 'mitos', only: ['kr'], body: 0x1a0a30, dark: 0x040208, acc: 0xff1e3c, fx: 'void', cols: [0xb44cff, 0xff2a4a, 0x7a3cff, 0xff8aa0] },
     { id: 'naga', name: 'Raja Naga', rar: 'mitos', only: ['sg'], body: 0x15161b, dark: 0x070709, acc: 0xff4a14, fx: 'naga', cols: [0xff4a14, 0xff9a1f, 0xffd23a, 0xff1e1e] },
-    { id: 'cosmos', name: 'Celestial Void', rar: 'mitos', only: ['sn'], body: 0x0a0610, dark: 0x020106, acc: 0xffc84a, flashCol: 0xb44cff, tr: 0xb44cff, fx: 'cosmos', cols: [0xb44cff, 0xffd23a, 0x7a3cff, 0xffffff] },
+    { id: 'cosmos', name: 'Celestial Void', rar: 'mitos', only: ['sn'], body: 0x0a0610, dark: 0x020106, acc: 0xffc84a, flashCol: 0xb44cff, tr: 0xb44cff, wt: 0.25, lore: 'Di antara bintang dan kehampaan, aku adalah penguasa yang tak terlihat.', fx: 'cosmos', cols: [0xb44cff, 0xffd23a, 0x7a3cff, 0xffffff] },
     { id: 'dread', name: 'Dreadnought', rar: 'mitos', only: ['ar'], body: 0x0b0506, dark: 0x020101, acc: 0xff2410, flashCol: 0xff3a10, tr: 0xff3010, fx: 'dread', cols: [0xff2410, 0xff7a1f, 0xffd23a, 0x4a0000] },
     { id: 'reaper', name: 'Phantom Reaper', rar: 'mitos', only: ['smg'], body: 0x07040d, dark: 0x010003, acc: 0xb23cff, flashCol: 0xb44cff, tr: 0xc040ff, fx: 'reaper', cols: [0xb23cff, 0xff2a4a, 0x7a22ff, 0x2a0a40] }
   ];
@@ -3359,7 +3363,7 @@ body {
 
   /* ---------- Skin Mitos: Celestial Void (penembak jitu) ---------- */
   var cosRig = { g: new T.Group(), star: new T.Group(), shards: new T.Group(), shardList: [], stars: [], ring: null, runeMat: null, crackA: null, crackB: null, flash: 0, boost: 0, lastT: 0 };
-  var cosHold = 0, cosEyeT = 2, cosCr = [], cosCrV = [], cosDust = [], cosVort = [];
+  var cosHold = 0, cosEyeT = 2, cosCr = [], cosCrV = [], cosDust = [], cosVort = [], cosAura = [], cosZ = new T.Vector3(0, 0, 1), cosTv = new T.Vector3();
   (function () {
     var r = rng(11), g = cosRig.g, i, j, m, sx;
     function gm(c, op, add) { var o = { color: c, transparent: true, opacity: op, depthWrite: false, side: T.DoubleSide }; if (add) o.blending = T.AdditiveBlending; return new T.MeshBasicMaterial(o); }
@@ -3412,10 +3416,71 @@ body {
       var sh = new T.Mesh(new T.BoxGeometry(0.014, 0.014, 0.004), gm(i % 3 === 0 ? 0xffd23a : (i % 3 === 1 ? 0xb44cff : 0xffffff), 0.9, true));
       cosRig.shards.add(sh); cosRig.shardList.push(sh);
     }
+    for (i = 0; i < 6; i++) { var rs = new T.Mesh(new T.RingGeometry(0.011, 0.015, 6), gm(0xffd23a, 0.9, true)); cosRig.shards.add(rs); cosRig.shardList.push(rs); }
+    for (i = 0; i < 5; i++) { var bs2 = new T.Mesh(new T.SphereGeometry(0.007, 8, 6), gm(0xc77dff, 0.8, true)); cosRig.shards.add(bs2); cosRig.shardList.push(bs2); }
     cosRig.shards.position.set(0, 0.02, -0.45); cosRig.shards.visible = false;
+    // ===== ornamen emas kerajaan: duri, tombak, sirip, cincin scope, mata lubang hitam =====
+    var gold = new T.MeshBasicMaterial({ color: 0xe9bd52 }), goldD = new T.MeshBasicMaterial({ color: 0x8a5f14, side: T.DoubleSide }), blk = new T.MeshBasicMaterial({ color: 0x000000, side: T.DoubleSide });
+    var UPV = new T.Vector3(0, 1, 0);
+    function thorn(len, rad, x, y, z, dx, dy, dz, mat) {
+      var o = new T.Mesh(new T.ConeGeometry(rad, len, 5), mat || gold), d = new T.Vector3(dx, dy, dz).normalize();
+      o.quaternion.setFromUnitVectors(UPV, d);
+      o.position.set(x + d.x * len / 2, y + d.y * len / 2, z + d.z * len / 2);
+      g.add(o); return o;
+    }
+    for (i = 0; i < 6; i++) thorn(0.05 + (5 - i) * 0.008, 0.007, 0, 0.0345, -0.5 - i * 0.1, 0, 0.55, -1);
+    for (sx = -1; sx <= 1; sx += 2) {
+      for (i = 0; i < 5; i++) thorn(0.045, 0.006, sx * 0.0195, 0.015, -0.55 - i * 0.1, sx * 0.7, 0.15, -1);
+      thorn(0.09, 0.0065, sx * 0.022, 0.015, -1.13, sx * 0.45, 0, -1);
+      put(new T.BoxGeometry(0.003, 0.022, 0.12), gold, sx * 0.032, 0.042, -0.03, 0, sx * 0.3, 0);
+      thorn(0.05, 0.006, sx * 0.034, 0.045, 0.03, sx * 0.3, 0.3, 0.9);
+      put(new T.BoxGeometry(0.003, 0.03, 0.18), goldD, sx * 0.0285, -0.04, -0.36, 0.1, 0, 0);
+    }
+    thorn(0.16, 0.0115, 0, 0.015, -1.145, 0, 0, -1);
+    put(new T.TorusGeometry(0.0275, 0.0026, 6, 20), gold, 0, 0.08, -0.05);
+    put(new T.TorusGeometry(0.0275, 0.0026, 6, 20), gold, 0, 0.08, -0.17);
+    put(new T.TorusGeometry(0.0355, 0.003, 6, 20), gold, 0, 0.08, -0.262);
+    put(new T.TorusGeometry(0.0305, 0.003, 6, 20), gold, 0, 0.08, 0.035);
+    cosRig.eyes = [];
+    function eye(sx, z, y, sc, xw) {
+      var ex = sx * xw, ry = sx * Math.PI / 2, q, a;
+      put(new T.RingGeometry(0.0165 * sc, 0.0225 * sc, 28), gold, ex, y, z, 0, ry, 0);
+      put(new T.RingGeometry(0.0225 * sc, 0.0245 * sc, 28), goldD, ex, y, z, 0, ry, 0);
+      put(new T.CircleGeometry(0.0165 * sc, 24), blk, ex - sx * 0.0001, y, z, 0, ry, 0);
+      var sw = put(new T.RingGeometry(0.006 * sc, 0.0155 * sc, 6, 1, 0, 4.4), gm(0xb44cff, 0.85, true), ex + sx * 0.0004, y, z, 0, ry, 0);
+      var sw2 = put(new T.RingGeometry(0.0035 * sc, 0.01 * sc, 5, 1, 0, 3.6), gm(0xffd23a, 0.7, true), ex + sx * 0.0005, y, z, 0, ry, 0);
+      for (q = 0; q < 10; q++) { a = q / 10 * 6.283; thorn(0.011 * sc, 0.0028 * sc, ex, y + Math.sin(a) * 0.0255 * sc, z + Math.cos(a) * 0.0255 * sc, sx * 0.25, Math.sin(a), Math.cos(a)); }
+      cosRig.eyes.push({ a: sw, b: sw2, sx: sx });
+    }
+    eye(1, -0.07, 0, 1, 0.0293); eye(-1, -0.07, 0, 1, 0.0293); eye(1, 0.24, -0.02, 0.6, 0.0262); eye(-1, 0.24, -0.02, 0.6, 0.0262);
+    // petir ungu saat menembak
+    cosRig.bolts = new T.Group(); cosRig.boltList = []; cosRig.boltT = 0;
+    cosRig.bm1 = gm(0xe0b8ff, 0.95, true); cosRig.bm2 = gm(0xffffff, 0.95, true);
+    var bgeo = new T.BoxGeometry(0.004, 0.004, 1);
+    for (i = 0; i < 28; i++) { var bsh = new T.Mesh(bgeo, i % 4 === 3 ? cosRig.bm2 : cosRig.bm1); bsh.visible = false; cosRig.bolts.add(bsh); cosRig.boltList.push(bsh); }
+    cosRig.bolts.position.set(0, 0.015, -1.3); cosRig.bolts.visible = false;
+    gunModels.sn.add(cosRig.bolts);
     g.visible = false;
     gunModels.sn.add(g); gunModels.sn.add(cosRig.star); gunModels.sn.add(cosRig.shards);
   })();
+  function cosBolts() {
+    var L = cosRig.boltList, n = 0, b, s2, px, py, pz, dx, dy, dz, len, nx, ny, nz, m, vx, vy, vz, ln;
+    for (b = 0; b < 7; b++) {
+      px = py = pz = 0; dx = (Math.random() - 0.5) * 1.1; dy = (Math.random() - 0.5) * 1.1; dz = -(0.5 + Math.random() * 0.8);
+      for (s2 = 0; s2 < 4 && n < L.length; s2++, n++) {
+        len = 0.06 + Math.random() * 0.07;
+        nx = px + (dx + (Math.random() - 0.5) * 0.7) * len; ny = py + (dy + (Math.random() - 0.5) * 0.7) * len; nz = pz + dz * len;
+        m = L[n]; m.visible = true;
+        vx = nx - px; vy = ny - py; vz = nz - pz; ln = Math.hypot(vx, vy, vz) || 0.001;
+        m.position.set((px + nx) / 2, (py + ny) / 2, (pz + nz) / 2); m.scale.set(1, 1, ln);
+        m.quaternion.setFromUnitVectors(cosZ, cosTv.set(vx / ln, vy / ln, vz / ln));
+        px = nx; py = ny; pz = nz;
+      }
+    }
+    for (; n < L.length; n++) L[n].visible = false;
+    cosRig.boltT = 0.15; cosRig.bolts.visible = true;
+  }
+  var auGeoD = new T.RingGeometry(0.12, 0.85, 40, 3), auGeoR = new T.RingGeometry(0.55, 0.62, 40), auGeoB = new T.CylinderGeometry(0.05, 0.16, 7, 12, 1, true);
   function buildCosmos() {
     var body = $('cosmosBody'); if (!body) return;
     var r = rng(23), s = '', i, j, t, a, d;
@@ -3430,15 +3495,17 @@ body {
       for (t = 0; t <= 1.001; t += 0.07) pts += (pts ? 'L' : 'M') + (Math.cos(j * 2.094 + t * 3.6) * (7 + t * 30)).toFixed(1) + ' ' + (Math.sin(j * 2.094 + t * 3.6) * (7 + t * 30)).toFixed(1);
       s += '<path d="' + pts + '" fill="none" stroke="url(#cga)" stroke-width="1.1" opacity="0.8"/>';
     }
-    s += '<circle r="6" fill="#000"/><circle r="7.5" fill="none" stroke="#b44cff" stroke-width="0.8"/></g><g class="cvortex2">';
+    s += '<circle r="6" fill="#000"/><circle r="7.5" fill="none" stroke="#b44cff" stroke-width="0.8"/><circle r="9.5" fill="none" stroke="#ffd23a" stroke-width="1.2" opacity="0.85"/></g><g class="cvortex2">';
     for (j = 0; j < 3; j++) {
       var pq = '';
       for (t = 0; t <= 1.001; t += 0.07) pq += (pq ? 'L' : 'M') + (Math.cos(j * 2.094 + 1 + t * 3.2) * (10 + t * 34)).toFixed(1) + ' ' + (Math.sin(j * 2.094 + 1 + t * 3.2) * (10 + t * 34)).toFixed(1);
       s += '<path d="' + pq + '" fill="none" stroke="#ffd23a" stroke-width="0.5" opacity="0.5"/>';
     }
-    s += '</g><g class="cret" stroke="#c77dff" stroke-width="0.6" fill="none"><path d="M-100 0H-14M14 0H100M0 -100V-14M0 14V100"/><circle r="13"/></g><g fill="#ffd23a">';
+    s += '</g><g class="cret" stroke="#d9a8ff" stroke-width="0.9" fill="none"><path d="M-100 0H-14M14 0H100M0 -100V-14M0 14V100"/><circle r="13"/></g><g fill="#ffd23a">';
     [20, 30, 40, 52, 66].forEach(function (v) { s += '<circle cx="' + v + '" cy="0" r="0.9"/><circle cx="' + -v + '" cy="0" r="0.9"/><circle cx="0" cy="' + v + '" r="0.9"/><circle cx="0" cy="' + -v + '" r="0.9"/>'; });
-    s += '</g><circle r="96" fill="none" stroke="#ffd23a" stroke-width="0.7" opacity="0.7"/>';
+    s += '</g><circle r="96" fill="none" stroke="#ffd23a" stroke-width="0.7" opacity="0.7"/><circle r="91" fill="none" stroke="#b44cff" stroke-width="2.2" opacity="0.35"/><circle r="99" fill="none" stroke="#ffd23a" stroke-width="2" opacity="0.9"/><g class="cticks" stroke="#ffd23a" stroke-width="0.7">';
+    for (i = 0; i < 72; i++) { a = i * 0.0873; var tl = i % 6 === 0 ? 6 : 3; s += '<line x1="' + (Math.cos(a) * 96).toFixed(1) + '" y1="' + (Math.sin(a) * 96).toFixed(1) + '" x2="' + (Math.cos(a) * (96 - tl)).toFixed(1) + '" y2="' + (Math.sin(a) * (96 - tl)).toFixed(1) + '"/>'; }
+    s += '</g><path fill="#ffd23a" d="M0 -91 l3 -5 l-6 0z M0 91 l3 5 l-6 0z M-91 0 l-5 3 l0 -6z M91 0 l5 3 l0 -6z"/>';
     for (i = 0; i < 8; i++) {
       a = i * 0.785 + (r() - 0.5) * 0.4;
       var rr = 100, pc = 'M' + (Math.cos(a) * rr).toFixed(1) + ' ' + (Math.sin(a) * rr).toFixed(1), bx = 0, by = 0;
@@ -3493,6 +3560,12 @@ body {
       cosDust.push({ m: m, cx: pt.x, cy: cy, cz: pt.z, r0: rr, a: a, dy: (Math.random() - 0.5) * 1.6, d: Math.random() * 0.25, t: 0 });
     }
     burst(pt, 0xb44cff, 8, 5); burst(pt, 0xffd23a, 5, 4);
+    if (cosAura.length < 8) {
+      var ag = new T.Group(); ag.position.set(pt.x, Math.max(0.03, pt.y - 1.15) + 0.03, pt.z); scene.add(ag);
+      var d1 = new T.Mesh(auGeoD, voidMat(0x8a3cff, 0)), d2 = new T.Mesh(auGeoR, voidMat(0xffd23a, 0)), d3 = new T.Mesh(auGeoR, voidMat(0xd9a8ff, 0)), bm = new T.Mesh(auGeoB, voidMat(0xd9a8ff, 0));
+      d1.rotation.x = d2.rotation.x = d3.rotation.x = -Math.PI / 2; ag.add(d1); ag.add(d2); ag.add(d3); ag.add(bm);
+      cosAura.push({ g: ag, d1: d1, d2: d2, d3: d3, bm: bm, t: 0 });
+    }
     cosmosSound('kill');
   }
   function cosmosUpdate(dt) {
@@ -3510,6 +3583,15 @@ body {
       var sc = a.t < 0.25 ? a.t / 0.25 : (a.t < 1.0 ? 1 : Math.max(0, 1 - (a.t - 1.0) / 0.3));
       a.g.scale.setScalar(sc * 1.3); a.r1.rotation.z += dt * 7; a.r2.rotation.z -= dt * 10;
       if (a.t >= 1.3) { scene.remove(a.g); a.r1.material.dispose(); a.r2.material.dispose(); a.core.material.dispose(); cosVort.splice(i, 1); burst(a.g.position, 0xffffff, 6, 6); }
+    }
+    for (i = cosAura.length - 1; i >= 0; i--) {
+      a = cosAura[i]; a.t += dt;
+      var tt = a.t, inn = clamp(tt / 0.3, 0, 1), fo = clamp((tt - 1.5) / 1.1, 0, 1), bw = clamp((tt - 0.85) / 0.25, 0, 1) * (1 - clamp((tt - 1.6) / 1.0, 0, 1)), ph = (tt * 0.9) % 1;
+      a.d1.rotation.z += dt * 4; a.d1.material.opacity = 0.55 * inn * (1 - fo);
+      a.d2.scale.setScalar(0.6 + 0.9 * inn + fo * 0.6); a.d2.material.opacity = 0.8 * inn * (1 - fo);
+      a.d3.scale.setScalar(0.4 + ph * 1.8); a.d3.material.opacity = 0.6 * (1 - ph) * (1 - fo) * inn;
+      a.bm.scale.set(1 + 0.15 * Math.sin(tt * 12), Math.max(0.001, bw), 1 + 0.15 * Math.sin(tt * 12)); a.bm.position.y = 3.5 * bw; a.bm.material.opacity = 0.55 * bw;
+      if (tt >= 2.7) { scene.remove(a.g); a.d1.material.dispose(); a.d2.material.dispose(); a.d3.material.dispose(); a.bm.material.dispose(); cosAura.splice(i, 1); }
     }
     if (cosRig.flash > 0 || cosRig.hemiOn) {
       if (cosRig.flash > 0) { hemi.intensity = (curMap.hemi[2] || 0.95) + cosRig.flash * 0.9; hemi.color.setHex(0xe0c0ff); cosRig.hemiOn = true; }
@@ -3531,6 +3613,11 @@ body {
       } else if (kind === 'kill') {
         layerN(t, 'bandpass', 300, 2, 0.9, 0.2, out, 3500); layerO(t, 200, 1400, 0.9, 'sine', 0.08, out);
         layerO(t + 0.9, 900, 60, 0.3, 'sine', 0.25, out); layerO(t + 0.92, 3520, 3520, 0.5, 'sine', 0.05, out);
+        layerO(t + 1.0, 330, 660, 1.4, 'sine', 0.05, out); layerO(t + 1.1, 495, 990, 1.2, 'triangle', 0.03, out);
+      } else if (kind === 'reload') {
+        layerO(t, 200, 900, 0.9, 'sine', 0.05, out); layerO(t + 0.1, 400, 1600, 0.8, 'triangle', 0.03, out);
+        for (var rq = 0; rq < 4; rq++) layerO(t + 0.2 + rq * 0.18, 1500 + rq * 400, 1500 + rq * 400, 0.25, 'sine', 0.035, out);
+        layerO(t + 0.95, 90, 40, 0.15, 'square', 0.07, out); layerN(t + 0.95, 'bandpass', 2200, 2, 0.1, 0.05, out, 600);
       } else {
         layerO(t, 130, 260, 1.6, 'sine', 0.07, out); layerO(t, 196, 392, 1.6, 'triangle', 0.04, out);
         for (var q = 0; q < 5; q++) layerO(t + 0.4 + q * 0.25, 1760 + q * 330, 1760 + q * 330, 0.5, 'sine', 0.04, out);
@@ -4083,6 +4170,20 @@ body {
       cosRig.runeMat.opacity = 0.55 + 0.4 * Math.sin(t * 2.2); cosRig.crackA.opacity = 0.35 + 0.65 * Math.pow(Math.sin(t * 3.3), 2); cosRig.crackB.opacity = 0.35 + 0.65 * Math.pow(Math.sin(t * 2.7 + 1), 2);
       cosRig.ring.rotation.z = t * 1.2; cosRig.ring.material.opacity = 0.5 + 0.3 * Math.sin(t * 2);
       var cie = inspT >= 0 ? Math.sin(inspT * Math.PI) : 0;
+      var crl = reloading && RELOAD > 0 ? Math.sin(clamp(reloadT / RELOAD, 0, 1) * Math.PI) : 0;
+      if (crl > cosRig.boost) cosRig.boost = crl;
+      cie = Math.max(cie, crl);
+      cosRig.shards.position.set(0, 0.02 - crl * 0.06, -0.45 + crl * 0.38);
+      for (cq = 0; cq < cosRig.eyes.length; cq++) {
+        var cey = cosRig.eyes[cq];
+        cey.a.rotation.z = cey.sx * t * 1.6; cey.b.rotation.z = -cey.sx * t * 2.4;
+        cey.a.material.opacity = 0.6 + 0.3 * Math.sin(t * 2.1 + cq) + cosRig.flash * 0.3 + crl * 0.2; cey.b.material.opacity = 0.5 + 0.3 * Math.sin(t * 3 + cq);
+      }
+      if (cosRig.boltT > 0) {
+        cosRig.boltT -= cdt; var cbo = clamp(cosRig.boltT / 0.15, 0, 1);
+        cosRig.bm1.opacity = 0.95 * cbo; cosRig.bm2.opacity = cbo;
+        if (cosRig.boltT <= 0) cosRig.bolts.visible = false;
+      }
       cosRig.shards.visible = cie > 0.03;
       if (cosRig.shards.visible) for (cq = 0; cq < cosRig.shardList.length; cq++) {
         var sh = cosRig.shardList[cq], sa = t * (1.2 + cie * 1.8) + cq * 0.52, srad = (0.06 + cie * 0.14) * (0.7 + 0.3 * Math.sin(cq * 3));
@@ -4344,6 +4445,28 @@ body {
   }
   var svgN = 0;
   function hexs(n) { return '#' + ('000000' + n.toString(16)).slice(-6); }
+  /* Celestial Void: ornamen emas, duri, tombak, dan mata lubang hitam di gambar samping */
+  function cosOrnate(inner) {
+    var o = '<g transform="translate(1,1.6) scale(0.9)">' + inner, k, a, G = '#e9bd52', Gd = '#8a5f14';
+    o += '<g stroke="' + G + '" stroke-width="0.35" fill="' + G + '">';
+    for (k = 0; k < 8; k++) { var x = 53 + k * 6.6, h = 5.2 - k * 0.32; o += '<path d="M' + x + ' 17.9L' + (x + 6.4) + ' ' + (17.9 - h) + 'L' + (x + 3.2) + ' 17.9Z"/>'; }
+    for (k = 0; k < 5; k++) { var x2 = 58 + k * 9, h2 = 3.4 - k * 0.3; o += '<path d="M' + x2 + ' 21.1L' + (x2 + 5.4) + ' ' + (21.1 + h2) + 'L' + (x2 + 2.6) + ' 21.1Z" fill="' + Gd + '"/>'; }
+    o += '<path d="M115.5 18.6L131 19.5L115.5 20.4Z"/><path d="M113 18.3L121 15.6L116 18.6Z"/><path d="M113 20.7L121 23.4L116 20.4Z"/>';
+    o += '<path d="M27 17.6L19 11.6L25.5 12.6L31 17.2Z"/><path d="M26.6 17.8L16 15.4L24 17.8Z" fill="' + Gd + '"/>';
+    o += '<path d="M50 23.2L72 29.6L56 24.4L52 23.2Z" fill="' + Gd + '"/>';
+    o += '<rect x="31" y="11.8" width="1.1" height="5.4"/><rect x="42.5" y="11.8" width="1.1" height="5.4"/><rect x="50.6" y="11.2" width="1.4" height="6.4" rx="0.5"/>';
+    o += '<line x1="51" y1="17.9" x2="106" y2="17.9" stroke-width="0.5"/><line x1="51" y1="21.1" x2="106" y2="21.1" stroke-width="0.5" opacity="0.7"/></g>';
+    function eye(cx, cy, r) {
+      var e = '<g class="seye">';
+      for (var q = 0; q < 10; q++) { var t = q / 10 * 6.283; e += '<path d="M' + (cx + Math.cos(t - 0.12) * r * 1.12).toFixed(2) + ' ' + (cy + Math.sin(t - 0.12) * r * 1.12).toFixed(2) + 'L' + (cx + Math.cos(t) * r * 1.62).toFixed(2) + ' ' + (cy + Math.sin(t) * r * 1.62).toFixed(2) + 'L' + (cx + Math.cos(t + 0.12) * r * 1.12).toFixed(2) + ' ' + (cy + Math.sin(t + 0.12) * r * 1.12).toFixed(2) + 'Z" fill="' + G + '"/>'; }
+      e += '<circle cx="' + cx + '" cy="' + cy + '" r="' + (r * 1.1).toFixed(2) + '" fill="#000" stroke="' + G + '" stroke-width="' + (r * 0.28).toFixed(2) + '"/>';
+      e += '<g class="sswirl" style="transform-origin:' + cx + 'px ' + cy + 'px"><path d="M' + (cx + r * 0.9) + ' ' + cy + 'A' + (r * 0.9) + ' ' + (r * 0.9) + ' 0 1 1 ' + cx + ' ' + (cy - r * 0.9) + 'A' + (r * 0.55) + ' ' + (r * 0.55) + ' 0 0 0 ' + (cx - r * 0.3) + ' ' + cy + '" fill="none" stroke="#b44cff" stroke-width="' + (r * 0.22).toFixed(2) + '"/></g>';
+      e += '<circle cx="' + cx + '" cy="' + cy + '" r="' + (r * 0.3).toFixed(2) + '" fill="#fff" opacity="0.85"/></g>';
+      return e;
+    }
+    o += eye(37.5, 20.5, 2.6) + eye(13, 21.6, 1.7);
+    return o + '</g>';
+  }
   function gunSVG(wid, th) {
     var w = weaponById(wid), S = GUNSHAPE[wid] || GUNSHAPE.ar;
     var body = th ? th.body : (wid === 'sn' ? 0x4b5f3a : (wid === 'kr' ? 0xb4bec8 : 0x22303b)), dark = th ? th.dark : (wid === 'sn' ? 0x151a14 : (wid === 'kr' ? 0x1a1f25 : 0x0f1b26)), acc = th ? th.acc : w.look.ac;
@@ -4356,7 +4479,7 @@ body {
       return o;
     }
     var defs = rb ? '<defs><linearGradient id="' + id + '" x1="0" x2="1"><stop offset="0" stop-color="#ff3b3b"/><stop offset="0.25" stop-color="#ffd23a"/><stop offset="0.5" stop-color="#3bff8a"/><stop offset="0.75" stop-color="#3ba5ff"/><stop offset="1" stop-color="#c13bff"/></linearGradient></defs>' : '';
-    var out = '<svg viewBox="0 0 120 44" class="' + (th && th.fx ? 'fxs fx-' + th.fx : '') + '" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' + defs + sideGun(wid, { d: hexs(body), k: hexs(dark), a: accFill, g: '#66ccff' });
+    var out = '<svg viewBox="0 0 120 44" class="' + (th && th.fx ? 'fxs fx-' + th.fx : '') + '" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' + defs + (th && th.id === 'cosmos' && wid === 'sn' ? cosOrnate(sideGun(wid, { d: hexs(body), k: hexs(dark), a: accFill, g: '#66ccff' })) : sideGun(wid, { d: hexs(body), k: hexs(dark), a: accFill, g: '#66ccff' }));
     if (th && th.fx) {
       var pos = [[16, 12], [48, 8], [84, 11], [104, 24], [34, 36], [70, 34]];
       for (var q = 0; q < pos.length; q++) out += '<circle class="tw" cx="' + pos[q][0] + '" cy="' + pos[q][1] + '" r="1.8" fill="' + (rb ? '#fff' : hexs(th.cols[q % th.cols.length])) + '" style="animation-delay:' + (q * 0.35).toFixed(2) + 's"/>';
@@ -4375,8 +4498,10 @@ body {
     for (k in RAR) tot += RAR[k].w;
     var r = Math.random() * tot, rar = 'umum';
     for (k in RAR) { if (r < RAR[k].w) { rar = k; break; } r -= RAR[k].w; }
-    var pool = THEMES.filter(function (t) { return t.rar === rar; });
-    var th = pool[Math.floor(Math.random() * pool.length)];
+    var pool = THEMES.filter(function (t) { return t.rar === rar; }), wsum = 0, th = pool[0], q;
+    pool.forEach(function (t) { wsum += t.wt || 1; });
+    var rr = Math.random() * wsum;
+    for (q = 0; q < pool.length; q++) { var wq = pool[q].wt || 1; if (rr < wq) { th = pool[q]; break; } rr -= wq; }
     var w = th.only ? weaponById(th.only[0]) : WEAPONS[Math.floor(Math.random() * WEAPONS.length)];
     return { w: w.id, t: th.id };
   }
@@ -4616,6 +4741,7 @@ body {
       var bt = document.createElement('button'); bt.type = 'button'; bt.className = 'go';
       bt.textContent = on2 ? 'Lepas (ke standar)' : 'Pasang';
       bt.addEventListener('click', function () { invSet(sel, !on2); });
+      if (sel.kind === 'w' && sel.th.lore) { var lo = document.createElement('div'); lo.className = 'lore'; lo.textContent = '\u201c' + sel.th.lore + '\u201d'; tx.appendChild(lo); }
       tx.appendChild(bt); box.appendChild(tx); det.appendChild(box);
     } else if (list.length) {
       var hint = document.createElement('div'); hint.className = 'medmsg'; hint.textContent = 'Ketuk sebuah item untuk melihat dan memasangnya.'; det.appendChild(hint);
@@ -4725,6 +4851,7 @@ body {
       btn.addEventListener('click', function () { equipSkin(win.w, win.t); btn.textContent = 'Dipakai'; btn.disabled = true; });
       $('spinTxt').appendChild(btn);
     }
+    if (th.lore) { var lq = document.createElement('div'); lq.className = 'note lore'; lq.textContent = '\u201c' + th.lore + '\u201d'; $('spinTxt').appendChild(lq); }
     box.hidden = false;
     refreshEcon();
     var up = { umum: 0, langka: 1, epik: 2, legendaris: 3, mitos: 4 }[th.rar];
@@ -4768,6 +4895,11 @@ body {
     var tot = 0, k, html = '';
     for (k in RAR) tot += RAR[k].w;
     for (k in RAR) html += '<span><i style="background:' + RAR[k].col + '"></i>' + RAR[k].name + ' ' + Math.round(RAR[k].w / tot * 100) + '%</span>';
+    THEMES.forEach(function (t) {
+      if (!t.wt || t.wt >= 1) return;
+      var pl = THEMES.filter(function (x) { return x.rar === t.rar; }), ws = 0; pl.forEach(function (x) { ws += x.wt || 1; });
+      html += '<span><i style="background:#ffd23a"></i>' + t.name + ' ' + (RAR[t.rar].w / tot * t.wt / ws * 100).toFixed(2) + '%</span>';
+    });
     $('oddsRow').innerHTML = html;
   }
 
