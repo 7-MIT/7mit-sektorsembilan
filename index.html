@@ -398,6 +398,20 @@ body {
 #sfx.fx-dread { --c: #ff2410; --c2: #ff9a3a; }
 #sfx.fx-dread b { animation: sfxr 1.2s ease-in infinite; }
 #sfx.fx-dread .ring { box-shadow: 0 0 12px 2px var(--c), inset 0 0 14px 2px var(--c); opacity: 0.55; border-width: 1px; }
+#optic.valor { background: radial-gradient(circle at 50% 50%, transparent calc(var(--r) - 14px), rgba(3,6,22,0.98) calc(var(--r) - 3px), rgba(3,6,22,0.72) calc(var(--r) + 4px), rgba(3,6,22,0.5) 100%); }
+#optic.valor i { display: none; }
+#valor { position: absolute; inset: 0; pointer-events: none; opacity: 0; --r: min(21vmin, 190px); }
+#valor .cb { position: absolute; left: calc(50% - var(--r)); top: calc(50% - var(--r)); width: calc(var(--r) * 2); height: calc(var(--r) * 2); border-radius: 50%; overflow: hidden;
+  background: radial-gradient(circle, rgba(0, 0, 0, 0) 40%, rgba(40, 70, 170, 0.2) 70%, rgba(6, 10, 40, 0.75) 100%); box-shadow: inset 0 0 26px 5px rgba(120, 170, 255, 0.5), 0 0 14px 2px rgba(255, 220, 130, 0.6); }
+#valor svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.vrot { animation: cspin 90s linear infinite; }
+.vstar { filter: drop-shadow(0 0 3px #8ab8ff); animation: dpulse 1.8s ease-in-out infinite; }
+#lflash { position: absolute; inset: 0; pointer-events: none; opacity: 0; mix-blend-mode: screen; background: radial-gradient(circle at 50% 50%, rgba(255, 246, 214, 0.7), rgba(120, 170, 255, 0.25) 55%, transparent 82%); }
+.fxc-valor { background: linear-gradient(160deg, #060a22, #1c2a66) !important; color: #fff6dc; box-shadow: inset 0 0 16px rgba(120,170,255,0.8), inset 0 -10px 18px rgba(255,216,106,0.35); }
+.fxc-valor b { color: #fff6dc; } .fxc-valor span { color: #c8d8ff !important; }
+.fx-valor { animation: pvalor 2.2s ease-in-out infinite; }
+@keyframes pvalor { 0%, 100% { filter: drop-shadow(0 0 3px #6aa8ff); } 50% { filter: drop-shadow(0 0 8px #ffd86a); } }
+#sfx.fx-valor { --c: #6aa8ff; --c2: #ffd86a; }
 #optic.dread { background: radial-gradient(circle at 50% 50%, transparent calc(var(--r) - 14px), rgba(4,0,0,0.98) calc(var(--r) - 3px), rgba(4,0,0,0.72) calc(var(--r) + 4px), rgba(4,0,0,0.5) 100%); }
 #optic.dread i { display: none; }
 #dread { position: absolute; inset: 0; pointer-events: none; opacity: 0; --r: min(21vmin, 190px); }
@@ -578,6 +592,7 @@ body {
   <div id="optic"><i></i></div>
   <div id="cosmos" aria-hidden="true"><div class="cb" id="cosmosBody"></div></div>
   <div id="dread" aria-hidden="true"><div class="cb" id="dreadBody"></div></div>
+  <div id="valor" aria-hidden="true"><div class="cb" id="valorBody"></div></div>
   <div id="reaper" aria-hidden="true"><div class="cb" id="reaperBody"></div></div>
   <div id="sfx" aria-hidden="true"><i class="edge"></i><i class="ring"></i><b style="--a:0deg"></b><b style="--a:45deg"></b><b style="--a:90deg"></b><b style="--a:135deg"></b><b style="--a:180deg"></b><b style="--a:225deg"></b><b style="--a:270deg"></b><b style="--a:315deg"></b></div>
   <div id="slashfx" aria-hidden="true"><svg viewBox="0 0 160 90" preserveAspectRatio="xMidYMid slice"><path class="pa" pathLength="100" d="M130 12 Q96 74 30 64"/><path class="pb" pathLength="100" d="M30 12 Q64 74 130 64"/><path class="pc" pathLength="100" d="M80 84 L80 36 M64 78 L75 46 M96 78 L85 46"/><path class="pd" pathLength="100" d="M80 14 A32 32 0 1 1 79.9 14"/></svg></div>
@@ -585,6 +600,7 @@ body {
   <div id="vignette"></div>
   <div id="cflash"></div>
   <div id="vflash"></div>
+  <div id="lflash"></div>
   <div id="dflash"></div>
   <div id="rflash"></div>
   <div id="cross"><i></i><i></i><i></i><i></i><b id="hit"></b></div>
@@ -2556,7 +2572,7 @@ body {
   var el = {
     map: $('vMap'), hud: $('hud'), wave: $('vWave'), left: $('vLeft'), score: $('vScore'), coin: $('vCoin'), best: $('vBest'),
     hpFill: $('hpFill'), hpBar: $('hpBar'), hp: $('vHp'), ammo: $('vAmmo'), mag: $('vMag'), ammoV: $('ammoV'), kAmmo: $('kAmmo'),
-    rBar: $('rBar'), rFill: $('rFill'), vig: $('vignette'), scope: $('scope'), optic: $('optic'), cosmos: $('cosmos'), dread: $('dread'), reaper: $('reaper'), sfx: $('sfx'), cross: $('cross'), hit: $('hit'), banner: $('banner'), bnT: $('bnT'), bnS: $('bnS')
+    rBar: $('rBar'), rFill: $('rFill'), vig: $('vignette'), scope: $('scope'), optic: $('optic'), cosmos: $('cosmos'), dread: $('dread'), valor: $('valor'), reaper: $('reaper'), sfx: $('sfx'), cross: $('cross'), hit: $('hit'), banner: $('banner'), bnT: $('bnT'), bnS: $('bnS')
   };
   var cache = {};
   function setText(node, key, val) {
@@ -2775,6 +2791,7 @@ body {
     scoped = false;
     reloadSound(weapon.id, RELOAD);
     if (fxName === 'cosmos' && weapon.id === 'sn') { cosRig.boost = 1; cosmosSound('reload'); }
+    if (fxName === 'valor' && weapon.id === 'ar') { valorRig.boost = 1; valorSound('reload'); }
   }
 
   var slashT = -1, slashDir = 1, meleeDelay = -1, curMove = null, hitMul = 1, hitRM = 1;
@@ -2851,6 +2868,7 @@ body {
     if (fxName === 'cosmos') { cosmosSound('shot'); cosRig.flash = 1; cosRig.boost = 1; cosFlashDom(); cosBolts(); }
     if (fxName === 'reaper') { reaperSound('shot'); rpRig.flash = 1; rpRig.boost = Math.min(1, rpRig.boost + 0.25); }
     if (fxName === 'dread') { dreadSound('shot'); dreadRig.flash = 1; dreadRig.boost = Math.min(1, dreadRig.boost + 0.3); }
+    if (fxName === 'valor') { valorSound('shot'); valorRig.flash = 1; valorRig.boost = Math.min(1, valorRig.boost + 0.25); }
     flash.visible = true; flash.rotation.z = Math.random() * 3;
 
     var targets = obstacles.slice();
@@ -2919,6 +2937,7 @@ body {
     el.sfx.style.opacity = fxName ? String(clamp((scopeK - 0.45) / 0.55, 0, 1)) : '0';
     if (el.cosmos) el.cosmos.style.opacity = fxName === 'cosmos' && weapon.id === 'sn' ? String(snipe) : '0';
     if (el.dread) el.dread.style.opacity = fxName === 'dread' && weapon.id === 'ar' ? String(dot) : '0';
+    if (el.valor) el.valor.style.opacity = fxName === 'valor' && weapon.id === 'ar' ? String(dot) : '0';
     if (el.reaper) el.reaper.style.opacity = fxName === 'reaper' && weapon.id === 'smg' ? String(dot) : '0';
     el.cross.style.opacity = String(1 - Math.max(snipe, dot, weapon.id === 'sn' ? 0 : clamp((scopeK - 0.3) / 0.5, 0, 1)));
   }
@@ -3150,6 +3169,7 @@ body {
     { id: 'naga', name: 'Raja Naga', rar: 'mitos', only: ['sg'], body: 0x15161b, dark: 0x070709, acc: 0xff4a14, fx: 'naga', cols: [0xff4a14, 0xff9a1f, 0xffd23a, 0xff1e1e] },
     { id: 'cosmos', name: 'Celestial Void', rar: 'mitos', only: ['sn'], body: 0x0a0610, dark: 0x020106, acc: 0xffc84a, flashCol: 0xb44cff, tr: 0xb44cff, wt: 0.25, lore: 'Di antara bintang dan kehampaan, aku adalah penguasa yang tak terlihat.', fx: 'cosmos', cols: [0xb44cff, 0xffd23a, 0x7a3cff, 0xffffff] },
     { id: 'dread', name: 'Dreadnought', rar: 'mitos', only: ['ar'], body: 0x0b0506, dark: 0x020101, acc: 0xff2410, flashCol: 0xff3a10, tr: 0xff3010, fx: 'dread', cols: [0xff2410, 0xff7a1f, 0xffd23a, 0x4a0000] },
+    { id: 'valor', name: 'Radiant Valor', rar: 'mitos', only: ['ar'], body: 0x0b1030, dark: 0x04060f, acc: 0xe9bd52, flashCol: 0xfff2c0, tr: 0x9ec4ff, wt: 0.4, lore: 'Bukan sekadar senjata, tapi cahaya yang melindungi.', fx: 'valor', cols: [0xffd86a, 0xffffff, 0x6aa8ff, 0xfff0c0] },
     { id: 'reaper', name: 'Phantom Reaper', rar: 'mitos', only: ['smg'], body: 0x07040d, dark: 0x010003, acc: 0xb23cff, flashCol: 0xb44cff, tr: 0xc040ff, fx: 'reaper', cols: [0xb23cff, 0xff2a4a, 0x7a22ff, 0x2a0a40] }
   ];
   var THEME_BY_ID = {};
@@ -3902,6 +3922,196 @@ body {
     } catch (e) {}
   }
 
+  /* ---------- Skin Mitos: Radiant Valor (senapan serbu) ---------- */
+  var valorRig = { g: new T.Group(), fire: new T.Group(), halo: new T.Group(), wingGroups: [], stars: [], haloRings: [], haloFeathers: [], panelMat: null, flash: 0, boost: 0, lastT: 0, hemiOn: false };
+  var valFeatherGeo = new T.ConeGeometry(0.011, 1, 5), valUp = new T.Vector3(0, 1, 0), valFx = [], valDebris = [], valFall = [], valTex = null;
+  var valBeamGeo = new T.CylinderGeometry(0.1, 0.32, 8, 14, 1, true), valHaloGeo = new T.RingGeometry(0.34, 0.4, 36), valDebGeo = new T.BoxGeometry(0.035, 0.035, 0.035);
+  function valFeather(par, len, w, x, y, z, dx, dy, dz, mat) {
+    var o = new T.Mesh(valFeatherGeo, mat), d = new T.Vector3(dx, dy, dz).normalize();
+    o.scale.set(w, len, w * 0.16); o.quaternion.setFromUnitVectors(valUp, d);
+    o.position.set(x + d.x * len / 2, y + d.y * len / 2, z + d.z * len / 2); par.add(o); return o;
+  }
+  (function () {
+    var g = valorRig.g, i, sx, k;
+    function gm(c, op) { return new T.MeshBasicMaterial({ color: c, transparent: true, opacity: op, depthWrite: false, side: T.DoubleSide, blending: T.AdditiveBlending }); }
+    var gold = new T.MeshBasicMaterial({ color: 0xe9bd52 }), goldD = new T.MeshBasicMaterial({ color: 0x8a5f14 }), ivory = new T.MeshBasicMaterial({ color: 0xf4efe2, side: T.DoubleSide }), ivoryB = new T.MeshBasicMaterial({ color: 0xc9d6f4, side: T.DoubleSide });
+    function put(par, geo, mat, x, y, z, rx, ry, rz) { var o = new T.Mesh(geo, mat); o.position.set(x, y, z); o.rotation.set(rx || 0, ry || 0, rz || 0); par.add(o); return o; }
+    function thorn(len, rad, x, y, z, dx, dy, dz, mat) {
+      var d = new T.Vector3(dx, dy, dz).normalize(), o = new T.Mesh(new T.ConeGeometry(rad, len, 5), mat || gold);
+      o.quaternion.setFromUnitVectors(valUp, d); o.position.set(x + d.x * len / 2, y + d.y * len / 2, z + d.z * len / 2); g.add(o); return o;
+    }
+    valorRig.panelMat = gm(0x4a7aff, 0.7);
+    // cincin emas di hand guard, pita di rel, tombak di moncong
+    for (k = 0; k < 3; k++) put(g, new T.TorusGeometry(0.0335, 0.0026, 6, 20), gold, 0, 0.012, -0.3 - k * 0.1);
+    put(g, new T.BoxGeometry(0.02, 0.0035, 0.3), gold, 0, 0.0645, -0.18);
+    thorn(0.15, 0.012, 0, 0.012, -0.75, 0, 0, -1);
+    thorn(0.06, 0.005, 0, 0.032, -0.72, 0, 0.45, -1); thorn(0.06, 0.005, 0, -0.008, -0.72, 0, -0.45, -1);
+    for (k = 0; k < 5; k++) thorn(0.035 - k * 0.003, 0.005, 0, 0.043, -0.3 - k * 0.05, 0, 0.5, -1);
+    for (sx = -1; sx <= 1; sx += 2) {
+      thorn(0.08, 0.006, sx * 0.018, 0.012, -0.73, sx * 0.5, 0, -1);
+      put(g, new T.BoxGeometry(0.003, 0.03, 0.12), gold, sx * 0.034, 0.02, -0.38, 0, 0, sx * 0.15);
+      put(g, new T.BoxGeometry(0.003, 0.003, 0.3), gold, sx * 0.0295, 0.044, -0.12);
+      put(g, new T.BoxGeometry(0.002, 0.016, 0.16), valorRig.panelMat, sx * 0.0293, 0.012, -0.22);
+      // lambang bintang kompas biru di bodi
+      var ex = sx * 0.0296, em = new T.Group(); em.position.set(ex, 0.012, -0.095); em.rotation.y = sx * Math.PI / 2; g.add(em);
+      put(em, new T.RingGeometry(0.0125, 0.0185, 24), gold, 0, 0, 0);
+      put(em, new T.CircleGeometry(0.0125, 20), gm(0x1e3a9a, 0.75), 0, 0, 0.0004);
+      var st = new T.Group(); st.position.z = 0.0008; em.add(st);
+      put(st, new T.BoxGeometry(0.003, 0.034, 0.0015), gm(0xcfe2ff, 0.95), 0, 0, 0); put(st, new T.BoxGeometry(0.034, 0.003, 0.0015), gm(0xcfe2ff, 0.95), 0, 0, 0);
+      put(st, new T.BoxGeometry(0.0022, 0.022, 0.0015), gm(0x8ab8ff, 0.9), 0, 0, 0, 0, 0, Math.PI / 4); put(st, new T.BoxGeometry(0.0022, 0.022, 0.0015), gm(0x8ab8ff, 0.9), 0, 0, 0, 0, 0, -Math.PI / 4);
+      valorRig.stars.push(st);
+      // sayap: kipas bulu di atas bodi bagian belakang, mengembang saat reload / inspeksi
+      var wg = new T.Group(); wg.position.set(sx * 0.03, 0.06, -0.03); g.add(wg);
+      for (k = 0; k < 9; k++) {
+        var a = (10 + k * 10) * Math.PI / 180, L = 0.075 + 0.06 * Math.sin(k / 8 * Math.PI * 0.9 + 0.2);
+        valFeather(wg, L, 1.1, 0, 0, 0, sx * 0.4, Math.sin(a), Math.cos(a), k % 2 ? ivoryB : ivory);
+        if (k % 3 === 0) valFeather(wg, L * 0.45, 0.9, 0, 0, 0, sx * 0.5, Math.sin(a + 0.25), Math.cos(a + 0.25), gold);
+      }
+      thorn(0.03, 0.005, sx * 0.03, 0.06, -0.03, sx * 0.3, 0.4, 0.6, gold);
+      valorRig.wingGroups.push({ g: wg, sx: sx }); wg.scale.setScalar(0.5);
+    }
+    // ledakan cahaya suci di moncong
+    var fm = gm(0xfff1c8, 0.95), fm2 = gm(0xffd23a, 0.95), fm3 = gm(0x8ab8ff, 0.9), fire = valorRig.fire;
+    for (i = 0; i < 8; i++) { var sp = new T.Mesh(new T.BoxGeometry(0.01, 0.4, 0.003), i % 2 ? fm2 : fm); sp.rotation.z = i * Math.PI / 8; fire.add(sp); }
+    put(fire, new T.SphereGeometry(0.04, 10, 8), fm, 0, 0, 0);
+    put(fire, new T.BoxGeometry(0.03, 0.03, 0.7), fm3, 0, 0, -0.38);
+    put(fire, new T.BoxGeometry(0.012, 0.012, 1.0), fm, 0, 0, -0.52);
+    put(fire, new T.BoxGeometry(0.2, 0.014, 0.16), fm3, 0, 0, -0.1, 0, 0.6, 0); put(fire, new T.BoxGeometry(0.2, 0.014, 0.16), fm2, 0, 0, -0.1, 0, -0.6, 0);
+    fire.position.set(0, 0.012, -0.8); fire.visible = false;
+    // halo cahaya dan bulu yang melayang untuk inspeksi / reload
+    var hm = gm(0xffd86a, 0.9), halo = valorRig.halo;
+    [0.1, 0.14, 0.18].forEach(function (rr) { var rg = new T.Mesh(new T.RingGeometry(rr, rr + 0.004, 40), hm.clone()); rg.rotation.x = Math.PI / 2; halo.add(rg); valorRig.haloRings.push(rg); });
+    for (i = 0; i < 8; i++) { var fe = valFeather(halo, 0.05, 0.9, 0, 0, 0, 0, 1, 0, gm(i % 2 ? 0xfff4d0 : 0xcfe2ff, 0.9)); valorRig.haloFeathers.push(fe); }
+    halo.position.set(0, 0.0, -0.25); halo.visible = false;
+    g.visible = false;
+    gunModels.ar.add(g); gunModels.ar.add(fire); gunModels.ar.add(halo);
+  })();
+  function buildValor() {
+    var body = $('valorBody'); if (!body) return;
+    var r = rng(63), s = '', i, k, sx, a, d;
+    s += '<svg viewBox="-100 -100 200 200" aria-hidden="true"><defs><linearGradient id="vgd" x1="0" x2="1"><stop offset="0" stop-color="#ffe9a0"/><stop offset="1" stop-color="#c8902a"/></linearGradient></defs>';
+    s += '<g class="vrot"><circle r="94" fill="none" stroke="url(#vgd)" stroke-width="2"/><circle r="88" fill="none" stroke="#fff3c8" stroke-width="0.5" opacity="0.7"/>';
+    for (i = 0; i < 48; i++) { a = i * 0.1309; var tl = i % 4 === 0 ? 5 : 2.5; s += '<line x1="' + (Math.cos(a) * 88).toFixed(1) + '" y1="' + (Math.sin(a) * 88).toFixed(1) + '" x2="' + (Math.cos(a) * (88 - tl)).toFixed(1) + '" y2="' + (Math.sin(a) * (88 - tl)).toFixed(1) + '" stroke="#ffd86a" stroke-width="0.6"/>'; }
+    s += '</g>';
+    for (sx = -1; sx <= 1; sx += 2) for (k = 0; k < 6; k++) {
+      s += '<g transform="translate(' + (sx * 78) + ',0) rotate(' + (sx * 90 + (k - 2.5) * 22) + ')"><path d="M0 0Q' + (7 - k * 0.3) + ' ' + (-20 - k) + ' 0 ' + (-40 + k * 2) + 'Q' + (-7 + k * 0.3) + ' ' + (-20 - k) + ' 0 0Z" fill="rgba(235,242,255,0.22)" stroke="#fff6d6" stroke-width="0.7"/></g>';
+    }
+    s += '<g class="vstar"><path d="M0 -34L4 -4L34 0L4 4L0 34L-4 4L-34 0L-4 -4Z" fill="rgba(120,170,255,0.3)" stroke="#bcd6ff" stroke-width="0.9"/><path d="M0 -60V-14M0 14V60M-60 0H-14M14 0H60" stroke="#8ab8ff" stroke-width="0.9"/></g>';
+    s += '<circle r="13" fill="none" stroke="#ffd86a" stroke-width="0.9"/><circle r="2.2" fill="#fff"/><g fill="#ffd86a">';
+    [22, 34, 46, 58, 70].forEach(function (v) { s += '<circle cx="' + v + '" cy="0" r="0.9"/><circle cx="' + -v + '" cy="0" r="0.9"/><circle cx="0" cy="' + v + '" r="0.9"/><circle cx="0" cy="' + -v + '" r="0.9"/>'; });
+    s += '</g>';
+    for (i = 0; i < 22; i++) { a = r() * 6.283; d = 20 + Math.sqrt(r()) * 62; s += '<circle class="tw" cx="' + (Math.cos(a) * d).toFixed(1) + '" cy="' + (Math.sin(a) * d).toFixed(1) + '" r="' + (0.5 + r() * 1.1).toFixed(2) + '" fill="' + ['#fff6d6', '#ffd86a', '#9ec4ff'][i % 3] + '" style="animation-delay:' + (r() * 2).toFixed(2) + 's"/>'; }
+    body.innerHTML = s + '</svg>';
+  }
+  function valorFlashDom() {
+    var f = $('lflash'); if (!f) return;
+    f.style.transition = 'none'; f.style.opacity = '0.9'; void f.offsetWidth;
+    f.style.transition = 'opacity 0.9s ease-out'; f.style.opacity = '0';
+  }
+  function valorTexture() {
+    if (valTex) return valTex;
+    try {
+      var c = document.createElement('canvas'); c.width = c.height = 128; var x = c.getContext('2d'), k;
+      x.translate(64, 64);
+      x.strokeStyle = '#ffd86a'; x.lineWidth = 4; x.beginPath(); x.arc(0, 0, 58, 0, 6.283); x.stroke();
+      x.strokeStyle = '#fff3c8'; x.lineWidth = 2; x.beginPath(); x.arc(0, 0, 50, 0, 6.283); x.stroke();
+      x.strokeStyle = '#ffe9a0'; x.lineWidth = 3;
+      x.beginPath(); x.moveTo(0, -42); x.lineTo(0, 40); x.stroke(); x.beginPath(); x.moveTo(-14, -18); x.lineTo(14, -18); x.stroke();
+      x.fillStyle = '#fff6d6';
+      for (k = -1; k <= 1; k += 2) { x.beginPath(); x.moveTo(k * 4, 2); x.quadraticCurveTo(k * 30, -20, k * 44, -4); x.quadraticCurveTo(k * 30, -6, k * 36, 10); x.quadraticCurveTo(k * 22, 2, k * 24, 18); x.quadraticCurveTo(k * 12, 8, k * 4, 22); x.closePath(); x.fill(); }
+      valTex = new T.CanvasTexture(c);
+    } catch (e) { valTex = null; }
+    return valTex;
+  }
+  function valorKill(pt) {
+    burst(pt, 0xfff1c8, 14, 7); burst(pt, 0xffd23a, 10, 6); burst(pt, 0x8ab8ff, 8, 8);
+    if (valFx.length < 5) {
+      var gy = Math.max(0.03, pt.y - 1.15), g = new T.Group(), k, sx;
+      g.position.set(pt.x, pt.y, pt.z); g.rotation.y = yaw; scene.add(g);
+      function vm(c) { return new T.MeshBasicMaterial({ color: c, transparent: true, opacity: 0, depthWrite: false, side: T.DoubleSide, blending: T.AdditiveBlending }); }
+      var mW = vm(0xfff4d8), mB = vm(0x8ab8ff), mG = vm(0xffd86a);
+      var beam = new T.Mesh(valBeamGeo, mB); beam.position.y = gy - pt.y + 4; g.add(beam);
+      var halo = new T.Mesh(valHaloGeo, mG); halo.position.y = 1.15; g.add(halo);
+      var wings = [];
+      for (sx = -1; sx <= 1; sx += 2) {
+        var wr = new T.Group(); wr.position.set(sx * 0.15, 0.3, -0.1); g.add(wr);
+        for (k = 0; k < 8; k++) { var a = (12 + k * 10) * Math.PI / 180; valFeather(wr, 0.7 + 0.55 * Math.sin(k / 7 * Math.PI * 0.85 + 0.25), 8, 0, 0, 0, sx * Math.cos(a), Math.sin(a), -0.05, k % 3 === 0 ? mG : mW); }
+        wr.scale.setScalar(0.2); wings.push(wr);
+      }
+      var tx = valorTexture(), sp = null;
+      if (tx) { sp = new T.Sprite(new T.SpriteMaterial({ map: tx, transparent: true, opacity: 0, depthWrite: false, blending: T.AdditiveBlending })); sp.position.set(0, 0.2, 0.2); sp.scale.set(1.6, 1.6, 1.6); g.add(sp); }
+      valFx.push({ g: g, mW: mW, mB: mB, mG: mG, beam: beam, halo: halo, wings: wings, sp: sp, t: 0, gy: gy - pt.y });
+    }
+    for (var q = 0; q < 26 && valDebris.length < 150; q++) {
+      var dm = new T.Mesh(valDebGeo, new T.MeshBasicMaterial({ color: [0xfff4d8, 0xffd86a, 0x8ab8ff][q % 3], transparent: true, opacity: 1, depthWrite: false, blending: T.AdditiveBlending }));
+      dm.position.set(pt.x + (Math.random() - 0.5) * 0.5, pt.y - 0.5 + Math.random() * 1.2, pt.z + (Math.random() - 0.5) * 0.5); scene.add(dm);
+      valDebris.push({ m: dm, v: new T.Vector3((Math.random() - 0.5) * 1.6, 0.5 + Math.random() * 1.8, (Math.random() - 0.5) * 1.6), life: 1.3 + Math.random() * 0.7, spin: Math.random() * 6 });
+    }
+    for (var f = 0; f < 10 && valFall.length < 60; f++) {
+      var fm = new T.MeshBasicMaterial({ color: f % 2 ? 0xfff4d8 : 0xcfe2ff, transparent: true, opacity: 0.95, depthWrite: false, side: T.DoubleSide, blending: T.AdditiveBlending });
+      var fo = new T.Mesh(valFeatherGeo, fm); fo.scale.set(2.2, 0.28, 0.4); fo.position.set(pt.x + (Math.random() - 0.5) * 1.6, pt.y + Math.random() * 1.1, pt.z + (Math.random() - 0.5) * 1.6); scene.add(fo);
+      valFall.push({ m: fo, life: 2.4, ph: Math.random() * 6, sp: Math.random() * 3 + 1 });
+    }
+    valorFlashDom(); valorSound('kill');
+  }
+  function valorUpdate(dt) {
+    var i, a, u;
+    for (i = valFx.length - 1; i >= 0; i--) {
+      a = valFx[i]; a.t += dt;
+      var t = a.t, bo = clamp(t / 0.25, 0, 1) * (1 - clamp((t - 1.2) / 0.5, 0, 1)), wo = clamp((t - 0.1) / 0.45, 0, 1), fade = 1 - clamp((t - 1.1) / 0.6, 0, 1), ho = clamp((t - 0.3) / 0.3, 0, 1) * fade;
+      a.mB.opacity = 0.6 * bo; a.mW.opacity = 0.95 * wo * fade; a.mG.opacity = 0.95 * wo * fade;
+      a.beam.scale.set(1 + 0.12 * Math.sin(t * 14), 1, 1 + 0.12 * Math.sin(t * 14));
+      var ws = 0.2 + 0.8 * (1 - Math.pow(1 - wo, 3)) + 0.04 * Math.sin(t * 6);
+      for (u = 0; u < a.wings.length; u++) a.wings[u].scale.setScalar(ws);
+      a.halo.scale.setScalar(0.7 + 0.3 * ho); a.halo.rotation.z = t * 1.5;
+      if (a.sp) { a.sp.material.opacity = 0.95 * ho; a.sp.position.y = 0.2 + t * 0.12; }
+      if (t >= 1.8) {
+        scene.remove(a.g); a.mW.dispose(); a.mB.dispose(); a.mG.dispose(); if (a.sp) a.sp.material.dispose(); valFx.splice(i, 1);
+      }
+    }
+    for (i = valDebris.length - 1; i >= 0; i--) {
+      a = valDebris[i]; a.life -= dt; a.v.y += 0.5 * dt; a.m.position.addScaledVector(a.v, dt);
+      a.m.rotation.x += a.spin * dt; a.m.rotation.y += a.spin * 0.7 * dt; a.m.material.opacity = Math.min(1, Math.max(0, a.life) / 0.6); a.m.scale.setScalar(Math.min(1, 0.3 + a.life));
+      if (a.life <= 0) { scene.remove(a.m); a.m.material.dispose(); valDebris.splice(i, 1); }
+    }
+    for (i = valFall.length - 1; i >= 0; i--) {
+      a = valFall[i]; a.life -= dt; a.m.position.y -= 0.7 * dt; a.m.position.x += Math.sin(a.life * a.sp + a.ph) * 0.4 * dt; a.m.rotation.z += a.sp * dt; a.m.rotation.x += a.sp * 0.6 * dt;
+      a.m.material.opacity = Math.min(0.95, Math.max(0, a.life) / 0.8);
+      if (a.life <= 0 || a.m.position.y < 0.02) { scene.remove(a.m); a.m.material.dispose(); valFall.splice(i, 1); }
+    }
+    if (valorRig.flash > 0 || valorRig.hemiOn) {
+      if (valorRig.flash > 0) { hemi.intensity = (curMap.hemi[2] || 0.95) + valorRig.flash * 0.7; hemi.color.setHex(0xfff0d0); valorRig.hemiOn = true; }
+      else { hemi.intensity = curMap.hemi[2]; hemi.color.setHex(curMap.hemi[0]); valorRig.hemiOn = false; }
+    }
+  }
+  function valorSound(kind) {
+    if (!actx || muted || !noiseBuf) return;
+    try {
+      var out = outNode(0);
+      if (!out) return;
+      out.gain.value = 0.9;
+      var t = actx.currentTime;
+      if (kind === 'shot') {
+        layerN(t, 'bandpass', 2200, 0.8, 0.12, 0.2, out, 700); layerN(t, 'highpass', 4500, 0.6, 0.08, 0.09, out);
+        layerO(t, 150, 60, 0.18, 'square', 0.1, out);
+        var now = performance.now();
+        if (now - (valorSound.at || 0) > 260) { valorSound.at = now; layerO(t + 0.02, 1568, 1568, 0.4, 'sine', 0.045, out); layerO(t + 0.02, 2349, 2349, 0.45, 'sine', 0.03, out); layerO(t + 0.05, 3136, 3136, 0.5, 'sine', 0.02, out); }
+      } else if (kind === 'reload') {
+        layerO(t, 300, 1200, 0.9, 'sine', 0.045, out); layerO(t + 0.1, 600, 2400, 0.8, 'triangle', 0.025, out);
+        for (var rq = 0; rq < 5; rq++) layerO(t + 0.15 + rq * 0.16, 1800 + rq * 350, 1800 + rq * 350, 0.3, 'sine', 0.03, out);
+        layerN(t + 0.5, 'bandpass', 3500, 1.5, 0.4, 0.05, out, 900); layerO(t + 0.95, 120, 55, 0.12, 'square', 0.07, out);
+      } else if (kind === 'kill') {
+        layerN(t, 'bandpass', 800, 1.4, 0.7, 0.2, out, 4200); layerO(t, 90, 40, 0.5, 'sine', 0.3, out);
+        [523, 659, 784, 1047].forEach(function (f, i) { layerO(t + 0.05 + i * 0.05, f, f, 1.6, 'sine', 0.06, out); layerO(t + 0.05 + i * 0.05, f * 2, f * 2, 1.2, 'triangle', 0.02, out); });
+        layerO(t + 0.5, 2093, 2093, 0.8, 'sine', 0.04, out); layerO(t + 0.6, 3136, 3136, 0.9, 'sine', 0.03, out);
+      } else {
+        [392, 494, 587, 784].forEach(function (f, i) { layerO(t + i * 0.15, f, f * 1.01, 1.6, 'sine', 0.05, out); });
+        layerO(t, 98, 196, 1.5, 'sine', 0.06, out); layerN(t + 0.3, 'bandpass', 3200, 2, 0.9, 0.04, out, 1200);
+        for (var q = 0; q < 4; q++) layerO(t + 0.7 + q * 0.2, 2093 + q * 400, 2093 + q * 400, 0.5, 'sine', 0.03, out);
+      }
+    } catch (e) {}
+  }
+
   /* ---------- Skin Mitos: Phantom Reaper (SMG) ---------- */
   var rpRig = { g: new T.Group(), fire: new T.Group(), vort: new T.Group(), vlist: [], skulls: [], eyeMat: null, crackA: null, crackB: null, boost: 0, flash: 0, lastT: 0, hemiOn: false };
   var rpEyeT = 1.2, rpShotAt = 0;
@@ -4231,7 +4441,7 @@ body {
     if (!weapon.melee) {
       if (reloading || inspT >= 0 || scopeK > 0.2 || fireCd > 0.05) return;
       inspT = 0;
-      if (fxName === 'naga') { nagaRig.boost = 1; nagaSound('inspect'); } else if (fxName === 'cosmos') { cosRig.boost = 1; cosmosSound('inspect'); } else if (fxName === 'dread') { dreadRig.boost = 1; dreadSound('inspect'); } else if (fxName === 'reaper') { rpRig.boost = 1; reaperSound('inspect'); } else tone(300, 600, 0.3, 'triangle', 0.05);
+      if (fxName === 'naga') { nagaRig.boost = 1; nagaSound('inspect'); } else if (fxName === 'cosmos') { cosRig.boost = 1; cosmosSound('inspect'); } else if (fxName === 'dread') { dreadRig.boost = 1; dreadSound('inspect'); } else if (fxName === 'reaper') { rpRig.boost = 1; reaperSound('inspect'); } else if (fxName === 'valor') { valorRig.boost = 1; valorSound('inspect'); } else tone(300, 600, 0.3, 'triangle', 0.05);
       return;
     }
     if (slashT >= 0 || (flourishT >= 0 && flType === 3)) return;
@@ -4248,11 +4458,13 @@ body {
     var big = fxName ? 1.6 : 1;
     flash.scale.set(big, big, 1);
     if (fxName) glow.material.color.setHex(fxTheme.cols[0]);
-    var isV = fxName === 'void', isN = fxName === 'naga', isC = fxName === 'cosmos', isD = fxName === 'dread', isR = fxName === 'reaper';
+    var isV = fxName === 'void', isN = fxName === 'naga', isC = fxName === 'cosmos', isD = fxName === 'dread', isR = fxName === 'reaper', isL = fxName === 'valor';
     dreadRig.g.visible = isD; dreadRig.fire.visible = false; dreadRig.sigil.visible = false;
+    valorRig.g.visible = isL; valorRig.fire.visible = false; valorRig.halo.visible = false;
     rpRig.g.visible = isR; rpRig.fire.visible = false; rpRig.vort.visible = false;
-    if (el.optic) el.optic.className = isD ? 'dread' : (isR ? 'reaper' : '');
+    if (el.optic) el.optic.className = isD ? 'dread' : (isR ? 'reaper' : (isL ? 'valor' : ''));
     if (el.dread && !isD) el.dread.style.opacity = '0';
+    if (el.valor && !isL) el.valor.style.opacity = '0';
     if (el.reaper && !isR) el.reaper.style.opacity = '0';
     cosRig.g.visible = isC; cosRig.star.visible = false; cosRig.shards.visible = false;
     if (el.scope) el.scope.className = isC ? 'cosmic' : '';
@@ -4262,7 +4474,7 @@ body {
     if (isN) { nagaRig.form = 0; nagaRig.boost = 0; if (state === 'playing') nagaSound('inspect'); }
     for (var oi = 0; oi < orbs.length; oi++) {
       var ob = orbs[oi]; ob.box = ob.box || ob.m.geometry;
-      ob.m.geometry = ((isV || isN || isD || isR) && oi < 7) || (isC && oi < 4) ? voidRig.sph : ob.box;
+      ob.m.geometry = ((isV || isN || isD || isR) && oi < 7) || (isC && oi < 4) || (isL && oi < 5) ? voidRig.sph : ob.box;
       ob.m.material.opacity = 0.95; ob.m.scale.set(1, 1, 1); ob.m.rotation.set(0, 0, 0);
     }
   }
@@ -4315,6 +4527,25 @@ body {
         rpRig.vlist[rq].scale.setScalar((3 + 3 * vh) * rie + 0.1);
       }
       glow.material.color.setHex(rpRig.boost > 0.3 ? 0xff2a4a : 0x9a2cff); glow.material.opacity = 0.1 + 0.05 * Math.sin(t * 2.4) + rpRig.flash * 0.2 + rpRig.boost * 0.06;
+    }
+    if (fxName === 'valor') {
+      var lvd = Math.min(0.1, Math.max(0, t - valorRig.lastT)); valorRig.lastT = t;
+      valorRig.boost = Math.max(0, valorRig.boost - lvd * 0.5); valorRig.flash = Math.max(0, valorRig.flash - lvd * 5);
+      var lie = inspT >= 0 ? Math.sin(inspT * Math.PI) : 0, lrl = reloading && RELOAD > 0 ? Math.sin(clamp(reloadT / RELOAD, 0, 1) * Math.PI) : 0, lo = Math.max(lie, lrl), lq;
+      valorRig.panelMat.opacity = 0.5 + 0.3 * Math.sin(t * 2.4) + valorRig.flash * 0.3 + lo * 0.2;
+      for (lq = 0; lq < valorRig.stars.length; lq++) valorRig.stars[lq].rotation.z = t * (0.6 + lo * 1.6) * (lq % 2 ? 1 : -1);
+      var lwk = 0.5 + 0.5 * lo + 0.2 * valorRig.flash;
+      for (lq = 0; lq < valorRig.wingGroups.length; lq++) { var lw = valorRig.wingGroups[lq]; lw.g.scale.setScalar(lwk); lw.g.rotation.z = -lw.sx * (lo * 0.18 + 0.03 * Math.sin(t * 2.2)); }
+      valorRig.halo.visible = lo > 0.03;
+      if (valorRig.halo.visible) {
+        for (lq = 0; lq < valorRig.haloRings.length; lq++) { valorRig.haloRings[lq].rotation.z = t * (0.8 + lq * 0.5) * (lq % 2 ? -1 : 1); valorRig.haloRings[lq].material.opacity = 0.9 * lo; }
+        for (lq = 0; lq < valorRig.haloFeathers.length; lq++) {
+          var lfa = t * (1.0 + lo * 1.4) + lq * 0.785, lfr = 0.12 + 0.06 * Math.sin(lq * 2.1 + t), lfe = valorRig.haloFeathers[lq];
+          lfe.position.set(Math.cos(lfa) * lfr, Math.sin(t * 1.6 + lq) * 0.06, Math.sin(lfa) * lfr * 1.4);
+          lfe.rotation.set(t * 1.3 + lq, t + lq * 0.6, lq); lfe.material.opacity = 0.9 * lo;
+        }
+      }
+      glow.material.color.setHex(lo > 0.25 || valorRig.flash > 0.3 ? 0xffe08a : 0x8ab8ff); glow.material.opacity = 0.1 + 0.05 * Math.sin(t * 2.4) + valorRig.flash * 0.18 + lo * 0.08;
     }
     if (fxName === 'dread') {
       var ddt = Math.min(0.1, Math.max(0, t - dreadRig.lastT)); dreadRig.lastT = t;
@@ -4427,6 +4658,22 @@ body {
           o.m.material.opacity = 0.95; o.m.material.color.setHex(fxCol(i));
         }
         continue;
+      } else if (fxName === 'valor') {
+        var lbs = valorRig.boost;
+        if (i < 5) {
+          ang = t * (0.5 + lbs * 1.2) + i * 1.26;
+          var lrr = 0.075 + 0.02 * Math.sin(t * 1.1 + i);
+          o.m.position.set(Math.cos(ang) * lrr, 0.015 + Math.sin(ang) * lrr, -0.1 - (i / 5) * 0.55 + Math.sin(t * 0.8 + i) * 0.05);
+          sc = 2.6 + 1.0 * Math.sin(t * 1.5 + i * 2) + lbs; o.m.scale.set(sc, sc, sc);
+          o.m.material.opacity = 0.16 + 0.06 * Math.sin(t * 1.8 + i) + lbs * 0.08;
+          o.m.material.color.setHex(i % 2 ? 0x6a8ee0 : 0xc9b27a);
+        } else {
+          u = (t * (0.5 + lbs * 0.5) + o.s * 0.31) % 1; ang = o.s * 7 + t * 1.1;
+          o.m.position.set(Math.cos(ang) * 0.075 * (0.5 + u), 0.03 + u * 0.3, -0.1 - ((o.s * 3.3) % 1) * 0.65);
+          sc = Math.sin(u * Math.PI) * 2.1 + 0.1; o.m.scale.set(sc, sc, sc);
+          o.m.material.opacity = 0.95; o.m.material.color.setHex(fxCol(i));
+        }
+        continue;
       } else if (fxName === 'dread') {
         var dbs = dreadRig.boost;
         if (i < 7) {
@@ -4495,6 +4742,7 @@ body {
   var tmpFx = new T.Vector3();
   function fxShot() {
     if (fxName === 'reaper') { burst(tmpO, 0xb23cff, 6, 6); burst(tmpO, 0xff2a4a, 7, 8.5); burst(tmpO, 0x14041f, 2, 3); return; }
+    if (fxName === 'valor') { burst(tmpO, 0xfff1c8, 6, 6); burst(tmpO, 0xffd23a, 5, 5); burst(tmpO, 0x8ab8ff, 3, 8); return; }
     if (fxName === 'dread') { burst(tmpO, 0xff2a10, 8, 6.5); burst(tmpO, 0xffa030, 5, 5); burst(tmpO, 0x1a0000, 3, 3); return; }
     if (fxName === 'cosmos') { burst(tmpO, 0xb44cff, 8, 6); burst(tmpO, 0xffd23a, 5, 5); burst(tmpO, 0xffffff, 3, 8); return; }
     if (fxName === 'naga') { emberAt(tmpO, 7, 3.2, false, 0.05); burst(tmpO, 0xff6a1f, 8, 5); burst(tmpO, 0xffd23a, 4, 3.5); return; }
@@ -4506,6 +4754,7 @@ body {
     if (fxName === 'naga') { nagaKill(pt); return; }
     if (fxName === 'cosmos') { cosmosKill(pt); return; }
     if (fxName === 'dread') { dreadKill(pt); return; }
+    if (fxName === 'valor') { valorKill(pt); return; }
     if (fxName === 'reaper') { reaperKill(pt); return; }
     for (var k = 0; k < 4; k++) burst(pt, fxCol(k + Math.floor(Math.random() * 3)), 4, 6.5);
   }
@@ -4607,6 +4856,32 @@ body {
     }
     return o + '</g>';
   }
+  /* Radiant Valor: sayap malaikat, pita emas, tombak, dan lambang bintang biru di gambar samping */
+  function valorOrnate(inner) {
+    var o = '<g transform="translate(1,4.5) scale(0.9)">' + inner, G = '#e9bd52', k, q;
+    function wing(rx, ry, a0, a1, n, L0, L1, sx) {
+      var w = '';
+      for (q = 0; q < n; q++) {
+        var a = a0 + (a1 - a0) * q / (n - 1), L = L0 + (L1 - L0) * Math.sin(q / (n - 1) * Math.PI * 0.9 + 0.2), wd = 2.1;
+        w += '<g transform="translate(' + rx + ',' + ry + ') rotate(' + (a + 90) + ')"><path d="M0 0Q' + wd + ' ' + (-L * 0.5) + ' 0 ' + (-L) + 'Q' + (-wd) + ' ' + (-L * 0.5) + ' 0 0Z" fill="' + (q % 2 ? '#d5e0ff' : '#fbf7ea') + '" stroke="' + G + '" stroke-width="0.3"/></g>';
+        if (q % 3 === 0) w += '<g transform="translate(' + rx + ',' + ry + ') rotate(' + (a + 98) + ')"><path d="M0 0Q1.2 ' + (-L * 0.25) + ' 0 ' + (-L * 0.5) + 'Q-1.2 ' + (-L * 0.25) + ' 0 0Z" fill="' + G + '"/></g>';
+      }
+      return w;
+    }
+    o += wing(49, 13.6, 195, 272, 9, 10, 17, -1) + wing(81, 14.6, 272, 345, 7, 7, 12, 1);
+    o += '<g fill="' + G + '" stroke="' + G + '" stroke-width="0.3">';
+    [72, 80, 88].forEach(function (x) { o += '<rect x="' + x + '" y="14.2" width="0.9" height="6.8" rx="0.3"/>'; });
+    o += '<rect x="40" y="13.7" width="29" height="0.7"/>';
+    for (k = 0; k < 5; k++) o += '<path d="M' + (71 + k * 5) + ' 14.4L' + (75.5 + k * 5) + ' ' + (11.6 - k * 0.2) + 'L' + (74 + k * 5) + ' 14.4Z"/>';
+    o += '<path d="M116 17.2L131 18.2L116 19.2Z"/><path d="M113 16.6L122 14L116.5 17.2Z"/><path d="M113 19.8L122 22.4L116.5 19.2Z"/>';
+    o += '<rect x="56" y="22.2" width="22" height="0.6" opacity="0.8"/></g>';
+    var ex = 54, ey = 17.4, r = 3.1;
+    o += '<g class="seye">';
+    for (k = 0; k < 8; k++) { var a2 = k / 8 * 6.283 + 0.2; o += '<path d="M' + (ex + Math.cos(a2 - 0.13) * r * 1.15).toFixed(2) + ' ' + (ey + Math.sin(a2 - 0.13) * r * 1.15).toFixed(2) + 'L' + (ex + Math.cos(a2) * r * 1.6).toFixed(2) + ' ' + (ey + Math.sin(a2) * r * 1.6).toFixed(2) + 'L' + (ex + Math.cos(a2 + 0.13) * r * 1.15).toFixed(2) + ' ' + (ey + Math.sin(a2 + 0.13) * r * 1.15).toFixed(2) + 'Z" fill="' + G + '"/>'; }
+    o += '<circle cx="' + ex + '" cy="' + ey + '" r="' + r + '" fill="#0c1a55" stroke="' + G + '" stroke-width="0.8"/>';
+    o += '<g class="sswirl" style="transform-origin:' + ex + 'px ' + ey + 'px"><path d="M' + ex + ' ' + (ey - 2.7) + 'L' + (ex + 0.5) + ' ' + (ey - 0.5) + 'L' + (ex + 2.7) + ' ' + ey + 'L' + (ex + 0.5) + ' ' + (ey + 0.5) + 'L' + ex + ' ' + (ey + 2.7) + 'L' + (ex - 0.5) + ' ' + (ey + 0.5) + 'L' + (ex - 2.7) + ' ' + ey + 'L' + (ex - 0.5) + ' ' + (ey - 0.5) + 'Z" fill="#cfe2ff" stroke="#8ab8ff" stroke-width="0.3"/></g></g>';
+    return o + '</g>';
+  }
   function gunSVG(wid, th) {
     var w = weaponById(wid), S = GUNSHAPE[wid] || GUNSHAPE.ar;
     var body = th ? th.body : (wid === 'sn' ? 0x4b5f3a : (wid === 'kr' ? 0xb4bec8 : 0x22303b)), dark = th ? th.dark : (wid === 'sn' ? 0x151a14 : (wid === 'kr' ? 0x1a1f25 : 0x0f1b26)), acc = th ? th.acc : w.look.ac;
@@ -4619,7 +4894,7 @@ body {
       return o;
     }
     var defs = rb ? '<defs><linearGradient id="' + id + '" x1="0" x2="1"><stop offset="0" stop-color="#ff3b3b"/><stop offset="0.25" stop-color="#ffd23a"/><stop offset="0.5" stop-color="#3bff8a"/><stop offset="0.75" stop-color="#3ba5ff"/><stop offset="1" stop-color="#c13bff"/></linearGradient></defs>' : '';
-    var out = '<svg viewBox="0 0 120 44" class="' + (th && th.fx ? 'fxs fx-' + th.fx : '') + '" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' + defs + (th && th.id === 'void' && wid === 'kr' ? krOrnate(sideGun(wid, { d: hexs(body), k: hexs(dark), a: accFill, g: '#66ccff' })) : th && th.id === 'cosmos' && wid === 'sn' ? cosOrnate(sideGun(wid, { d: hexs(body), k: hexs(dark), a: accFill, g: '#66ccff' })) : sideGun(wid, { d: hexs(body), k: hexs(dark), a: accFill, g: '#66ccff' }));
+    var out = '<svg viewBox="0 0 120 44" class="' + (th && th.fx ? 'fxs fx-' + th.fx : '') + '" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' + defs + (th && th.id === 'valor' && wid === 'ar' ? valorOrnate(sideGun(wid, { d: hexs(body), k: hexs(dark), a: accFill, g: '#66ccff' })) : th && th.id === 'void' && wid === 'kr' ? krOrnate(sideGun(wid, { d: hexs(body), k: hexs(dark), a: accFill, g: '#66ccff' })) : th && th.id === 'cosmos' && wid === 'sn' ? cosOrnate(sideGun(wid, { d: hexs(body), k: hexs(dark), a: accFill, g: '#66ccff' })) : sideGun(wid, { d: hexs(body), k: hexs(dark), a: accFill, g: '#66ccff' }));
     if (th && th.fx) {
       var pos = [[16, 12], [48, 8], [84, 11], [104, 24], [34, 36], [70, 34]];
       for (var q = 0; q < pos.length; q++) out += '<circle class="tw" cx="' + pos[q][0] + '" cy="' + pos[q][1] + '" r="1.8" fill="' + (rb ? '#fff' : hexs(th.cols[q % th.cols.length])) + '" style="animation-delay:' + (q * 0.35).toFixed(2) + 's"/>';
@@ -6004,7 +6279,7 @@ body {
       popup('+' + pts, head);
       earn(killCoins(head));
       dropMed(e.g.position.x, e.g.position.z, e.ey || 0);
-      if (fxName === 'cosmos' || fxName === 'dread' || fxName === 'reaper') e.sd = 1;
+      if (fxName === 'cosmos' || fxName === 'dread' || fxName === 'reaper' || fxName === 'valor') e.sd = 1;
       if (fxName) fxKill(pt);
       hitMarker(true);
       burst(tmpV.set(e.g.position.x, 1.2, e.g.position.z), 0xe8472b, 14, 5);
@@ -6391,6 +6666,7 @@ body {
           gun.position.x -= ie * 0.16; gun.position.y += ie * 0.04; gun.position.z -= ie * 0.02;
           if (fxName === 'cosmos') { gun.position.y += ie * 0.06 + Math.sin(bobT * 1.3) * 0.008 * ie; gun.position.x += ie * 0.08; gun.rotation.y -= ie * 0.35; }
           if (fxName === 'reaper') { var rpq = clamp((inspT - 0.12) / 0.76, 0, 1); gun.rotation.z += rpq * rpq * (3 - 2 * rpq) * Math.PI * 4; gun.position.y += ie * 0.04; }
+          if (fxName === 'valor') { gun.position.y += ie * 0.05 + Math.sin(bobT * 1.3) * 0.006 * ie; gun.position.z += ie * 0.04; gun.rotation.x -= ie * 0.1; }
           if (fxName === 'dread') { gun.position.y += ie * 0.03; gun.rotation.x -= ie * 0.18; gun.position.z += ie * 0.03; }
           gun.rotation.y += ie * (0.9 + 0.3 * Math.sin(inspT * Math.PI * 3)); gun.rotation.z += ie * 0.35 * Math.sin(inspT * Math.PI * 2); gun.rotation.x += ie * 0.12;
         }
@@ -6459,6 +6735,8 @@ body {
     if (flash.visible && recoil < (weapon.pierce ? 0.8 : 0.55)) flash.visible = false;
     cosRig.star.visible = flash.visible && fxName === 'cosmos';
     if (cosRig.star.visible) { cosRig.star.scale.setScalar(0.8 + recoil * 0.6); cosRig.star.rotation.z = flash.rotation.z; }
+    valorRig.fire.visible = flash.visible && fxName === 'valor';
+    if (valorRig.fire.visible) { valorRig.fire.scale.setScalar((0.8 + recoil * 0.5) * (1 - 0.65 * scopeK)); valorRig.fire.rotation.z = flash.rotation.z; valorRig.fire.position.z = weapon.look.mz - 0.04; }
     dreadRig.fire.visible = flash.visible && fxName === 'dread';
     if (dreadRig.fire.visible) { dreadRig.fire.scale.setScalar((0.8 + recoil * 0.5) * (1 - 0.65 * scopeK)); dreadRig.fire.rotation.z = flash.rotation.z; dreadRig.fire.position.z = weapon.look.mz - 0.04; }
     rpRig.fire.visible = flash.visible && fxName === 'reaper';
@@ -6816,6 +7094,7 @@ body {
     nagaUpdate(dt);
     cosmosUpdate(dt);
     dreadUpdate(dt);
+    valorUpdate(dt);
     reaperUpdate(dt);
     for (var i = particles.length - 1; i >= 0; i--) {
       var p = particles[i];
@@ -7146,6 +7425,7 @@ body {
   lobbyInit();
   buildCosmos();
   buildDread();
+  buildValor();
   buildReaper();
   applyCfgVisual();
   i18nStart();
