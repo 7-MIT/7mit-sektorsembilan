@@ -5126,6 +5126,8 @@ body {
     var code = netClean($('netCode').value);
     if (code.length < 3) { netMsg('Kode ruangan minimal 3 huruf atau angka.'); cb(false); return; }
     net.joining = true; net.code = code; $('pBtn').disabled = true;
+    /* main lagi: tinggalkan ruangan lama dulu, supaya "hantu" dirimu tidak memenuhi ruangan duel */
+    if (net.room) { var oldR = net.room; net.room = null; net.on = false; net.remotes = {}; try { oldR.leave().catch(function () {}); } catch (e) {} }
     netMsg('Menyambung ke ruangan ' + code + '…');
     (async function () {
       try {
@@ -5149,7 +5151,13 @@ body {
           await new Promise(function (r) { setTimeout(r, 150); });
         }
         if (!me) { try { nr.leave(); } catch (e) {} netFail(cb, 'Tidak bisa terhubung ke ruangan. Coba lagi.'); return; }
-        var others = ps.filter(function (p) { return !p.isMe && p.presence && p.presence.m === 1; });
+        function othersOf(list) { return list.filter(function (p) { return !p.isMe && p.presence && p.presence.m === 1; }); }
+        var others = othersOf(ps);
+        /* sisa koneksi lama (rematch) hilang dalam beberapa detik: tunggu sebentar sebelum bilang penuh */
+        for (var wt = 0; wt < 12 && others.length >= NET_KIND[netKind].max; wt++) {
+          await new Promise(function (r) { setTimeout(r, 400); });
+          ps = nr.peers(); others = othersOf(ps);
+        }
         if (others.length >= NET_KIND[netKind].max) { try { nr.leave(); } catch (e) {} netFail(cb, 'Ruangan penuh (' + NET_KIND[netKind].max + ' pemain). Pakai kode lain.'); return; }
         var mid = '', nb = 0, no = 0;
         others.forEach(function (p) { if (!mid && p.presence.map) mid = String(p.presence.map); if (p.presence.tm === 'oranye') no++; else if (p.presence.tm === 'biru') nb++; });
@@ -5375,7 +5383,7 @@ body {
     showPanel('over');
     el.hud.hidden = false;
     $('touch').hidden = true;
-    setTimeout(function () { if (!net.ready) netLeave(); }, 3500);
+    setTimeout(function () { if (!net.ready && !net.joining) netLeave(); }, 3500);
   }
   function netInitUI() {
     var c = '';
