@@ -384,6 +384,7 @@ body {
 .cret { filter: drop-shadow(0 0 2px #b44cff) drop-shadow(0 0 5px #8a3cff); }
 .cticks { animation: cspin 120s linear infinite reverse; }
 .sswirl { animation: cspin 3s linear infinite; }
+.sflame { animation: dpulse 0.9s ease-in-out infinite; }
 .lore { font-style: italic; font-size: 12px; line-height: 1.35; color: #6a3cb0; max-width: 28ch; }
 #cEye { opacity: 0; transform-box: fill-box; transform-origin: center; }
 #cosmos.eye #cEye { animation: ceye 1.3s ease-in-out 1; }
@@ -412,6 +413,13 @@ body {
 .fx-valor { animation: pvalor 2.2s ease-in-out infinite; }
 @keyframes pvalor { 0%, 100% { filter: drop-shadow(0 0 3px #6aa8ff); } 50% { filter: drop-shadow(0 0 8px #ffd86a); } }
 #sfx.fx-valor { --c: #6aa8ff; --c2: #ffd86a; }
+#optic.dragon { background: radial-gradient(circle at 50% 50%, transparent calc(var(--r) - 14px), rgba(14,2,0,0.98) calc(var(--r) - 3px), rgba(14,2,0,0.74) calc(var(--r) + 4px), rgba(14,2,0,0.5) 100%); }
+#optic.dragon i { display: none; }
+#dsight { position: absolute; inset: 0; pointer-events: none; opacity: 0; --r: min(21vmin, 190px); }
+#dsight .cb { position: absolute; left: calc(50% - var(--r)); top: calc(50% - var(--r)); width: calc(var(--r) * 2); height: calc(var(--r) * 2); border-radius: 50%; overflow: visible;
+  background: radial-gradient(circle, rgba(0, 0, 0, 0) 45%, rgba(120, 20, 0, 0.25) 72%, rgba(30, 4, 0, 0.8) 100%); box-shadow: inset 0 0 26px 5px rgba(255, 70, 20, 0.55), 0 0 14px 2px rgba(255, 140, 40, 0.55); }
+#dsight svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.dspin { animation: cspin 24s linear infinite; filter: drop-shadow(0 0 4px #ff4a14); }
 #optic.dread { background: radial-gradient(circle at 50% 50%, transparent calc(var(--r) - 14px), rgba(4,0,0,0.98) calc(var(--r) - 3px), rgba(4,0,0,0.72) calc(var(--r) + 4px), rgba(4,0,0,0.5) 100%); }
 #optic.dread i { display: none; }
 #dread { position: absolute; inset: 0; pointer-events: none; opacity: 0; --r: min(21vmin, 190px); }
@@ -593,6 +601,7 @@ body {
   <div id="cosmos" aria-hidden="true"><div class="cb" id="cosmosBody"></div></div>
   <div id="dread" aria-hidden="true"><div class="cb" id="dreadBody"></div></div>
   <div id="valor" aria-hidden="true"><div class="cb" id="valorBody"></div></div>
+  <div id="dsight" aria-hidden="true"><div class="cb" id="dsightBody"></div></div>
   <div id="reaper" aria-hidden="true"><div class="cb" id="reaperBody"></div></div>
   <div id="sfx" aria-hidden="true"><i class="edge"></i><i class="ring"></i><b style="--a:0deg"></b><b style="--a:45deg"></b><b style="--a:90deg"></b><b style="--a:135deg"></b><b style="--a:180deg"></b><b style="--a:225deg"></b><b style="--a:270deg"></b><b style="--a:315deg"></b></div>
   <div id="slashfx" aria-hidden="true"><svg viewBox="0 0 160 90" preserveAspectRatio="xMidYMid slice"><path class="pa" pathLength="100" d="M130 12 Q96 74 30 64"/><path class="pb" pathLength="100" d="M30 12 Q64 74 130 64"/><path class="pc" pathLength="100" d="M80 84 L80 36 M64 78 L75 46 M96 78 L85 46"/><path class="pd" pathLength="100" d="M80 14 A32 32 0 1 1 79.9 14"/></svg></div>
@@ -2572,7 +2581,7 @@ body {
   var el = {
     map: $('vMap'), hud: $('hud'), wave: $('vWave'), left: $('vLeft'), score: $('vScore'), coin: $('vCoin'), best: $('vBest'),
     hpFill: $('hpFill'), hpBar: $('hpBar'), hp: $('vHp'), ammo: $('vAmmo'), mag: $('vMag'), ammoV: $('ammoV'), kAmmo: $('kAmmo'),
-    rBar: $('rBar'), rFill: $('rFill'), vig: $('vignette'), scope: $('scope'), optic: $('optic'), cosmos: $('cosmos'), dread: $('dread'), valor: $('valor'), reaper: $('reaper'), sfx: $('sfx'), cross: $('cross'), hit: $('hit'), banner: $('banner'), bnT: $('bnT'), bnS: $('bnS')
+    rBar: $('rBar'), rFill: $('rFill'), vig: $('vignette'), scope: $('scope'), optic: $('optic'), cosmos: $('cosmos'), dread: $('dread'), valor: $('valor'), dsight: $('dsight'), reaper: $('reaper'), sfx: $('sfx'), cross: $('cross'), hit: $('hit'), banner: $('banner'), bnT: $('bnT'), bnS: $('bnS')
   };
   var cache = {};
   function setText(node, key, val) {
@@ -2792,6 +2801,7 @@ body {
     reloadSound(weapon.id, RELOAD);
     if (fxName === 'cosmos' && weapon.id === 'sn') { cosRig.boost = 1; cosmosSound('reload'); }
     if (fxName === 'valor' && weapon.id === 'ar') { valorRig.boost = 1; valorSound('reload'); }
+    if (fxName === 'naga' && weapon.id === 'sg') { nagaRig.boost = 1; nagaSound('reload'); }
   }
 
   var slashT = -1, slashDir = 1, meleeDelay = -1, curMove = null, hitMul = 1, hitRM = 1;
@@ -2931,13 +2941,14 @@ body {
   function lookScale() { return optSens * (cfg[WSENS[weapon.id]] || 1) * (1 + ((weapon.id === 'sn' ? cfg.ssn : cfg.sads) - 1) * scopeK) / (1 + (weapon.zoom - 1) * scopeK); }
   function scopeFx() {
     var snipe = weapon.id === 'sn' ? clamp((scopeK - 0.6) / 0.4, 0, 1) : 0;
-    var dot = (weapon.id === 'ar' || (weapon.id === 'smg' && fxName === 'reaper')) ? clamp((scopeK - 0.5) / 0.5, 0, 1) : 0;
+    var dot = (weapon.id === 'ar' || (weapon.id === 'smg' && fxName === 'reaper') || (weapon.id === 'sg' && fxName === 'naga')) ? clamp((scopeK - 0.5) / 0.5, 0, 1) : 0;
     el.scope.style.opacity = String(snipe);
     el.optic.style.opacity = String(dot);
     el.sfx.style.opacity = fxName ? String(clamp((scopeK - 0.45) / 0.55, 0, 1)) : '0';
     if (el.cosmos) el.cosmos.style.opacity = fxName === 'cosmos' && weapon.id === 'sn' ? String(snipe) : '0';
     if (el.dread) el.dread.style.opacity = fxName === 'dread' && weapon.id === 'ar' ? String(dot) : '0';
     if (el.valor) el.valor.style.opacity = fxName === 'valor' && weapon.id === 'ar' ? String(dot) : '0';
+    if (el.dsight) el.dsight.style.opacity = fxName === 'naga' && weapon.id === 'sg' ? String(dot) : '0';
     if (el.reaper) el.reaper.style.opacity = fxName === 'reaper' && weapon.id === 'smg' ? String(dot) : '0';
     el.cross.style.opacity = String(1 - Math.max(snipe, dot, weapon.id === 'sn' ? 0 : clamp((scopeK - 0.3) / 0.5, 0, 1)));
   }
@@ -3166,7 +3177,7 @@ body {
     { id: 'obsidian', name: 'Obsidian Merah', rar: 'legendaris', body: 0x0b0b0e, dark: 0x000000, acc: 0xff1e3c, fx: 'ember', cols: [0xff1e3c, 0xff7a1f, 0xffd0a0] },
     { id: 'petir', name: 'Petir', rar: 'legendaris', body: 0x14304a, dark: 0x06121f, acc: 0x7df3ff, fx: 'thunder', cols: [0x7df3ff, 0xffffff, 0xbfefff] },
     { id: 'void', name: 'Shadow Reaper', rar: 'mitos', only: ['kr'], body: 0x1a0a30, dark: 0x040208, acc: 0xc58bff, wt: 0.5, lore: 'Setiap luka adalah awal dari akhir yang indah.', fx: 'void', cols: [0xb44cff, 0xe0b8ff, 0x7a3cff, 0xffd23a] },
-    { id: 'naga', name: 'Raja Naga', rar: 'mitos', only: ['sg'], body: 0x15161b, dark: 0x070709, acc: 0xff4a14, fx: 'naga', cols: [0xff4a14, 0xff9a1f, 0xffd23a, 0xff1e1e] },
+    { id: 'naga', name: 'Infernal Dragon', rar: 'mitos', only: ['sg'], wt: 0.5, lore: 'Api naga, kehancuran tanpa akhir.', body: 0x15161b, dark: 0x070709, acc: 0xff4a14, fx: 'naga', cols: [0xff4a14, 0xff9a1f, 0xffd23a, 0xff1e1e] },
     { id: 'cosmos', name: 'Celestial Void', rar: 'mitos', only: ['sn'], body: 0x0a0610, dark: 0x020106, acc: 0xffc84a, flashCol: 0xb44cff, tr: 0xb44cff, wt: 0.25, lore: 'Di antara bintang dan kehampaan, aku adalah penguasa yang tak terlihat.', fx: 'cosmos', cols: [0xb44cff, 0xffd23a, 0x7a3cff, 0xffffff] },
     { id: 'dread', name: 'Dreadnought', rar: 'mitos', only: ['ar'], body: 0x0b0506, dark: 0x020101, acc: 0xff2410, flashCol: 0xff3a10, tr: 0xff3010, fx: 'dread', cols: [0xff2410, 0xff7a1f, 0xffd23a, 0x4a0000] },
     { id: 'valor', name: 'Radiant Valor', rar: 'mitos', only: ['ar'], body: 0x0b1030, dark: 0x04060f, acc: 0xe9bd52, flashCol: 0xfff2c0, tr: 0x9ec4ff, wt: 0.4, lore: 'Bukan sekadar senjata, tapi cahaya yang melindungi.', fx: 'valor', cols: [0xffd86a, 0xffffff, 0x6aa8ff, 0xfff0c0] },
@@ -3329,6 +3340,38 @@ body {
       var len = 0.34 - (k % 5) * 0.04, a = k < 5 ? 0.1 + k * 0.32 : -0.15 - (k - 5) * 0.3;
       addv(nagaRig.wing, new T.BoxGeometry(len, 0.014, 0.004), glowMat(k % 2 ? 0xffb02a : 0xff6a1f), j * (0.02 + Math.cos(a) * len / 2), Math.sin(a) * len / 2, 0, 0, 0, j * a);
     }
+    // ===== Infernal Dragon: tanduk emas, duri, pita emas, retakan lava, kobaran api =====
+    var gold = new T.MeshBasicMaterial({ color: 0xe9bd52 }), goldD = new T.MeshBasicMaterial({ color: 0x8a5f14 }), UPV = new T.Vector3(0, 1, 0), rr = rng(53), sxx;
+    nagaRig.cracks = []; nagaRig.flames = []; nagaRig.emT = 0;
+    function thorn(par, len, rad, x, y, z, dx, dy, dz, mat) {
+      var d = new T.Vector3(dx, dy, dz).normalize(), o = new T.Mesh(new T.ConeGeometry(rad, len, 5), mat || gold);
+      o.quaternion.setFromUnitVectors(UPV, d); o.position.set(x + d.x * len / 2, y + d.y * len / 2, z + d.z * len / 2); par.add(o); return o;
+    }
+    var hd = nagaRig.head;
+    for (sxx = -1; sxx <= 1; sxx += 2) {
+      thorn(hd, 0.085, 0.0075, sxx * 0.02, 0.034, -0.01, sxx * 0.35, 0.5, 0.85);
+      thorn(hd, 0.05, 0.005, sxx * 0.026, 0.026, -0.03, sxx * 0.7, 0.25, 0.7);
+      thorn(hd, 0.03, 0.0035, sxx * 0.012, 0.03, -0.075, sxx * 0.15, 0.6, -0.2);
+      thorn(hd, 0.035, 0.0035, sxx * 0.016, -0.02, -0.1, 0, -0.6, -0.5, gold);
+      thorn(g, 0.05, 0.008, sxx * 0.03, 0.03, 0.03, sxx * 0.4, 0.3, 0.9);
+      thorn(g, 0.05, 0.006, sxx * 0.016, -0.012, -0.74, sxx * 0.2, -0.5, -1);
+    }
+    for (i = 0; i < 7; i++) thorn(g, 0.04 - i * 0.002, 0.006, 0, 0.056, -0.2 - i * 0.08, 0, 0.55, -1);
+    for (i = 0; i < 3; i++) { var bnd = new T.Mesh(new T.TorusGeometry(0.0295, 0.0025, 6, 18), i % 2 ? goldD : gold); bnd.position.set(0, 0.02, -0.3 - i * 0.16); g.add(bnd); }
+    for (j = -1; j <= 1; j += 2) for (k = 0; k < 4; k++) {
+      var cz = -0.45 + rr() * 0.55 - (k > 1 ? 0.1 : 0), cy = (k < 2 ? 0.02 : 0.0) + (rr() - 0.5) * 0.03, ax = j * (k < 2 ? 0.0286 : 0.0296);
+      for (i = 0; i < 7; i++) {
+        var dy = (rr() - 0.5) * 0.02, dz = -(0.016 + rr() * 0.022), ln = Math.hypot(dy, dz), cm = glowMat(i % 3 === 2 ? 0xffd070 : 0xff3a10);
+        m = addv(g, new T.BoxGeometry(0.002, 0.0028, ln), cm, ax, cy + dy / 2, cz + dz / 2, Math.atan2(-dy, dz)); nagaRig.cracks.push(m); cy += dy; cz += dz;
+      }
+    }
+    for (i = 0; i < 4; i++) { var fl = addv(hd, new T.ConeGeometry(0.012, 0.075, 5), glowMat(i % 2 ? 0xff6a1f : 0xffb02a), (i - 1.5) * 0.012, 0.04, 0.03 + (i % 2) * 0.02, 1.1, 0, 0); nagaRig.flames.push(fl); }
+    // semburan api di kilatan tembakan
+    var fw = nagaRig.wing;
+    for (i = 0; i < 10; i++) addv(fw, new T.BoxGeometry(0.012, 0.46, 0.003), glowMat(i % 2 ? 0xffd23a : 0xff4a14), 0, 0, 0, 0, 0, i * Math.PI / 10);
+    addv(fw, new T.SphereGeometry(0.045, 10, 8), glowMat(0xfff0b0), 0, 0, 0);
+    addv(fw, new T.ConeGeometry(0.06, 0.55, 8), glowMat(0xff6a1f), 0, 0, -0.3, -Math.PI / 2, 0, 0);
+    addv(fw, new T.ConeGeometry(0.03, 0.8, 6), glowMat(0xffd23a), 0, 0, -0.45, -Math.PI / 2, 0, 0);
     nagaRig.wing.visible = false;
     g.visible = false;
     gunModels.sg.add(g); gunModels.sg.add(nagaRig.wing);
@@ -3368,19 +3411,99 @@ body {
     bx(dragon.jaw, gm, 0.3, 0.12, 0.4, 0, 0.0, 0.35);
     g.visible = false; scene.add(g);
   })();
+  var nagaCoils = [], nagaDeb = [], nagaSig = [], nagaTex = null, ndGeo = new T.BoxGeometry(0.06, 0.06, 0.06), ndSeg = new T.BoxGeometry(1, 1, 1), ndCone = new T.ConeGeometry(0.05, 0.16, 5);
+  function nagaSigilTexture() {
+    if (nagaTex) return nagaTex;
+    try {
+      var c = document.createElement('canvas'); c.width = c.height = 128; var x = c.getContext('2d'), a, k;
+      x.translate(64, 64);
+      x.strokeStyle = '#ff4a14'; x.lineWidth = 4; x.beginPath(); x.arc(0, 0, 59, 0, 6.283); x.stroke();
+      x.strokeStyle = '#ffb02a'; x.lineWidth = 1.5; x.beginPath(); x.arc(0, 0, 51, 0, 6.283); x.stroke();
+      for (k = 0; k < 16; k++) { a = k * 0.3927; x.beginPath(); x.moveTo(Math.cos(a) * 51, Math.sin(a) * 51); x.lineTo(Math.cos(a) * (k % 2 ? 56 : 46), Math.sin(a) * (k % 2 ? 56 : 46)); x.stroke(); }
+      x.strokeStyle = '#ff6a1f'; x.lineWidth = 6; x.lineCap = 'round'; x.beginPath();
+      for (a = 0; a <= 12.2; a += 0.15) { var rr = 6 + a * 3.6, px = Math.cos(a) * rr, py = Math.sin(a) * rr; if (a === 0) x.moveTo(px, py); else x.lineTo(px, py); }
+      x.stroke();
+      var ea = 12.2, er = 6 + ea * 3.6, hx = Math.cos(ea) * er, hy = Math.sin(ea) * er;
+      x.fillStyle = '#ffd070'; x.beginPath(); x.moveTo(hx + 12, hy - 3); x.lineTo(hx - 6, hy - 10); x.lineTo(hx - 4, hy + 8); x.closePath(); x.fill();
+      x.fillStyle = '#ff3a10'; x.beginPath(); x.arc(hx, hy - 3, 2.5, 0, 6.283); x.fill();
+      nagaTex = new T.CanvasTexture(c);
+    } catch (e) { nagaTex = null; }
+    return nagaTex;
+  }
   function nagaKill(pt) {
+    /* 1 peluru api menghantam: kobaran dan cincin api */
     burst(pt, 0xff6a1f, 14, 6); burst(pt, 0xffd23a, 8, 8);
     emberAt(pt, 10, 4, false, 0.4);
-    var dx = pt.x - camera.position.x, dz = pt.z - camera.position.z, dl = Math.hypot(dx, dz) || 1;
-    dx /= dl; dz /= dl;
-    dragon.sc = Math.min(4, Math.max(1.4, dl * 0.14));
-    dragon.g.position.set(pt.x + dx * 2.4, (pt.y > 0.5 ? pt.y - 1.2 : 0), pt.z + dz * 2.4);
-    dragon.g.rotation.y = Math.atan2(-dx, -dz);
-    dragon.g.visible = true; dragon.t = 0; dragon.lastAsh = 0; dragon.roared = false;
+    var gy = Math.max(0.03, pt.y - 1.15), k, i;
+    /* 2 naga raksasa melilit dan menerjang target */
+    if (nagaCoils.length < 4) {
+      var N = 20, g = new T.Group(); g.position.set(pt.x, gy, pt.z); scene.add(g);
+      function nm(c, add) { var o = { color: c, transparent: true, opacity: 0, depthWrite: false, side: T.DoubleSide }; if (add) o.blending = T.AdditiveBlending; return new T.MeshBasicMaterial(o); }
+      var mB = nm(0x1a0504, false), mG = nm(0xff4a14, true), mY = nm(0xffd23a, true), segs = [];
+      for (i = 0; i < N; i++) {
+        var u = i / (N - 1), sz = 0.34 - 0.22 * u, sg = new T.Mesh(ndSeg, mB); sg.scale.set(sz, sz * 0.9, sz * 1.5); sg.visible = false; g.add(sg);
+        var gl = new T.Mesh(ndSeg, mG); gl.scale.set(0.5, 0.5, 0.5); sg.add(gl);
+        var th = new T.Mesh(ndCone, mY); th.position.set(0, 0.6, 0); th.scale.set(sz * 5 + 0.3, sz * 5 + 0.3, sz * 5 + 0.3); sg.add(th);
+        segs.push(sg);
+      }
+      var head = new T.Group(), hb = new T.Mesh(ndSeg, mB), jw = new T.Group(), jb = new T.Mesh(ndSeg, mG), eyeL = new T.Mesh(ndSeg, mY), eyeR = new T.Mesh(ndSeg, mY);
+      hb.scale.set(0.34, 0.26, 0.5); head.add(hb);
+      jw.position.set(0, -0.1, -0.1); jb.scale.set(0.28, 0.07, 0.5); jb.position.set(0, 0, -0.18); jw.add(jb); head.add(jw);
+      eyeL.scale.set(0.07, 0.05, 0.05); eyeL.position.set(0.1, 0.08, -0.2); eyeR.scale.set(0.07, 0.05, 0.05); eyeR.position.set(-0.1, 0.08, -0.2); head.add(eyeL); head.add(eyeR);
+      var hh1 = new T.Mesh(ndCone, mY), hh2 = new T.Mesh(ndCone, mY);
+      hh1.position.set(0.12, 0.2, 0.15); hh1.rotation.x = 0.9; hh1.scale.set(1.2, 1.5, 1.2); hh2.position.set(-0.12, 0.2, 0.15); hh2.rotation.x = 0.9; hh2.scale.set(1.2, 1.5, 1.2); head.add(hh1); head.add(hh2);
+      head.visible = false; g.add(head);
+      nagaCoils.push({ g: g, segs: segs, head: head, jaw: jw, mB: mB, mG: mG, mY: mY, t: 0, N: N, gy: gy, breathed: false });
+    }
+    /* 3 target hancur menjadi serpihan energi merah */
+    for (k = 0; k < 36 && nagaDeb.length < 170; k++) {
+      var dark = k % 3 === 0, dm = new T.Mesh(ndGeo, dark ? new T.MeshBasicMaterial({ color: 0x1a0504, transparent: true, opacity: 1, depthWrite: false }) : voidMat(k % 3 === 1 ? 0xff3a10 : 0xffb02a, 1));
+      var ang = Math.random() * 6.283, sp = 0.8 + Math.random() * 2.4;
+      dm.position.set(pt.x + Math.cos(ang) * 0.2, pt.y - 0.5 + Math.random() * 1.1, pt.z + Math.sin(ang) * 0.2); dm.visible = false; scene.add(dm);
+      nagaDeb.push({ m: dm, v: new T.Vector3(Math.cos(ang) * sp, 1 + Math.random() * 2.2, Math.sin(ang) * sp), life: 1.5 + Math.random() * 0.8, d: 0.55 + Math.random() * 0.25, spin: Math.random() * 8 });
+    }
+    /* 4 naga lenyap meninggalkan simbol naga menyala di tanah */
+    var tx = nagaSigilTexture();
+    if (nagaSig.length < 5) {
+      var sm = new T.MeshBasicMaterial({ color: 0xff5a1f, transparent: true, opacity: 0, depthWrite: false, side: T.DoubleSide, blending: T.AdditiveBlending });
+      if (tx) sm.map = tx;
+      var sgm = new T.Mesh(tx ? new T.PlaneGeometry(1.9, 1.9) : new T.RingGeometry(0.7, 0.9, 32), sm); sgm.rotation.x = -Math.PI / 2; sgm.position.set(pt.x, gy + 0.04, pt.z); scene.add(sgm);
+      nagaSig.push({ m: sgm, t: 0 });
+    }
     nagaSound('kill');
   }
   function nagaUpdate(dt) {
-    var i, a, c;
+    var i, a, c, u;
+    for (i = nagaCoils.length - 1; i >= 0; i--) {
+      a = nagaCoils[i]; a.t += dt;
+      var tt = a.t, rv = clamp(tt / 0.7, 0, 1), fade = 1 - clamp((tt - 1.4) / 0.8, 0, 1), si, sg2, ua, ang, rad, yy;
+      a.mB.opacity = 0.92 * fade; a.mG.opacity = 0.9 * fade; a.mY.opacity = 0.95 * fade;
+      for (si = 0; si < a.N; si++) {
+        sg2 = a.segs[si]; ua = si / (a.N - 1);
+        if (ua > rv) { sg2.visible = false; continue; }
+        sg2.visible = true; ang = ua * 4.2 * Math.PI + tt * 2.4; rad = 0.95 - 0.35 * ua; yy = 0.15 + ua * 2.0 + 0.1 * Math.sin(tt * 3 + ua * 6);
+        sg2.position.set(Math.cos(ang) * rad, yy, Math.sin(ang) * rad); sg2.rotation.y = Math.PI - ang;
+      }
+      ang = 4.2 * Math.PI + tt * 2.4; rad = 0.6; yy = 2.15 + 0.1 * Math.sin(tt * 3 + 6);
+      a.head.visible = rv > 0.98 || tt > 0.6; a.head.position.set(Math.cos(ang) * rad, yy, Math.sin(ang) * rad); a.head.rotation.set(0.25, Math.PI - ang, 0);
+      a.jaw.rotation.x = Math.min(0.9, Math.max(0, (tt - 0.7) * 2.5)) * fade;
+      if (!a.breathed && tt > 0.85) { a.breathed = true; tmpV.set(a.g.position.x + Math.cos(ang) * rad, a.g.position.y + yy, a.g.position.z + Math.sin(ang) * rad); burst(tmpV, 0xff6a1f, 10, 7); burst(tmpV, 0xffd23a, 6, 6); emberAt(tmpV, 8, 3.5, false, 0.3); shake = Math.max(shake, 0.2); }
+      if (tt >= 2.2) { scene.remove(a.g); a.mB.dispose(); a.mG.dispose(); a.mY.dispose(); nagaCoils.splice(i, 1); }
+    }
+    for (i = nagaDeb.length - 1; i >= 0; i--) {
+      a = nagaDeb[i]; a.d -= dt;
+      if (a.d > 0) continue;
+      a.m.visible = true; a.life -= dt; a.v.y -= 5 * dt; a.m.position.addScaledVector(a.v, dt);
+      if (a.m.position.y < 0.03) { a.m.position.y = 0.03; a.v.y *= -0.3; a.v.x *= 0.6; a.v.z *= 0.6; }
+      a.m.rotation.x += a.spin * dt; a.m.rotation.z += a.spin * 0.7 * dt; a.m.material.opacity = Math.min(1, Math.max(0, a.life) / 0.6);
+      if (a.life <= 0) { scene.remove(a.m); a.m.material.dispose(); nagaDeb.splice(i, 1); }
+    }
+    for (i = nagaSig.length - 1; i >= 0; i--) {
+      a = nagaSig[i]; a.t += dt;
+      var su = clamp((a.t - 1.1) / 0.5, 0, 1) * (1 - clamp((a.t - 3.6) / 1.2, 0, 1));
+      a.m.material.opacity = 0.9 * su * (0.8 + 0.2 * Math.sin(a.t * 6)); a.m.rotation.z += dt * 0.4; a.m.scale.setScalar(0.85 + 0.15 * clamp((a.t - 1.1) / 0.5, 0, 1));
+      if (a.t >= 4.8) { scene.remove(a.m); if (a.m.material.map) a.m.material.map = null; a.m.material.dispose(); nagaSig.splice(i, 1); }
+    }
     for (i = vEmbers.length - 1; i >= 0; i--) {
       a = vEmbers[i]; a.life -= dt;
       a.v.multiplyScalar(Math.max(0, 1 - 1.2 * dt)); a.v.y += (a.ash ? 0.5 : 0.9) * dt;
@@ -3420,6 +3543,10 @@ body {
         layerO(t, 90, 40, 1.2, 'sawtooth', 0.2, out); layerO(t + 0.1, 160, 70, 1.0, 'sawtooth', 0.1, out);
         layerN(t, 'bandpass', 450, 0.9, 1.2, 0.28, out, 120); layerO(t + 0.05, 55, 35, 1.3, 'sine', 0.32, out);
         layerN(t + 0.7, 'highpass', 3000, 0.7, 0.9, 0.07, out);
+        layerO(t + 0.9, 70, 38, 1.2, 'sawtooth', 0.14, out); layerN(t + 0.9, 'bandpass', 1200, 1.2, 0.8, 0.06, out, 300);
+      } else if (kind === 'reload') {
+        layerN(t, 'bandpass', 900, 1.2, 0.6, 0.12, out, 2400); layerO(t, 80, 140, 0.7, 'sawtooth', 0.08, out);
+        layerN(t + 0.3, 'highpass', 3200, 0.7, 0.5, 0.05, out); layerO(t + 0.6, 150, 60, 0.35, 'square', 0.07, out);
       } else {
         layerN(t, 'lowpass', 600, 1, 1.4, 0.2, out, 140); layerO(t, 70, 95, 1.4, 'sawtooth', 0.09, out);
         layerO(t + 1.2, 140, 60, 0.8, 'sawtooth', 0.07, out); layerN(t + 1.2, 'bandpass', 900, 1.4, 0.7, 0.12, out, 250);
@@ -3986,6 +4113,24 @@ body {
     g.visible = false;
     gunModels.ar.add(g); gunModels.ar.add(fire); gunModels.ar.add(halo);
   })();
+  function buildDSight() {
+    var body = $('dsightBody'); if (!body) return;
+    var r = rng(88), s = '', i, a, d, pts = '', t;
+    s += '<svg viewBox="-100 -100 200 200" aria-hidden="true"><defs><linearGradient id="dgd" x1="0" x2="1"><stop offset="0" stop-color="#ffe29a"/><stop offset="1" stop-color="#c8802a"/></linearGradient></defs>';
+    s += '<circle r="94" fill="none" stroke="url(#dgd)" stroke-width="2"/><circle r="88" fill="none" stroke="#ff6a1f" stroke-width="0.7" opacity="0.8"/>';
+    [-1, 1].forEach(function (sx) {
+      s += '<path d="M' + (sx * 62) + ' -52Q' + (sx * 84) + ' -70 ' + (sx * 74) + ' -98Q' + (sx * 94) + ' -76 ' + (sx * 90) + ' -44Z" fill="url(#dgd)" stroke="#8a5f14" stroke-width="0.6"/>';
+      s += '<path d="M' + (sx * 78) + ' 12Q' + (sx * 94) + ' 28 ' + (sx * 86) + ' 52Q' + (sx * 72) + ' 34 ' + (sx * 66) + ' 18Z" fill="url(#dgd)" opacity="0.8"/>';
+    });
+    s += '<g class="dspin">';
+    for (t = 0; t <= 12.2; t += 0.15) pts += (pts ? 'L' : 'M') + (Math.cos(t) * (4 + t * 2.7)).toFixed(1) + ' ' + (Math.sin(t) * (4 + t * 2.7)).toFixed(1);
+    var ex = Math.cos(12.2) * (4 + 12.2 * 2.7), ey = Math.sin(12.2) * (4 + 12.2 * 2.7);
+    s += '<path d="' + pts + '" fill="none" stroke="#ff4a14" stroke-width="3" stroke-linecap="round"/><path d="' + pts + '" fill="none" stroke="#ffb02a" stroke-width="0.8" stroke-linecap="round"/>';
+    s += '<path d="M' + (ex + 7) + ' ' + (ey - 2) + 'L' + (ex - 4) + ' ' + (ey - 6) + 'L' + (ex - 2) + ' ' + (ey + 5) + 'Z" fill="#ffd070"/></g>';
+    s += '<g class="dret" stroke="#ff6a24" stroke-width="1" fill="none"><path d="M-70 0H-40M40 0H70M0 -70V-40M0 40V70"/><circle r="36" stroke-dasharray="3 3" opacity="0.7"/></g><circle r="1.6" fill="#fff0b0"/>';
+    for (i = 0; i < 24; i++) { a = r() * 6.283; d = 12 + Math.sqrt(r()) * 70; s += '<circle class="tw" cx="' + (Math.cos(a) * d).toFixed(1) + '" cy="' + (Math.sin(a) * d).toFixed(1) + '" r="' + (0.5 + r() * 1.1).toFixed(2) + '" fill="' + ['#ffb02a', '#ff6a1f', '#ff3a10'][i % 3] + '" style="animation-delay:' + (r() * 2).toFixed(2) + 's"/>'; }
+    body.innerHTML = s + '</svg>';
+  }
   function buildValor() {
     var body = $('valorBody'); if (!body) return;
     var r = rng(63), s = '', i, k, sx, a, d;
@@ -4462,9 +4607,10 @@ body {
     dreadRig.g.visible = isD; dreadRig.fire.visible = false; dreadRig.sigil.visible = false;
     valorRig.g.visible = isL; valorRig.fire.visible = false; valorRig.halo.visible = false;
     rpRig.g.visible = isR; rpRig.fire.visible = false; rpRig.vort.visible = false;
-    if (el.optic) el.optic.className = isD ? 'dread' : (isR ? 'reaper' : (isL ? 'valor' : ''));
+    if (el.optic) el.optic.className = isD ? 'dread' : (isR ? 'reaper' : (isL ? 'valor' : (isN ? 'dragon' : '')));
     if (el.dread && !isD) el.dread.style.opacity = '0';
     if (el.valor && !isL) el.valor.style.opacity = '0';
+    if (el.dsight && !isN) el.dsight.style.opacity = '0';
     if (el.reaper && !isR) el.reaper.style.opacity = '0';
     cosRig.g.visible = isC; cosRig.star.visible = false; cosRig.shards.visible = false;
     if (el.scope) el.scope.className = isC ? 'cosmic' : '';
@@ -4584,7 +4730,13 @@ body {
         en.m.position.set(en.x, en.y, 0.1 - gu * 0.88);
         en.m.material.opacity = (1 - en.k * 0.22) * Math.min(1, fe2 * 1.5); en.m.material.color.setHex(en.k === 0 ? 0xffd070 : 0xff3a10);
       }
-      glow.material.color.setHex(0xff5a14); glow.material.opacity = 0.1 + 0.05 * Math.sin(t * 2.4) + recoil * 0.12;
+      var nrl = reloading && RELOAD > 0 ? Math.sin(clamp(reloadT / RELOAD, 0, 1) * Math.PI) : 0;
+      if (nrl > nagaRig.boost) nagaRig.boost = nrl;
+      for (nq = 0; nq < nagaRig.cracks.length; nq++) nagaRig.cracks[nq].material.opacity = 0.35 + 0.65 * Math.pow(Math.sin(t * 3.1 + nq * 1.3), 2) + nagaRig.boost * 0.3;
+      for (nq = 0; nq < nagaRig.flames.length; nq++) { nagaRig.flames[nq].scale.set(1, 0.7 + 0.6 * Math.abs(Math.sin(t * 7 + nq * 2)) + nrl * 0.8, 1); nagaRig.flames[nq].material.opacity = 0.6 + 0.4 * Math.sin(t * 9 + nq); }
+      nagaRig.emT -= ndt;
+      if (nrl > 0.2 && nagaRig.emT <= 0) { nagaRig.emT = 0.07; try { gun.getWorldPosition(tmpV); emberAt(tmpV, 2, 2.2, false, 0.25); } catch (e) {} }
+      glow.material.color.setHex(0xff5a14); glow.material.opacity = 0.1 + 0.05 * Math.sin(t * 2.4) + recoil * 0.12 + nrl * 0.08;
     }
     if (fxName === 'void') {
       var vdt = Math.min(0.1, Math.max(0, t - voidRig.lastT)); voidRig.lastT = t;
@@ -4882,6 +5034,31 @@ body {
     o += '<g class="sswirl" style="transform-origin:' + ex + 'px ' + ey + 'px"><path d="M' + ex + ' ' + (ey - 2.7) + 'L' + (ex + 0.5) + ' ' + (ey - 0.5) + 'L' + (ex + 2.7) + ' ' + ey + 'L' + (ex + 0.5) + ' ' + (ey + 0.5) + 'L' + ex + ' ' + (ey + 2.7) + 'L' + (ex - 0.5) + ' ' + (ey + 0.5) + 'L' + (ex - 2.7) + ' ' + ey + 'L' + (ex - 0.5) + ' ' + (ey - 0.5) + 'Z" fill="#cfe2ff" stroke="#8ab8ff" stroke-width="0.3"/></g></g>';
     return o + '</g>';
   }
+  /* Infernal Dragon: kepala naga di moncong, duri emas, retakan lava, lambang naga di gambar samping */
+  function dragonOrnate(inner) {
+    var o = '<g transform="translate(1,3) scale(0.88)">' + inner, G = '#e9bd52', k, seed = 5;
+    function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+    o += '<g fill="' + G + '" stroke="' + G + '" stroke-width="0.3">';
+    for (k = 0; k < 9; k++) o += '<path d="M' + (50 + k * 6) + ' 13.5L' + (55.5 + k * 6) + ' ' + (9.2 - (k % 2) * 0.8) + 'L' + (54 + k * 6) + ' 13.5Z"/>';
+    [60, 74, 90].forEach(function (x) { o += '<rect x="' + x + '" y="13.2" width="1" height="6.2" rx="0.3"/>'; });
+    o += '<path d="M25 14L32 8.5L30 14.4Z"/><path d="M110 13.6L106 6.4L113.4 11.4Z"/><path d="M115 13L112.6 5.4L118.6 10.6Z"/></g>';
+    o += '<path d="M113 14.4L121 13.4L129.5 15.6L132.4 17.6L124.6 17.4L117.5 18.4Z" fill="#2a0a06" stroke="#ff4a14" stroke-width="0.6"/>';
+    o += '<path d="M113.6 19.8L121 19.6L127.6 22L118.8 22.4Z" fill="#1a0604" stroke="#ff4a14" stroke-width="0.6"/>';
+    o += '<path d="M123 17.5l0.8 1.8 0.8-1.8zM126.6 17.5l0.7 1.6 0.7-1.6zM122 19.7l0.7-1.5 0.7 1.5z" fill="#fff0c0"/>';
+    o += '<circle cx="119.6" cy="15.9" r="0.95" fill="#ffd23a"/><path d="M112 17.4L110 19.4L112 21.4" fill="none" stroke="#ff6a1f" stroke-width="0.5"/>';
+    o += '<g class="seye"><circle cx="38" cy="17.6" r="3.4" fill="#240804" stroke="' + G + '" stroke-width="0.8"/>';
+    for (k = 0; k < 8; k++) { var a = k / 8 * 6.283 + 0.2; o += '<path d="M' + (38 + Math.cos(a - 0.13) * 3.9).toFixed(2) + ' ' + (17.6 + Math.sin(a - 0.13) * 3.9).toFixed(2) + 'L' + (38 + Math.cos(a) * 5.4).toFixed(2) + ' ' + (17.6 + Math.sin(a) * 5.4).toFixed(2) + 'L' + (38 + Math.cos(a + 0.13) * 3.9).toFixed(2) + ' ' + (17.6 + Math.sin(a + 0.13) * 3.9).toFixed(2) + 'Z" fill="' + G + '"/>'; }
+    o += '<g class="sswirl" style="transform-origin:38px 17.6px"><path d="M38 17.6m0 -0.6a0.6 0.6 0 1 1 -0.6 0.6a1.6 1.6 0 1 1 1.6 1.6a2.6 2.6 0 1 1 -2.6 -2.6" fill="none" stroke="#ff6a1f" stroke-width="0.7" stroke-linecap="round"/></g></g>';
+    o += '<g fill="none" stroke="#ffb02a" stroke-width="0.4" stroke-linecap="round">';
+    for (k = 0; k < 5; k++) {
+      var x = 52 + k * 11 + rnd() * 3, y = 14.5 + rnd() * 3, path = 'M' + x.toFixed(1) + ' ' + y.toFixed(1);
+      for (var q = 0; q < 5; q++) { x += 1.3 + rnd() * 1.6; y += (rnd() - 0.5) * 2.2; y = Math.max(13.8, Math.min(18.8, y)); path += 'L' + x.toFixed(1) + ' ' + y.toFixed(1); }
+      o += '<path d="' + path + '"/>';
+    }
+    o += '</g><g class="sflame" fill="#ff6a1f" opacity="0.85">';
+    for (k = 0; k < 6; k++) o += '<path d="M' + (56 + k * 9) + ' 22.6Q' + (57.5 + k * 9) + ' ' + (25.6 + (k % 2) * 1.4) + ' ' + (60 + k * 9) + ' 22.8Q' + (58.6 + k * 9) + ' 24 ' + (56 + k * 9) + ' 22.6Z"/>';
+    return o + '</g></g>';
+  }
   function gunSVG(wid, th) {
     var w = weaponById(wid), S = GUNSHAPE[wid] || GUNSHAPE.ar;
     var body = th ? th.body : (wid === 'sn' ? 0x4b5f3a : (wid === 'kr' ? 0xb4bec8 : 0x22303b)), dark = th ? th.dark : (wid === 'sn' ? 0x151a14 : (wid === 'kr' ? 0x1a1f25 : 0x0f1b26)), acc = th ? th.acc : w.look.ac;
@@ -4894,7 +5071,7 @@ body {
       return o;
     }
     var defs = rb ? '<defs><linearGradient id="' + id + '" x1="0" x2="1"><stop offset="0" stop-color="#ff3b3b"/><stop offset="0.25" stop-color="#ffd23a"/><stop offset="0.5" stop-color="#3bff8a"/><stop offset="0.75" stop-color="#3ba5ff"/><stop offset="1" stop-color="#c13bff"/></linearGradient></defs>' : '';
-    var out = '<svg viewBox="0 0 120 44" class="' + (th && th.fx ? 'fxs fx-' + th.fx : '') + '" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' + defs + (th && th.id === 'valor' && wid === 'ar' ? valorOrnate(sideGun(wid, { d: hexs(body), k: hexs(dark), a: accFill, g: '#66ccff' })) : th && th.id === 'void' && wid === 'kr' ? krOrnate(sideGun(wid, { d: hexs(body), k: hexs(dark), a: accFill, g: '#66ccff' })) : th && th.id === 'cosmos' && wid === 'sn' ? cosOrnate(sideGun(wid, { d: hexs(body), k: hexs(dark), a: accFill, g: '#66ccff' })) : sideGun(wid, { d: hexs(body), k: hexs(dark), a: accFill, g: '#66ccff' }));
+    var out = '<svg viewBox="0 0 120 44" class="' + (th && th.fx ? 'fxs fx-' + th.fx : '') + '" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' + defs + (th && th.id === 'naga' && wid === 'sg' ? dragonOrnate(sideGun(wid, { d: hexs(body), k: hexs(dark), a: accFill, g: '#66ccff' })) : th && th.id === 'valor' && wid === 'ar' ? valorOrnate(sideGun(wid, { d: hexs(body), k: hexs(dark), a: accFill, g: '#66ccff' })) : th && th.id === 'void' && wid === 'kr' ? krOrnate(sideGun(wid, { d: hexs(body), k: hexs(dark), a: accFill, g: '#66ccff' })) : th && th.id === 'cosmos' && wid === 'sn' ? cosOrnate(sideGun(wid, { d: hexs(body), k: hexs(dark), a: accFill, g: '#66ccff' })) : sideGun(wid, { d: hexs(body), k: hexs(dark), a: accFill, g: '#66ccff' }));
     if (th && th.fx) {
       var pos = [[16, 12], [48, 8], [84, 11], [104, 24], [34, 36], [70, 34]];
       for (var q = 0; q < pos.length; q++) out += '<circle class="tw" cx="' + pos[q][0] + '" cy="' + pos[q][1] + '" r="1.8" fill="' + (rb ? '#fff' : hexs(th.cols[q % th.cols.length])) + '" style="animation-delay:' + (q * 0.35).toFixed(2) + 's"/>';
@@ -7426,6 +7603,7 @@ body {
   buildCosmos();
   buildDread();
   buildValor();
+  buildDSight();
   buildReaper();
   applyCfgVisual();
   i18nStart();
