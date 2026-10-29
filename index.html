@@ -35,6 +35,8 @@ body {
   background: radial-gradient(ellipse at center, rgba(224, 16, 42, 0) 45%, rgba(224, 16, 42, 0.7) 100%);
 }
 #wtint { position: absolute; inset: 0; pointer-events: none; opacity: 0; background: radial-gradient(ellipse at center, rgba(40,120,200,0.25) 30%, rgba(10,60,130,0.6) 100%); }
+#bloodscr { position: absolute; inset: 0; pointer-events: none; opacity: 0;
+  background: radial-gradient(circle at 18% 78%, rgba(150,8,16,0.75) 0, rgba(150,8,16,0) 14%), radial-gradient(circle at 82% 70%, rgba(130,6,14,0.7) 0, rgba(130,6,14,0) 12%), radial-gradient(circle at 50% 92%, rgba(160,10,18,0.7) 0, rgba(160,10,18,0) 16%), radial-gradient(circle at 30% 30%, rgba(120,5,12,0.45) 0, rgba(120,5,12,0) 8%), radial-gradient(circle at 74% 24%, rgba(120,5,12,0.4) 0, rgba(120,5,12,0) 7%); }
 #scope {
   position: absolute; inset: 0; pointer-events: none; opacity: 0; --r: min(40vmin, 320px);
   background: radial-gradient(circle at 50% 50%, transparent calc(var(--r) - 1px), #0a0f14 var(--r));
@@ -609,6 +611,7 @@ body {
   <div id="healfx" aria-hidden="true"></div>
   <div id="vignette"></div>
   <div id="wtint"></div>
+  <div id="bloodscr"></div>
   <div id="cflash"></div>
   <div id="vflash"></div>
   <div id="lflash"></div>
@@ -1672,7 +1675,7 @@ body {
     for (var i = 0; i < MAPS.length; i++) if (MAPS[i].id === id) m = MAPS[i];
     disposeMap();
     curMap = m; ARENA = m.half;
-    obstacles.length = 0; colliders.length = 0; routes.length = 0; waterZones.length = 0; waterK = 0; inWater = false;
+    bloodClear(); obstacles.length = 0; colliders.length = 0; routes.length = 0; waterZones.length = 0; waterK = 0; inWater = false;
     mapGroup = new T.Group();
     scene.add(mapGroup);
     var size = (m.half + 2) * 2;
@@ -2223,6 +2226,50 @@ body {
       scene.add(m);
       particles.push({ m: m, v: new T.Vector3(Math.random() - 0.5, Math.random() * 0.9 + 0.2, Math.random() - 0.5).multiplyScalar(spd), life: 0.35 + Math.random() * 0.25 });
     }
+  }
+  /* ---------- Darah ---------- */
+  var bloods = [], bloodDecals = [], bloodScr = 0;
+  var bgeo = new T.BoxGeometry(0.05, 0.09, 0.05), bdgeo = new T.CircleGeometry(1, 10);
+  var bmats = [new T.MeshBasicMaterial({ color: 0xb30c14 }), new T.MeshBasicMaterial({ color: 0x8a060e }), new T.MeshBasicMaterial({ color: 0xd01a22 })];
+  function bloodAt(pt, n, spd) {
+    if (cfg.gfx === 'low') n = Math.ceil(n / 2);
+    for (var i = 0; i < n && bloods.length < 160; i++) {
+      var m = new T.Mesh(bgeo, bmats[i % 3]);
+      m.position.set(pt.x, pt.y, pt.z);
+      scene.add(m);
+      bloods.push({ m: m, v: new T.Vector3((Math.random() - 0.5) * 1.6, Math.random() * 0.9 + 0.1, (Math.random() - 0.5) * 1.6).multiplyScalar(spd), fl: 0 });
+    }
+  }
+  function bloodDecal(x, z, y, r) {
+    if (bloodDecals.length >= 70) { var o = bloodDecals.shift(); scene.remove(o.m); o.m.material.dispose(); }
+    var mt = new T.MeshBasicMaterial({ color: Math.random() < 0.5 ? 0x7a0610 : 0x5e050c, transparent: true, opacity: 0.85, depthWrite: false });
+    var m = new T.Mesh(bdgeo, mt);
+    m.rotation.x = -Math.PI / 2; m.position.set(x, y + 0.03, z); m.scale.set(r, r * (0.6 + Math.random() * 0.5), 1); m.rotation.z = Math.random() * 6.28;
+    scene.add(m);
+    bloodDecals.push({ m: m, life: 16 });
+  }
+  function bloodUpdate(dt) {
+    for (var i = bloods.length - 1; i >= 0; i--) {
+      var b = bloods[i];
+      b.v.y -= 16 * dt;
+      b.m.position.addScaledVector(b.v, dt);
+      b.m.rotation.x += dt * 6;
+      var gy = 0;
+      try { gy = groundAt(b.m.position, 0.05, b.m.position.y + 0.15); } catch (e) {}
+      if (b.m.position.y <= gy + 0.02) {
+        bloodDecal(b.m.position.x, b.m.position.z, gy, 0.07 + Math.random() * 0.12);
+        scene.remove(b.m); bloods.splice(i, 1);
+      } else if (b.m.position.y < -2) { scene.remove(b.m); bloods.splice(i, 1); }
+    }
+    for (var j = bloodDecals.length - 1; j >= 0; j--) {
+      var d = bloodDecals[j]; d.life -= dt;
+      if (d.life < 3) d.m.material.opacity = Math.max(0, d.life / 3 * 0.85);
+      if (d.life <= 0) { scene.remove(d.m); d.m.material.dispose(); bloodDecals.splice(j, 1); }
+    }
+  }
+  function bloodClear() {
+    bloods.forEach(function (b) { scene.remove(b.m); }); bloods.length = 0;
+    bloodDecals.forEach(function (d) { scene.remove(d.m); d.m.material.dispose(); }); bloodDecals.length = 0;
   }
   var tgeo = new T.BoxGeometry(0.03, 0.03, 1);
   var tmat = new T.MeshBasicMaterial({ color: 0xff8a00 });
@@ -6012,7 +6059,7 @@ body {
     var d = Math.min(dmg, 200);
     net.hits[e.remote] = Math.round(((net.hits[e.remote] || 0) + d) * 10) / 10;
     e.flash = 0.1;
-    burst(pt, head ? 0xff5a1f : 0xffc21a, head ? 9 : 5, 4);
+    burst(pt, head ? 0xff5a1f : 0xffc21a, head ? 9 : 5, 4); bloodAt(pt, head ? 14 : 9, 3.2);
     hitMarker(false);
     var nowMs = performance.now();
     if (nowMs - hitSndAt > 45) { hitSndAt = nowMs; tone(head ? 900 : 640, 300, 0.06, 'triangle', 0.1); }
@@ -6450,7 +6497,7 @@ body {
     if (e.remote) { if (!e.friend) netDealt(e, dmg, head, pt); return; }
     e.hp -= dmg; e.hurtT = 2.2;
     e.flash = 0.1;
-    burst(pt, head ? 0xff5a1f : 0xffc21a, head ? 9 : 5, 4);
+    burst(pt, head ? 0xff5a1f : 0xffc21a, head ? 9 : 5, 4); bloodAt(pt, head ? 14 : 9, 3.2);
     if (e.hp <= 0) {
       e.dead = true; e.t = 0;
       kills++;
@@ -6462,7 +6509,7 @@ body {
       if (fxName === 'cosmos' || fxName === 'dread' || fxName === 'reaper' || fxName === 'valor') e.sd = 1;
       if (fxName) fxKill(pt);
       hitMarker(true);
-      burst(tmpV.set(e.g.position.x, 1.2, e.g.position.z), 0xe8472b, 14, 5);
+      burst(tmpV.set(e.g.position.x, 1.2, e.g.position.z), 0xe8472b, 14, 5); bloodAt(tmpV, 26, 3.6);
       tone(520, 120, 0.25, 'square', 0.12);
       if (e.team) { teamScore[myTeam]++; if (e.bid) e.bid.d++; queueRespawn(e.team, e.bid); checkTeamWin(); }
     } else {
@@ -6475,7 +6522,8 @@ body {
   function hurtPlayer(d, byTeam, by) {
     if (state !== 'playing' || pDead || graceT > 0) return;
     health = Math.max(0, health - d);
-    dmgT = 0.45; shake = 0.25;
+    dmgT = 0.45; shake = 0.25; bloodScr = 1;
+    bloodAt(tmpV.set(camera.position.x, camera.position.y - 0.5, camera.position.z), 12, 1.8);
     tone(150, 55, 0.2, 'sawtooth', 0.18);
     if (health <= 0) { if (gameMode === 'online') netDied(); else if (gameMode === 'team') playerDied(byTeam, by); else if (revives > 0) survivalDied(); else gameOver(); }
   }
@@ -6551,6 +6599,7 @@ body {
   function hurtBot(b, dmg, killerTeam, killerBid) {
     if (b.dead || b.grace > 0) return;
     b.hp -= dmg; b.flash = 0.1; b.hurtT = 2.2;
+    bloodAt(tmpV.set(b.g.position.x, (b.ey || 0) + 1.3, b.g.position.z), b.hp <= 0 ? 24 : 8, 3.2);
     if (b.hp <= 0) {
       b.dead = true; b.t = 0;
       teamScore[killerTeam]++;
@@ -6948,6 +6997,7 @@ body {
       gun.position.y -= sd * 0.2; gun.rotation.x -= sd * 0.6;
     }
     dmgT = Math.max(0, dmgT - dt);
+    bloodScr = Math.max(0, bloodScr - dt * 0.55); $('bloodscr').style.opacity = String(Math.min(1, bloodScr * 1.2));
     var low = health < 30 ? (0.25 + Math.sin(performance.now() / 160) * 0.1) : 0;
     el.vig.style.opacity = String(Math.max(dmgT / 0.45 * 0.9, low));
   }
@@ -7293,6 +7343,7 @@ body {
     dreadUpdate(dt);
     valorUpdate(dt);
     reaperUpdate(dt);
+    bloodUpdate(dt);
     for (var i = particles.length - 1; i >= 0; i--) {
       var p = particles[i];
       p.v.y -= 14 * dt;
